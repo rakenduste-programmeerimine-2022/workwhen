@@ -1,4 +1,4 @@
-# workwhen
+# WorkWhen
 
 ## Projekti kirjeldus
 
