@@ -30,6 +30,6 @@ Projekti loomisel kasutame MERN stack'i.
 
 ## Projekti autorid
 
-- Arjom Morozov
+- Artjom Morozov
 - Ragnar Valdre
 - Kert Lillenberk
