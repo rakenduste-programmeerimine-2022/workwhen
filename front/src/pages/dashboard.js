@@ -1,3 +1,3 @@
 export default function Dashboard() {
-    return 
+    return <h1>fix</h1>
 }
