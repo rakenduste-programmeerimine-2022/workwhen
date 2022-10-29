@@ -58,6 +58,14 @@ userSchema.statics.login = async ({ username, password }) => {
     })
 }
 
+userSchema.statics.all = async () => {
+    return new Promise(async (resolve, reject) => {
+        // some checks? for example if token present
+        const users = await User.find({}, {})
+        resolve(users)
+    })
+}
+
 const User = model("User", userSchema)
 
 module.exports = User
