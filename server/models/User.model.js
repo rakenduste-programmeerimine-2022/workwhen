@@ -9,8 +9,8 @@ const userSchema = new Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         fullname: { type: String, required: true },
-        contact: { type: String, required: false},
-        birthday: { type: Date, required: false},
+        contact: { type: String, required: true },
+        birthday: { type: Date, required: true },
         role: { type: String, default: 'employee' },
     },
     { timestamps: true }
