@@ -15,7 +15,7 @@ body {
     border-style: solid;
     border-color: black;
     gap: 2rem;
-    padding: 0 1rem;
+    padding: 0;
 }
 
 .logo {
@@ -27,7 +27,7 @@ body {
     margin: 0;
     list-style: none;
     display: flex;
-    gap: 8rem;
+    gap: 7rem;
 }
 
 .nav li {
