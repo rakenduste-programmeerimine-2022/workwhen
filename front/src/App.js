@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import Navbar from "./Navbar";
+import Bookmarks from "./pages/bookmarks";
+import Contacts from "./pages/contacts";
+import Dashboard from "./pages/dashboard";
+import Schedule from "./pages/schedule";
+import Shift_planning from "./pages/shift-planning";
+import User_settings from "./pages/user-settings";
+import {Route, Routes} from "react-router-dom"
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  <>
+    <Navbar />
+    <Routes>
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/shift-planning" element={<Shift_planning />} />
+      <Route path="/schedule" element={<Schedule />} />
+      <Route path="/bookmarks" element={<Bookmarks />} />
+      <Route path="/contacts" element={<Contacts />} />
+      <Route path="/user-settings" element={<User_settings />} />
+    </Routes>
+  </>
+  )
+
 }
 
-export default App;
+export default App
