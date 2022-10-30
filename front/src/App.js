@@ -6,6 +6,7 @@ import Schedule from "./pages/Schedule";
 import Shift_planning from "./pages/Shift-planning";
 import User_settings from "./pages/User-settings";
 import { Route, Routes } from "react-router-dom"
+import React from "react"
 
 function App() {
 
@@ -22,7 +23,6 @@ function App() {
     </Routes>
   </>
   )
-
 }
 
 export default App
