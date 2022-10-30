@@ -1,4 +1,3 @@
-import { Component } from "react";
 import Navbar from "./components/Navbar";
 import Bookmarks from "./pages/Bookmarks";
 import Contacts from "./pages/Contacts";
@@ -6,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Schedule from "./pages/Schedule";
 import Shift_planning from "./pages/Shift-planning";
 import User_settings from "./pages/User-settings";
-import {Route, Routes} from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 
 function App() {
 
