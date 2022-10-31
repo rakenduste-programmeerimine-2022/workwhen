@@ -1,7 +1,7 @@
 const express = require("express")
 const mongoose = require("mongoose")
 // const userRouter
-// require("dotenv").config()
+require("dotenv").config()
 
 const app = express()
 const PORT = 8080
@@ -14,11 +14,11 @@ app.use(function(req, res, next) {
     next()
 })
 
-// const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.06xoxj3.mongodb.net/?retryWrites=true&w=majority`
-// mongoose
-//   .connect(uri)
-//   .then(() => console.log('Database connection established'))
-//   .catch((e) => console.error(e))
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@workwhen.j4desho.mongodb.net/?retryWrites=true&w=majority`
+mongoose
+  .connect(uri)
+  .then(() => console.log('Database connection established'))
+  .catch((e) => console.error(e))
 
 // app.use("/user", userRouter)
 
