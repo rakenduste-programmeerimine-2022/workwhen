@@ -1,11 +1,13 @@
 const express = require("express")
 const mongoose = require("mongoose")
-// const userRouter
+const morgan = require("morgan")
+const userRouter = require("./routes/user.routes")
 require("dotenv").config()
 
 const app = express()
 const PORT = 8080
 
+app.use(morgan("dev"))
 app.use(express.json())
 
 app.use(function(req, res, next) {
@@ -20,7 +22,7 @@ mongoose
   .then(() => console.log('Database connection established'))
   .catch((e) => console.error(e))
 
-// app.use("/user", userRouter)
+app.use("/user", userRouter)
 
 app.get("*", (req, res) => {
     res.send("404")
