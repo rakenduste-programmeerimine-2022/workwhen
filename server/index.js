@@ -2,6 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const morgan = require("morgan")
 const userRouter = require("./routes/user.routes")
+const shiftRouter = require("./routes/shift.routes")
 require("dotenv").config()
 
 const app = express()
@@ -23,6 +24,7 @@ mongoose
   .catch((e) => console.error(e))
 
 app.use("/user", userRouter)
+app.use("/shift", shiftRouter)
 
 app.get("*", (req, res) => {
     res.send("404")
