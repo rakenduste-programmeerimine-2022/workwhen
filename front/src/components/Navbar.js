@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
 
-const pages = ['Dashboard', 'Shift-Planning', 'Schedule', 'Bookmarks', 'Contacts', 'User-Settings'];
+const pages = ['Dashboard', 'Shift Planning', 'Schedule', 'Bookmarks', 'Contacts', 'User Settings'];
 
 function Navbar() {
 
@@ -36,15 +36,17 @@ function Navbar() {
           </Typography>
             <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, marginLeft: 'auto', gap: 14}} >
                 {pages.map((page) => (
-                <Button
+                <Link style={{textDecoration:'none', color: 'white'}} to={`/${page}`}>
+                  <Button
                     key={page}
                     sx={{ my: 2, color: 'white', display: 'block'}}
                     
-                >
-                    <Link style={{textDecoration:'none', color: 'white'}} to={`/${page}`}>
-                        {page}
-                    </Link>
-                </Button>
+                  >
+                    
+                    {page}
+                    
+                  </Button>
+                </Link>
                 ))}
             </Box>
         </Toolbar>

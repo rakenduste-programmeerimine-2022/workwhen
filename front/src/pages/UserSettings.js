@@ -1,3 +1,3 @@
 export default function UserSettings() {
-    return 
+    return <h1>User Settings</h1>
 }

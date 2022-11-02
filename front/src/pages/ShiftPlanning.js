@@ -1,3 +1,3 @@
 export default function ShiftPlanning() {
-    return 
+    return <h1>Shift Planning</h1>
 }
