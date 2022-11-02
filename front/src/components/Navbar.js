@@ -38,13 +38,10 @@ function Navbar() {
                 {pages.map((page) => (
                 <Link style={{textDecoration:'none', color: 'white'}} to={`/${page}`}>
                   <Button
-                    key={page}
-                    sx={{ my: 2, color: 'white', display: 'block'}}
-                    
+                      key={page}
+                      sx={{color: 'white', display: 'block'}}    
                   >
-                    
-                    {page}
-                    
+                      {page}   
                   </Button>
                 </Link>
                 ))}
