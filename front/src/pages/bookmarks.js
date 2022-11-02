@@ -1,3 +1,3 @@
 export default function Bookmarks() {
-    return 
+    return <h1>Bookmarks</h1>
 }
