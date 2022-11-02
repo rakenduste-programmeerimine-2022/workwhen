@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
 
-const pages = ['Dashboard', 'Shift Planning', 'Schedule', 'Bookmarks', 'Contacts', 'User Settings'];
+const pages = ['Dashboard', 'Shift-Planning', 'Schedule', 'Bookmarks', 'Contacts', 'User-Settings'];
 
 function Navbar() {
 
@@ -39,6 +39,7 @@ function Navbar() {
                 <Button
                     key={page}
                     sx={{ my: 2, color: 'white', display: 'block'}}
+                    
                 >
                     <Link style={{textDecoration:'none', color: 'white'}} to={`/${page}`}>
                         {page}
