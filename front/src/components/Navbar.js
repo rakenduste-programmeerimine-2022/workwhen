@@ -1,32 +1,54 @@
-import { Children } from "react"
-import { Link, resolvePath, useMatch, useResolvedPath } from "react-router-dom"
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
-export default function Navbar() {
 
-    const path = window.location.pathname
-    return (
-    <nav className="nav">
-        <Link to="/dashboard" className="logo">Logo</Link>
-        <ul>     
-            <ActiveLink to="/dashboard">Dashboard</ActiveLink>
-            <ActiveLink to="/shift-planning">Shift planning</ActiveLink>
-            <ActiveLink to="/schedule">Schedule</ActiveLink>
-            <ActiveLink to="/bookmarks">Bookmarks</ActiveLink>
-            <ActiveLink to="/contacts">Contacts</ActiveLink>
-            <ActiveLink to="/user-settings">User settings</ActiveLink>
-        </ul>
-    </nav>
-)}
+const pages = ['Dashboard', 'Shift Planning', 'Schedule', 'Bookmarks', 'Contacts', 'User Settings'];
 
-function ActiveLink({ to, children, ...props}) {
-    const resolvedPath = useResolvedPath(to)
-    const isActive = useMatch( {path: resolvedPath.pathname, end: true})
+function Navbar() {
 
-    return (
-        <li className={isActive ? "active" : ""}>
-            <Link to={to} {...props}>
-                {children}
+  return (
+    <AppBar position="static">
+      <Container maxWidth="xl" >
+        <Toolbar disableGutters >          
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            <Link style={{textDecoration:'none', color: 'white'}} to={"/Dashboard"}>
+            LOGO
             </Link>
-        </li>
-    )
+            
+          </Typography>
+            <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, marginLeft: 'auto', gap: 14}} >
+                {pages.map((page) => (
+                <Button
+                    key={page}
+                    sx={{ my: 2, color: 'white', display: 'block'}}
+                >
+                    <Link style={{textDecoration:'none', color: 'white'}} to={`/${page}`}>
+                        {page}
+                    </Link>
+                </Button>
+                ))}
+            </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
 }
+export default Navbar;
