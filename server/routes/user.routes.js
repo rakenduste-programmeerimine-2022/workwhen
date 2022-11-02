@@ -11,13 +11,15 @@ router.post(
     body("fullname").notEmpty().trim().escape(),
     body("contact").notEmpty().trim().escape(),
     body("birthday").isISO8601().toDate().withMessage("Wrong date format!"),
-    userController.signup)
+    userController.signup
+)
 
 router.post(
     "/login",
     body("username").not().isEmpty().trim().escape(),
     body("password").isLength({ min: 5 }).withMessage("Minimum length 5"),
-    userController.login)
+    userController.login
+)
 
 router.get("/all", userController.getAll)
 module.exports = router

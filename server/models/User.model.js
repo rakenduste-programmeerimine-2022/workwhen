@@ -12,6 +12,7 @@ const userSchema = new Schema(
         contact: { type: String, required: true },
         birthday: { type: Date, required: true },
         role: { type: String, default: 'employee' },
+        deleted: { type: Boolean, default: false }
     },
     { timestamps: true }
 )
@@ -61,7 +62,7 @@ userSchema.statics.login = async ({ username, password }) => {
 userSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
         // some checks? for example if token present
-        const users = await User.find({}, {})
+        const users = await User.find({ deleted: false }, {})
         resolve(users)
     })
 }

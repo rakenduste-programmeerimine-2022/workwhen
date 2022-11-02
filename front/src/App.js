@@ -7,6 +7,7 @@ import ShiftPlanning from "./pages/ShiftPlanning";
 import UserSettings from "./pages/UserSettings";
 import { Route, Routes } from "react-router-dom"
 import React from "react"
+import Login from "./pages/Login"
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   <>
     <Navbar />
     <Routes>
+      <Route path="/" element={<Login />} />  
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/shift-planning" element={<ShiftPlanning />} />
       <Route path="/schedule" element={<Schedule />} />
