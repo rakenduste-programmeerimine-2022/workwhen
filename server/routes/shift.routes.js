@@ -7,7 +7,14 @@ router.post(
     "/add",
     body("date").isISO8601().toDate().withMessage("Wrong date format!"),
     body("type").notEmpty().trim().escape(),
-    body("employeeId").notEmpty().trim().escape(),
-    shiftController.add)
+    body("username").notEmpty().trim().escape(),
+    shiftController.add
+)
 
-    module.exports = router
+router.get(
+    "/get",
+    body("date").isISO8601().toDate().withMessage("Wrong date format!"),
+    shiftController.get
+)
+
+module.exports = router

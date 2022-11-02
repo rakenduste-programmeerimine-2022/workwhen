@@ -11,14 +11,14 @@ const shiftSchema = new Schema(
     { timestamps: true }
 )
 
-shiftSchema.statics.add = async ({ date, type, employeeId }) => {
+shiftSchema.statics.add = async ({ date, type, username }) => {
     return new Promise(async (resolve, reject) => {
         // maybe need to check if date isn't in the past
         const shift = await Shift.findOne({ date })
-        if(!shift){
+        if(shift == null){
             const newShift = new Shift({
                 date,
-                [type]: employeeId
+                [type]: username
             })
 
             newShift.save((err) => {
@@ -26,11 +26,19 @@ shiftSchema.statics.add = async ({ date, type, employeeId }) => {
                 resolve(newShift)
             })
         }
-        shift[type].push(employeeId)
+        shift[type].push(username)
         shift.save((err) => {
             if(err) return reject(err)
             resolve(shift)
         })
+    })
+}
+
+shiftSchema.statics.get = async ({ date }) => {
+    return new Promise(async (resolve, reject) => {
+        const shift = await Shift.findOne({ date })
+        if(shift != null) resolve(shift)
+        reject("No shifts planned for this date")
     })
 }
 
