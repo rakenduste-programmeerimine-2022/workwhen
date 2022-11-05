@@ -11,4 +11,12 @@ router.post(
     bookmarkController.add
 )
 
+router.post(
+    "/remove",
+    body("category").notEmpty().trim().escape(),
+    body("title").notEmpty().trim().escape(),
+    body("link").notEmpty().trim().escape(),
+    bookmarkController.remove
+)
+
 module.exports = router

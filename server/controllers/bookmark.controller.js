@@ -5,3 +5,9 @@ exports.add = async (req, res) => {
         .then((data) => res.send(`Success ${data}`))
         .catch((err) => res.send(`Oh no ${err}`))
 }
+
+exports.remove = async (req, res) => {
+    Bookmark.remove(req.body)
+        .then((data) => res.send(`Success ${data}`))
+        .catch((err) => res.send(`Oh no ${err}`))
+}

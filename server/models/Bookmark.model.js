@@ -30,7 +30,12 @@ bookmarkSchema.statics.add = async ({ category, title, link }) => {
 bookmarkSchema.statics.remove = async ({ category, title, link }) => {
     return new Promise(async (resolve, reject) => {
         const bookmark = await Bookmark.findOne({ category, title, link }, { deleted: false})
-        
+        if(!bookmark) reject("Bookmark doesn't exist!")
+        bookmark.deleted = true
+        bookmark.save((err) => {
+            if(err) return reject(err)
+            resolve("Bookmark successfully deleted!")
+        })
     })
 }
 
