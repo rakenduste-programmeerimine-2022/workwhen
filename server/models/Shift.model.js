@@ -25,12 +25,13 @@ shiftSchema.statics.add = async ({ date, type, username }) => {
                 if(err) return reject(err)
                 resolve(newShift)
             })
+        } else {
+            shift[type].push(username)
+            shift.save((err) => {
+                if(err) return reject(err)
+                resolve(shift)
+            })
         }
-        shift[type].push(username)
-        shift.save((err) => {
-            if(err) return reject(err)
-            resolve(shift)
-        })
     })
 }
 
