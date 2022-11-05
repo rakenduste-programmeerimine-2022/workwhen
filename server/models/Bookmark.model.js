@@ -39,6 +39,13 @@ bookmarkSchema.statics.remove = async ({ category, title, link }) => {
     })
 }
 
+bookmarkSchema.statics.all = async () => {
+    return new Promise(async (resolve, reject) => {
+        const bookmarks = await Bookmark.find({ deleted: false }, "-_id category title link", {})
+        resolve(bookmarks)
+    })
+}
+
 const Bookmark = model("Bookmark", bookmarkSchema)
 
 module.exports = Bookmark

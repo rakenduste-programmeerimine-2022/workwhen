@@ -19,4 +19,6 @@ router.post(
     bookmarkController.remove
 )
 
+router.get("/all", bookmarkController.all)
+
 module.exports = router
