@@ -7,6 +7,7 @@ router.post(
     "/add",
     body("category").notEmpty().trim().escape(),
     body("title").notEmpty().trim().escape(),
+    body("description").trim().escape(),
     body("link").notEmpty(),
     bookmarkController.add
 )
