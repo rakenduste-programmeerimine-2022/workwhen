@@ -16,7 +16,7 @@ export default function Dashboard() {
     return (
         <Box sx={{display:'flex',padding: 3}}>
             <Box sx={{display: 'flex' ,border: 'solid', border: 1, minWidth: 425 ,justifyContent:'center'}}>
-                <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list</Typography>
+                <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list <Typography sx={{display:'flex', border:'solid', border: 1, borderRadius:'50%', background: 'red', marginLeft:'5px'}}>5</Typography></Typography>
                 <Button variant="outlined" size="small" sx={{margin:1, marginLeft: 'auto', color:'black', borderColor:'black', minWidth: '36px', padding:'5px'}}>Me</Button>
                 <Button variant="outlined" size="small" sx={{margin:1, color:'black', borderColor:'black', minWidth: '36px', padding:'5px'}}>
                     <AddIcon></AddIcon>
