@@ -7,15 +7,14 @@ router.post(
     "/add",
     body("category").notEmpty().trim().escape(),
     body("title").notEmpty().trim().escape(),
-    body("link").notEmpty().trim().escape(),
+    body("description").trim().escape(),
+    body("link").notEmpty(),
     bookmarkController.add
 )
 
 router.post(
     "/remove",
-    body("category").notEmpty().trim().escape(),
-    body("title").notEmpty().trim().escape(),
-    body("link").notEmpty().trim().escape(),
+    body("id").notEmpty().trim().escape(),
     bookmarkController.remove
 )
 
