@@ -14,9 +14,7 @@ router.post(
 
 router.post(
     "/remove",
-    body("category").notEmpty().trim().escape(),
-    body("title").notEmpty().trim().escape(),
-    body("link").notEmpty().trim().escape(),
+    body("id").notEmpty().trim().escape(),
     bookmarkController.remove
 )
 

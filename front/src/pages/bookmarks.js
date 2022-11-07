@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Box, Divider, Link, Paper, Typography } from '@mui/material'
+import { Box, Divider, IconButton, Link, Paper, Typography } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import axios from "axios"
 import BookmarkDialog from "../components/BookmarkDialog"
 
@@ -23,6 +24,25 @@ export default function Bookmarks() {
         })
     }
 
+    const handleDelete = e => {
+        console.log(e.currentTarget.id)
+        const id = e.currentTarget.id
+        axios.post("http://localhost:8080/bookmark/remove", {id})
+        .then(function(response){
+            console.log(response)
+            getData()
+        })
+        .catch(function(error){
+            if(error.response){
+                console.log(error.response)
+            } else if (error.request){
+                console.log(error.request)
+            } else {
+                console.log(error.message)
+            }
+        })
+    }
+
     useEffect(() => {
         getData()
     }, [])
@@ -32,7 +52,7 @@ export default function Bookmarks() {
         <Box sx={{padding: "0 1rem 0 1rem"}}>
             <Box sx={{display: "flex", alignItems: "center", gap: "1rem"}}>
                 <h1>Bookmarks</h1>
-                <BookmarkDialog />
+                <BookmarkDialog getData={getData}/>
             </Box>
             <Paper elevation={7}>
                 <Typography variant="h5">Monitooringu tööriistad</Typography>
@@ -40,6 +60,9 @@ export default function Bookmarks() {
                     {monitoringArr.map(item => {
                         return(
                             <>
+                                <IconButton id={item._id} onClick={e => handleDelete(e)} aria-label="delete" size="small" sx={{marginLeft: "0.5rem"}}>
+                                    <DeleteIcon />
+                                </IconButton>
                                 <Link
                                     underline="hover"
                                     href={item.link}
@@ -47,6 +70,7 @@ export default function Bookmarks() {
                                 >
                                     {item.title}
                                 </Link>
+                                    {item.description ? ` - ${item.description}` : ""}
                                 <br />
                             </>
                             )
@@ -58,13 +82,17 @@ export default function Bookmarks() {
                     {mapsArr.map(item => {
                         return(
                             <>
+                                <IconButton id={item._id} onClick={e => handleDelete(e)} aria-label="delete" size="small" sx={{marginLeft: "0.5rem"}}>
+                                    <DeleteIcon />
+                                </IconButton>
                                 <Link
                                     underline="hover"
                                     href={item.link}
                                     target="_blank"
                                 >
-                                    {item.title}
+                                    {item.title} 
                                 </Link>
+                                    {item.description ? ` - ${item.description}` : ""}
                                 <br />
                             </>
                         )

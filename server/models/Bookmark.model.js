@@ -13,7 +13,7 @@ const bookmarkSchema = new Schema(
 
 bookmarkSchema.statics.add = async ({ category, title, description, link }) => {
     return new Promise(async (resolve, reject) => {
-        const bookmark = await Bookmark.findOne({ link }, { deleted: false})
+        const bookmark = await Bookmark.findOne({ link, deleted: false })
         if(bookmark) reject(`Bookmark already exists under "${bookmark.title}"`)
         else {
             const newBookmark = new Bookmark({
@@ -31,9 +31,9 @@ bookmarkSchema.statics.add = async ({ category, title, description, link }) => {
     })
 }
 
-bookmarkSchema.statics.remove = async ({ category, title, link }) => {
+bookmarkSchema.statics.remove = async ({ id }) => {
     return new Promise(async (resolve, reject) => {
-        const bookmark = await Bookmark.findOne({ category, title, link }, { deleted: false})
+        const bookmark = await Bookmark.findById(id)
         if(!bookmark) reject("Bookmark doesn't exist!")
         else {
             bookmark.deleted = true
@@ -47,7 +47,7 @@ bookmarkSchema.statics.remove = async ({ category, title, link }) => {
 
 bookmarkSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
-        const bookmarks = await Bookmark.find({ deleted: false }, "-_id category title link", {})
+        const bookmarks = await Bookmark.find({ deleted: false }, "_id category title description link", {})
         resolve(bookmarks)
     })
 }

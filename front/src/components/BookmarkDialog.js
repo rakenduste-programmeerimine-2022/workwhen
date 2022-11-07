@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormHelperText, TextField, Box, Snackbar, Alert } from "@mui/material";
+import { 
+    Button,
+    Dialog, 
+    DialogActions, 
+    DialogContent, 
+    DialogTitle, 
+    FormHelperText, 
+    TextField, 
+    Box, 
+    Snackbar, 
+    Alert 
+} from "@mui/material";
 import axios from "axios";
 
-export default function BookmarkDialog(){
+export default function BookmarkDialog({ getData }){
     const [open, setOpen] = useState(false)
     const [snackOpen, setSnackOpen] = useState(false)
     
@@ -59,6 +70,7 @@ export default function BookmarkDialog(){
                         severity: "success"
                     })
                     setOpen(false)
+                    getData()
                 } else if (typeof response.data === "string" && response.data !== null){
                     setSnackOpen(true)
                     setSnackbarInfo({
@@ -74,6 +86,7 @@ export default function BookmarkDialog(){
                 }
             })
             .catch(function(err){
+                console.log(err)
                 setSnackOpen(true)
                 setSnackbarInfo({
                     text: "Somethin went wrong!",
