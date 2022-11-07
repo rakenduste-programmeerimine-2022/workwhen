@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Box, Divider, Link, Paper, Typography } from '@mui/material'
 import axios from "axios"
+import BookmarkDialog from "../components/BookmarkDialog"
 
 export default function Bookmarks() {
     const [monitoringArr, setMonitoringArr] = useState([])
@@ -28,8 +29,11 @@ export default function Bookmarks() {
     
     return (
         <>
-        <Box sx={{margin: "2vw"}}>
-            <h1>Bookmarks</h1>
+        <Box sx={{padding: "0 1rem 0 1rem"}}>
+            <Box sx={{display: "flex", alignItems: "center", gap: "1rem"}}>
+                <h1>Bookmarks</h1>
+                <BookmarkDialog />
+            </Box>
             <Paper elevation={7}>
                 <Typography variant="h5">Monitooringu tööriistad</Typography>
                 <Paper elevation={3} sx={{marginBottom: "2vw"}}>
