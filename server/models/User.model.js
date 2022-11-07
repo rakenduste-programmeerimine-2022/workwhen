@@ -21,21 +21,23 @@ userSchema.statics.signup = async ({ username, email, password, fullname, contac
     return new Promise(async (resolve, reject) => {
         const user = await User.findOne({ email })
         if(user) reject("User already exists!")
+        else {
+            const newUser = new User({
+                username,
+                email,
+                password: await bcrypt.hash(password, 10),
+                fullname,
+                contact,
+                birthday,
+                role
+            })
+    
+            newUser.save((err) => {
+                if(err) return reject(err)
+                resolve(newUser)
+            })
+        }
 
-        const newUser = new User({
-            username,
-            email,
-            password: await bcrypt.hash(password, 10),
-            fullname,
-            contact,
-            birthday,
-            role
-        })
-
-        newUser.save((err) => {
-            if(err) return reject(err)
-            resolve(newUser)
-        })
     })
 }
 
@@ -44,18 +46,20 @@ userSchema.statics.login = async ({ username, password }) => {
         const existingUser = await User.findOne({ username })
         if(!existingUser) reject("User doesn't exist!")
         if(!await bcrypt.compare(password, existingUser.password)) reject("Wrong password!")
+        else {
+            const token = jwt.sign(
+                {
+                    username: existingUser.username,
+                    fullname: existingUser.fullname,
+                    role: existingUser.role
+                },
+                `${key}`
+                // maybe also expiry time ??
+            )
+            if(!token) reject("Somethin went wrong!")
+            resolve(token)
+        }
 
-        const token = jwt.sign(
-            {
-                username: existingUser.username,
-                fullname: existingUser.fullname,
-                role: existingUser.role
-            },
-            `${key}`
-            // maybe also expiry time ??
-        )
-        if(!token) reject("Somethin went wrong!")
-        resolve(token)
     })
 }
 
