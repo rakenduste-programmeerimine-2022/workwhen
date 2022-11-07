@@ -32,17 +32,16 @@ todoSchema.statics.add = async ({ title, description, date, assigned }) => {
 
 todoSchema.statics.all = async ({ completed }) => {
     return new Promise(async (resolve, reject) => {
-        const todos = await Todo.find({ completed }, "_id title description, date, assigned", {})
+        const todos = await Todo.find({ completed }, "_id title description, date, assigned", { deleted: false })
         resolve(todos)
     })
 }
 
 todoSchema.statics.update = async ({ id }) => {
     return new Promise(async (resolve, reject) => {
-        const todo = await Todo.find({ id })
+        const todo = await Todo.findById(id)
         if(!todo) reject("To-do doesn't exist")
         todo.completed = true
-
         todo.save((err) => {
             if(err) return reject(err)
             resolve(todo)
@@ -52,7 +51,7 @@ todoSchema.statics.update = async ({ id }) => {
 
 todoSchema.statics.remove = async ({ id }) => {
     return new Promise(async (resolve, reject) => {
-        const todo = await Todo.find({ id })
+        const todo = await Todo.findById(id)
         if(!todo) reject("To-do doesn't exist")
         todo.deleted = true
 
