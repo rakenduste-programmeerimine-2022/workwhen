@@ -28,6 +28,7 @@ export default function Login(){
             axios.post("http://localhost:8080/user/login", formValue)
             .then(function(response) {
                 console.log(response)
+                localStorage.setItem("token", response.data)
             })
             .catch(function(error) {
                 if(error.response){
