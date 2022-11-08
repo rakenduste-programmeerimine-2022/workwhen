@@ -35,7 +35,7 @@ export default function Dashboard() {
                 <Button variant="outlined" size="small" sx={{margin:1, marginLeft: 'auto', color:'black', borderColor:'black', minWidth: '36px', padding:'5px'}}>Me</Button>
                 <TodoDialog getData={getData}/>
 
-                <Divider></Divider>
+                <Divider />
 
                 <Dialog>
                     <DialogContent>
