@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const key = require("../secret")
+require("dotenv").config()
 
 const userSchema = new Schema(
     {
@@ -51,7 +52,7 @@ userSchema.statics.login = async ({ username, password }) => {
                 {
                     id: existingUser._id
                 },
-                `${key}`,
+                `${process.env.KEY}`,
                 { expiresIn: "12h" }
             )
             if(!token) reject("Somethin went wrong!")

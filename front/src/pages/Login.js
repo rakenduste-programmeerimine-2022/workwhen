@@ -1,4 +1,6 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
+import { useNavigate } from 'react-router-dom'
+// import { UserContext } from "../hooks/UserContext"
 import { 
     Container, 
     Button, 
@@ -22,6 +24,9 @@ export default function Login(){
         text: "",
         severity: ""
     }
+
+    let navigate = useNavigate()
+    // const { setUser } = useContext(UserContext)
 
     const [formValue, setFormValue] = useState(form)
     const [helperText, setHelperText] = useState("")
@@ -48,15 +53,17 @@ export default function Login(){
             setHelperText("")
             axios.post("http://localhost:8080/user/login", formValue)
             .then(function(response) {
-                console.log(response)
-                if(typeof response.data === "object" && response.data !== null){
+                if(typeof response.data === "object" && response.data !== null && response.data.token){
+                    console.log(response)
                     setSnackOpen(true)
                     setSnackbarInfo({
                         text: "Logged in!",
                         severity: "success"
                     })
                     localStorage.setItem("token", response.data.token)
-                    localStorage.setItem("user", JSON.stringify(response.data.data) )
+                    localStorage.setItem("user", JSON.stringify(response.data.data))
+                    // setUser(JSON.stringify(response.data.data))
+                    navigate("/dashboard")
                 } else if (typeof response.data === "string" && response.data !== null){
                     setSnackOpen(true)
                     setSnackbarInfo({

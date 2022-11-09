@@ -32,7 +32,7 @@ todoSchema.statics.add = async ({ title, description, date, assigned }) => {
 
 todoSchema.statics.all = async ({ completed }) => {
     return new Promise(async (resolve, reject) => {
-        const todos = await Todo.find({ completed }, "_id title description date assigned", { deleted: false })
+        const todos = await Todo.find({ completed, deleted: false }, "_id title description date assigned")
         resolve(todos)
     })
 }
