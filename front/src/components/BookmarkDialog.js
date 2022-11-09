@@ -60,6 +60,9 @@ export default function BookmarkDialog({ getData }){
                 title: formValue.title,
                 description: formValue.description,
                 link: formValue.link
+            },
+            {
+                headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}
             })
             .then(function(response){
                 console.log(response)
