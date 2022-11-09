@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
+
 const checkToken = (req, res, next) => {
     const header = req.headers["authorization"]
 
@@ -5,8 +8,13 @@ const checkToken = (req, res, next) => {
         const bearer = header.split(" ")
         const token = bearer[1]
 
-        req.token = token
-        next()
+        jwt.verify(token, `${process.env.KEY}`, (err, decoded) => {
+            if(err){
+                res.sendStatus(403)
+            } else {
+                next()
+            }
+        })
     } else {
         res.sendStatus(403)
     }
