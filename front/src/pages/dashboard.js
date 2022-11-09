@@ -12,15 +12,20 @@ export default function Dashboard() {
     const [todoArr, setTodoArr] = useState([])
     
     const getData = () => {
-        axios.get("http://localhost:8080/todo/all")
+        //axios.get("http://localhost:8080/todo/all", { "completed": false })
+        axios.get("http://localhost:8080/todo/all", { params: { completed: false }})
         .then(function(response) {
             setTodoArr([])
+            console.log(response)
             response.data.forEach(element => {
                 setTodoArr(oldArr => [...oldArr, element])
-                    }
-                )
-            }
-        )
+                console.log(element)
+                }
+            )  
+        })
+        .catch(function(err) {
+            console.log(err)
+        })
     }
 
 
