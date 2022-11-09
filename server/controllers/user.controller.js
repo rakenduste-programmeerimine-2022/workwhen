@@ -9,13 +9,15 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
     User.login(req.body)
         .then((data) => res.send(data))
-        .catch((data) => res.send(`Error ${data}`))
+        .catch((err) => res.send(err))
 }
 
-// exports.protected = async (req, res) => {}
+exports.logout = async (req, res) => {
+
+}
 
 exports.getAll = async (req, res) => {
     User.all(req.body)
         .then((data) => res.send(data))
-        .catch((data) => res.send(`Error ${data}`))
+        .catch((err) => res.send(`Error ${err}`))
 }

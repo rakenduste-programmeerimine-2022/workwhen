@@ -89,7 +89,7 @@ export default function BookmarkDialog({ getData }){
                 console.log(err)
                 setSnackOpen(true)
                 setSnackbarInfo({
-                    text: "Somethin went wrong!",
+                    text: "Something went wrong!",
                     severity: "error"
                 })
                 setOpen(false)
