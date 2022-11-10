@@ -12,6 +12,7 @@ const userSchema = new Schema(
         contact: { type: String, required: true },
         birthday: { type: Date, required: true },
         role: { type: String, default: 'employee' },
+        deleted: { type: Boolean, default: false }
     },
     { timestamps: true }
 )
@@ -20,21 +21,23 @@ userSchema.statics.signup = async ({ username, email, password, fullname, contac
     return new Promise(async (resolve, reject) => {
         const user = await User.findOne({ email })
         if(user) reject("User already exists!")
+        else {
+            const newUser = new User({
+                username,
+                email,
+                password: await bcrypt.hash(password, 10),
+                fullname,
+                contact,
+                birthday,
+                role
+            })
+    
+            newUser.save((err) => {
+                if(err) return reject(err)
+                resolve(newUser)
+            })
+        }
 
-        const newUser = new User({
-            username,
-            email,
-            password: await bcrypt.hash(password, 10),
-            fullname,
-            contact,
-            birthday,
-            role
-        })
-
-        newUser.save((err) => {
-            if(err) return reject(err)
-            resolve(newUser)
-        })
     })
 }
 
@@ -43,25 +46,27 @@ userSchema.statics.login = async ({ username, password }) => {
         const existingUser = await User.findOne({ username })
         if(!existingUser) reject("User doesn't exist!")
         if(!await bcrypt.compare(password, existingUser.password)) reject("Wrong password!")
+        else {
+            const token = jwt.sign(
+                {
+                    username: existingUser.username,
+                    fullname: existingUser.fullname,
+                    role: existingUser.role
+                },
+                `${key}`
+                // maybe also expiry time ??
+            )
+            if(!token) reject("Somethin went wrong!")
+            resolve(token)
+        }
 
-        const token = jwt.sign(
-            {
-                username: existingUser.username,
-                fullname: existingUser.fullname,
-                role: existingUser.role
-            },
-            `${key}`
-            // maybe also expiry time ??
-        )
-        if(!token) reject("Somethin went wrong!")
-        resolve(token)
     })
 }
 
 userSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
         // some checks? for example if token present
-        const users = await User.find({}, {})
+        const users = await User.find({ deleted: false }, {})
         resolve(users)
     })
 }
