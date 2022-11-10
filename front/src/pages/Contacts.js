@@ -15,9 +15,9 @@ export default function Contacts() {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Ettevõte/Isiku nimi</TableCell>
-                            <TableCell>Ettevõte/Isiku number</TableCell>
-                            <TableCell>Ettevõte/Isiku email</TableCell>
+                            <TableCell>Contact name</TableCell>
+                            <TableCell>Contact number</TableCell>
+                            <TableCell>Contact e-mail</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
