@@ -1,5 +1,17 @@
 import React, { useState } from "react"
-import { Container, Button, FormHelperText, Paper, TextField, Box, Avatar, FormControl } from "@mui/material"
+import { useNavigate } from 'react-router-dom'
+import { 
+    Container, 
+    Button, 
+    FormHelperText, 
+    Paper, 
+    TextField, 
+    Box, 
+    Avatar, 
+    FormControl, 
+    Snackbar,
+    Alert
+} from "@mui/material"
 import axios from "axios"
 
 export default function Login(){
@@ -7,9 +19,18 @@ export default function Login(){
         username: "",
         password: ""
     }
+    const snackbar = {
+        text: "",
+        severity: ""
+    }
+
+    let navigate = useNavigate()
+    // const { setUser } = useContext(UserContext)
 
     const [formValue, setFormValue] = useState(form)
     const [helperText, setHelperText] = useState("")
+    const [snackbarInfo, setSnackbarInfo] = useState(snackbar)
+    const [snackOpen, setSnackOpen] = useState(false)
 
     const handleFormChange = e => {
         const { value, name } = e.target
@@ -20,6 +41,10 @@ export default function Login(){
         setFormValue(newValue)
     }
 
+    const handleSnackClose = () => {
+        setSnackOpen(false)
+    }
+
     const handleSubmit = e => {
         e.preventDefault()
         console.log(formValue)
@@ -27,12 +52,39 @@ export default function Login(){
             setHelperText("")
             axios.post("http://localhost:8080/user/login", formValue)
             .then(function(response) {
-                console.log(response)
+                if(typeof response.data === "object" && response.data !== null && response.data.token){
+                    console.log(response)
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: "Logged in!",
+                        severity: "success"
+                    })
+                    localStorage.setItem("token", response.data.token)
+                    localStorage.setItem("user", JSON.stringify(response.data.data))
+                    window.dispatchEvent(new Event("login"))
+                    navigate("/dashboard")
+                } else if (typeof response.data === "string" && response.data !== null){
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: response.data,
+                        severity: "error"
+                    })
+                } else {
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: "Something went wrong!",
+                        severity: "error"
+                    })
+                }
             })
             .catch(function(error) {
                 if(error.response){
                     console.log(error.response)
-                    setHelperText(error.response.data.errors[0].msg)
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: "Something went wrong!",
+                        severity: "error"
+                    })
                 } else if (error.request){
                     console.log(error.request)
                 } else {
@@ -84,6 +136,11 @@ export default function Login(){
                                 Login
                             </Button>
                         </FormControl>
+                        <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                            <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                                {snackbarInfo.text}
+                            </Alert>
+                        </Snackbar>
                     </Box>
                 </Box>
             </Paper>

@@ -60,6 +60,9 @@ export default function BookmarkDialog({ getData }){
                 title: formValue.title,
                 description: formValue.description,
                 link: formValue.link
+            },
+            {
+                headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}
             })
             .then(function(response){
                 console.log(response)
@@ -89,7 +92,7 @@ export default function BookmarkDialog({ getData }){
                 console.log(err)
                 setSnackOpen(true)
                 setSnackbarInfo({
-                    text: "Somethin went wrong!",
+                    text: "Something went wrong!",
                     severity: "error"
                 })
                 setOpen(false)

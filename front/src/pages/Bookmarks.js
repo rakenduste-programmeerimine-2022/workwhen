@@ -9,7 +9,7 @@ export default function Bookmarks() {
     const [mapsArr, setMapsArr] = useState([])
 
     const getData = () => {
-        axios.get("http://localhost:8080/bookmark/all")
+        axios.get("http://localhost:8080/bookmark/all", { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response) {
             setMonitoringArr([])
             setMapsArr([])
@@ -21,6 +21,9 @@ export default function Bookmarks() {
                     setMapsArr(oldArr => [...oldArr, element])
                 }
             })
+        })
+        .catch(function(err){
+            console.log(err)
         })
     }
 

@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const key = require("../secret")
+require("dotenv").config()
 
 const userSchema = new Schema(
     {
@@ -44,20 +45,26 @@ userSchema.statics.signup = async ({ username, email, password, fullname, contac
 userSchema.statics.login = async ({ username, password }) => {
     return new Promise(async (resolve, reject) => {
         const existingUser = await User.findOne({ username })
-        if(!existingUser) reject("User doesn't exist!")
-        if(!await bcrypt.compare(password, existingUser.password)) reject("Wrong password!")
+        if(!existingUser) return reject("User doesn't exist!")
+        if(!await bcrypt.compare(password, existingUser.password)) return reject("Wrong password!")
         else {
             const token = jwt.sign(
                 {
+                    id: existingUser._id
+                },
+                `${process.env.KEY}`,
+                { expiresIn: "12h" }
+            )
+            if(!token) reject("Somethin went wrong!")
+            const response = {
+                token,
+                data: {
                     username: existingUser.username,
                     fullname: existingUser.fullname,
                     role: existingUser.role
-                },
-                `${key}`
-                // maybe also expiry time ??
-            )
-            if(!token) reject("Somethin went wrong!")
-            resolve(token)
+                }
+            }
+            resolve(response)
         }
 
     })

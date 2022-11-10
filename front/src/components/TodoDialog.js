@@ -60,7 +60,8 @@ export default function BookmarkDialog({getData}){
                 description: formValue.description,
                 date: formValue.date,
                 assigned: formValue.assigned
-            })
+            },
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
             .then(function(response){
                 console.log(response)
                 if(typeof response.data === "object" && response.data !== null){
@@ -89,13 +90,13 @@ export default function BookmarkDialog({getData}){
                 console.log(err)
                 setSnackOpen(true)
                 setSnackbarInfo({
-                    text: "Somethin went wrong!",
+                    text: "Something went wrong!",
                     severity: "error"
                 })
                 setOpen(false)
             })
         }
-        if (formValue.title == "" || formValue.description == "" || formValue.assigned == "" || formValue.date == ""){
+        if (formValue.title === "" || formValue.description === "" || formValue.assigned === "" || formValue.date === ""){
             setSnackOpen(true)
             setSnackbarInfo({
                 text: "Form fields are not filled",
