@@ -13,7 +13,7 @@ const bookmarkSchema = new Schema(
 
 bookmarkSchema.statics.add = async ({ category, title, description, link }) => {
     return new Promise(async (resolve, reject) => {
-        const bookmark = await Bookmark.findOne({ link, deleted: false })
+        const bookmark = await Bookmark.findOne({ link }, { deleted: false })
         if(bookmark) reject(`Bookmark already exists under "${bookmark.title}"`)
         else {
             const newBookmark = new Bookmark({

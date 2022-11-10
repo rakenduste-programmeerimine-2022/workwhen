@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const todoController = require("../controllers/todo.controller")
-const { body } = require("express-validator")
 const checkToken = require("../middlewares/checkToken")
+const { body, param } = require("express-validator")
 
 router.post(
     "/add",
@@ -17,7 +17,7 @@ router.post(
 router.get(
     "/all",
     checkToken,
-    body("completed").notEmpty().trim().escape(),
+    param("completed").trim().isBoolean(),
     todoController.all
 )
 
