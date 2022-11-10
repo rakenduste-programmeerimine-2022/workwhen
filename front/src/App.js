@@ -7,6 +7,9 @@ import ShiftPlanning from "./pages/ShiftPlanning"
 import UserSettings from "./pages/UserSettings"
 import { Route, Routes } from "react-router-dom"
 import React from "react"
+import Signup from "./pages/Signup";
+import UserSettings from './pages/UserSettings';
+import Contacts from './pages/Contacts';
 import Login from "./pages/Login"
 import RouteGuard from "./components/RouteGuard"
 
