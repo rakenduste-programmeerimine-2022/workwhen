@@ -12,17 +12,17 @@ import Login from "./pages/Login"
 import RouteGuard from "./components/RouteGuard"
 
 function App() {
-    const [user, setUser] = useState(false)
+    // const [user, setUser] = useState(false)
 
     // this is scuffed
     const ProtectedNavbar = () => {
-        if(localStorage.getItem("token") && user){
+        if(localStorage.getItem("token") && localStorage.getItem("user")){
             return <Navbar />
         }
     }
 
     window.addEventListener("login", () => {
-        setUser(true)
+        // setUser(true)
         ProtectedNavbar()
     })
 

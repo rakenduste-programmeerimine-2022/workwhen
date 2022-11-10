@@ -34,7 +34,6 @@ export default function Dashboard() {
     
 
     const handleDelete = e => {
-
         console.log(e.currentTarget.id)
         const id = e.currentTarget.id
         axios.post("http://localhost:8080/todo/remove", {id}, { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
