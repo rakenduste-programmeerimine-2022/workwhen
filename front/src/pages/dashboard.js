@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button,Divider,Paper,Typography} from "@mui/material";
 import { Box, Container} from "@mui/system";
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import axios from 'axios';
 import TodoDialog from "../components/TodoDialog"
 import moment from 'moment'
@@ -17,7 +14,11 @@ export default function Dashboard() {
     
     const getData = () => {
         //axios.get("http://localhost:8080/todo/all", { "completed": false })
-        axios.get("http://localhost:8080/todo/all", { params: { completed: false }})
+        axios.get("http://localhost:8080/todo/all", 
+        {
+            params: { completed: false }, 
+            headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}
+        })
         .then(function(response) {
             setTodoArr([])
             response.data.forEach(element => {
@@ -36,7 +37,7 @@ export default function Dashboard() {
 
         console.log(e.currentTarget.id)
         const id = e.currentTarget.id
-        axios.post("http://localhost:8080/todo/remove", {id})
+        axios.post("http://localhost:8080/todo/remove", {id}, { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response){
             console.log(response)
             getData()
@@ -55,7 +56,7 @@ export default function Dashboard() {
     const handleCompleted = e => {
         console.log(e.currentTarget.id)
         const id = e.currentTarget.id
-        axios.post("http://localhost:8080/todo/update", {id})
+        axios.post("http://localhost:8080/todo/update", {id}, { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response){
             console.log(response)
             getData()
@@ -76,7 +77,7 @@ export default function Dashboard() {
         getData()
     }, [])
     return (
-        <Container sx={{display:'flex', padding: 3, width:500, margin:0}}>
+        <Container sx={{display:'flex', padding: 3, width: 500, margin: 0}}>
             <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450}}>
                 <Box sx={{display:"flex"}}>
                     <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list <Typography sx={{display:'flex', border:'solid 1', borderRadius:'50%', background: 'red', marginLeft:'5px', padding:'2px'}}>5</Typography></Typography>
@@ -84,11 +85,8 @@ export default function Dashboard() {
                     <TodoDialog getData={getData}/>
                 </Box>
                 <Divider />
-                    
                 <Box sx={{display:"flex", flexDirection:"column", overflow:"hidden", overflowY:"scroll", marginTop:"5px", width:450, height:500}}>
                     {todoArr.length === 0 ? <Typography>No todos</Typography> : todoArr.map(item => {
-                        
-
                         return(
                             <Box sx={{display:"flex", marginTop:"10px", padding:2, border:"solid", border:1}}>
                                     Title: {item.title}<br />
@@ -101,14 +99,10 @@ export default function Dashboard() {
                                     </Box>
                                     <br />
                                     <Divider />
-                                    
-
                             </Box>
                         )
                     })}
                 </Box>
-                   
-                
             </Paper>
         </Container>
     )

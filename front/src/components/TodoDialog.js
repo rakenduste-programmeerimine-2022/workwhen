@@ -95,7 +95,7 @@ export default function BookmarkDialog({getData}){
                 setOpen(false)
             })
         }
-        if (formValue.title == "" || formValue.description == "" || formValue.assigned == "" || formValue.date == ""){
+        if (formValue.title === "" || formValue.description === "" || formValue.assigned === "" || formValue.date === ""){
             setSnackOpen(true)
             setSnackbarInfo({
                 text: "Form fields are not filled",

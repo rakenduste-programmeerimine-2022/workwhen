@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react"
+import React, { useState } from "react"
 import { useNavigate } from 'react-router-dom'
-// import { UserContext } from "../hooks/UserContext"
 import { 
     Container, 
     Button, 
@@ -62,7 +61,7 @@ export default function Login(){
                     })
                     localStorage.setItem("token", response.data.token)
                     localStorage.setItem("user", JSON.stringify(response.data.data))
-                    // setUser(JSON.stringify(response.data.data))
+                    window.dispatchEvent(new Event("login"))
                     navigate("/dashboard")
                 } else if (typeof response.data === "string" && response.data !== null){
                     setSnackOpen(true)
