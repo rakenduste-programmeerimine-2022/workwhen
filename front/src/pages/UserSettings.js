@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Avatar, Button } from "@mui/material";
+import { Box, Container, Paper, Avatar, Button, Dialog, DialogContent, DialogContentText, DialogActions, TextField, FormControl } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -23,6 +23,14 @@ export default function UserSettings() {
     }
     const handleCloseUserMenu = () => {
         setanchorUser(null);
+    }
+
+    const [openPwdChange, setOpenPwdChange] = useState(false);
+    const handleOpenPwdChange = () => {
+        setOpenPwdChange(true);
+    }
+    const handleClosePwdChange = () => {
+        setOpenPwdChange(false);
     }
 
 
@@ -51,7 +59,7 @@ export default function UserSettings() {
                             </Table>
                             <Table>
                                 <TableRow>
-                                    <Button variant="contained" sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }} margin="dense">
+                                    <Button onClick={handleOpenPwdChange} variant="contained" sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }} margin="dense">
                                         Change password
                                     </Button>
                                 </TableRow>
@@ -62,7 +70,49 @@ export default function UserSettings() {
                                 </TableRow>
                             </Table>
                         </TableContainer>
-                    </Box>  
+                    </Box>
+                    <Dialog open={openPwdChange} onClose={handleClosePwdChange} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
+                        </DialogContent>
+                        <FormControl
+                            className="PwdChangeForm"
+                            sx={{width: "20rem", p: 2}}                        
+                        >
+                            <TextField
+                                autoFocus
+                                id="curPwdChange"
+                                label="Current password"
+                                type="text"
+                                variant="standard"
+                                sx={{ p: 2}}
+                            />
+                            <TextField
+                                autoFocus
+                                id="newPwdChange"
+                                label="New password"
+                                type="text"
+                                variant="standard"
+                                sx={{ p: 2}}
+                            />
+                            <TextField
+                                autoFocus
+                                id="repeatPwdChange"
+                                label="Repeat new password"
+                                type="text"
+                                variant="standard"
+                                sx={{ p: 2}}
+                            />
+                            <DialogActions>                            
+                                <Button variant="contained" sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }} margin="dense" onClick={handleClosePwdChange}>
+                                    Cancel
+                                </Button>
+                                <Button variant="contained" sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }} onClick={handleClosePwdChange} autoFocus>
+                                    Change!
+                                </Button>
+                            </DialogActions>
+                        </FormControl>
+			        </Dialog>
             </Paper>
         </Container>
 

@@ -8,6 +8,20 @@ import TableHead from "@mui/material/TableHead";
 
 export default function Contacts() {
 
+    function ContactsData() {
+        const data = [
+            {id: 1, name: "Juku", phone: 5555555, email: "mingi@mail.ee"},
+            {id: 2, name: "Kuku", phone: 5555555, email: "mingi@mail.ee"},
+            {id: 3, name: "Luku", phone: 5555555, email: "mingi@mail.ee"},
+            {id: 4, name: "Muku", phone: 5555555, email: "mingi@mail.ee"},
+            {id: 5, name: "Niina", phone: 5555555, email: "mingi@mail.ee"},
+            {id: 6, name: "Miina", phone: 5555555, email: "mingi@mail.ee"},
+            {id: 7, name: "Siina", phone: 5555555, email: "mingi@mail.ee"},
+            {id: 8, name: "Tiina", phone: 5555555, email: "mingi@mail.ee"}
+        ]
+
+    }
+
 
     return(
         <Paper sx={{ width: '100%'}} elevation={2}>
@@ -21,6 +35,7 @@ export default function Contacts() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
+
                         
                     </TableBody>
                 </Table>
