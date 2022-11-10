@@ -100,7 +100,7 @@ export default function BookmarkDialog({getData}){
     return(
         
         <>
-            <Button variant="outlined" onClick={handleClickOpen} size="small" sx={{margin:1, color:'black', borderColor:'black', minWidth: '36px', padding:'5px'}}><AddIcon></AddIcon></Button>
+            <Button variant="outlined" onClick={handleClickOpen} size="small" sx={{margin:1, color:'black', borderColor:'black', maxWidth: '36px', padding:'5px'}}><AddIcon></AddIcon></Button>
             <Dialog open={open} onClose={handleClose}>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <DialogTitle>Add a new to-do assignment</DialogTitle>
