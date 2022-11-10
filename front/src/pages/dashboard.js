@@ -30,6 +30,8 @@ export default function Dashboard() {
         })
     }
 
+    
+
     const handleDelete = e => {
 
         console.log(e.currentTarget.id)
