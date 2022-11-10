@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import TableHead from "@mui/material/TableHead";
 
 export default function Contacts() {
-
+    
     function ContactsData() {
         const data = [
             {id: 1, name: "Juku", phone: 5555555, email: "mingi@mail.ee"},
