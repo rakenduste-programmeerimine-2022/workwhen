@@ -40,7 +40,7 @@ todoSchema.statics.all = async ({ completed }) => {
 todoSchema.statics.update = async ({ id }) => {
     return new Promise(async (resolve, reject) => {
         const todo = await Todo.findById(id)
-        if(!todo) reject("To-do doesn't exist")
+        if(!todo) return reject("To-do doesn't exist")
         todo.completed = true
         todo.save((err) => {
             if(err) return reject(err)
@@ -52,9 +52,8 @@ todoSchema.statics.update = async ({ id }) => {
 todoSchema.statics.remove = async ({ id }) => {
     return new Promise(async (resolve, reject) => {
         const todo = await Todo.findById(id)
-        if(!todo) reject("To-do doesn't exist")
+        if(!todo) return reject("To-do doesn't exist")
         todo.deleted = true
-
         todo.save((err) => {
             if(err) return reject(err)
             resolve(todo)
