@@ -37,7 +37,7 @@ function Navbar() {
             }}
           >
             <Link style={{textDecoration:'none', color: 'white'}} to={'/dashboard'}>
-            LOGO
+            WorkWhen
             </Link>
             
           </Typography>

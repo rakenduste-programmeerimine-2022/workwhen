@@ -12,7 +12,6 @@ export default function Dashboard() {
     const [todoArr, setTodoArr] = useState([])
 
     const getData = () => {
-        //axios.get("http://localhost:8080/todo/all", { "completed": false })
         axios.get("http://localhost:8080/todo/all", 
         {
             params: { completed: false }, 
@@ -35,7 +34,10 @@ export default function Dashboard() {
     const handleDelete = e => {
         console.log(e.currentTarget.id)
         const id = e.currentTarget.id
-        axios.post("http://localhost:8080/todo/remove", {id}, { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+        axios.post("http://localhost:8080/todo/remove",
+            {id},
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} }
+        )
         .then(function(response){
             console.log(response)
             getData()
@@ -54,7 +56,10 @@ export default function Dashboard() {
     const handleCompleted = e => {
         console.log(e.currentTarget.id)
         const id = e.currentTarget.id
-        axios.post("http://localhost:8080/todo/update", {id}, { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+        axios.post("http://localhost:8080/todo/update",
+            {id},
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} }
+        )
         .then(function(response){
             console.log(response)
             getData()
