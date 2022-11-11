@@ -33,11 +33,11 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route element={<RouteGuard />}>
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/shift planning" element={<ShiftPlanning />} />
+                <Route path="/shift-planning" element={<ShiftPlanning />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/bookmarks" element={<Bookmarks />} />
                 <Route path="/contacts" element={<Contacts />} />
-                <Route path="/user settings" element={<UserSettings />} />
+                <Route path="/user-settings" element={<UserSettings />} />
             </Route>
         </Routes>
     </>
