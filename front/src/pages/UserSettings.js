@@ -59,25 +59,39 @@ export default function UserSettings() {
                             </Table>
                             <Table>
                                 <TableRow>
-                                    <Button onClick={handleOpenPwdChange} variant="contained" sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }} margin="dense">
+                                    <Button 
+                                        onClick={handleOpenPwdChange}
+                                        variant="contained"
+                                        sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }}
+                                        margin="dense"
+                                    >
                                         Change password
                                     </Button>
                                 </TableRow>
                                 <TableRow>
-                                    <Button variant="contained" sx={{ mt: 1, mb: 1, bgcolor: "main", width: "auto" }} margin="dense">
+                                    <Button
+                                        variant="contained"
+                                        sx={{ mt: 1, mb: 1, bgcolor: "main", width: "auto" }}
+                                        margin="dense"
+                                    >
                                         Logout
                                     </Button>
                                 </TableRow>
                             </Table>
                         </TableContainer>
                     </Box>
-                    <Dialog open={openPwdChange} onClose={handleClosePwdChange} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                    <Dialog 
+                        open={openPwdChange}
+                        onClose={handleClosePwdChange}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
                         </DialogContent>
                         <FormControl
                             className="PwdChangeForm"
-                            sx={{width: "20rem", p: 2}}                        
+                            sx={{width: "20rem", p: 2}}
                         >
                             <TextField
                                 autoFocus
@@ -104,10 +118,20 @@ export default function UserSettings() {
                                 sx={{ p: 2}}
                             />
                             <DialogActions>                            
-                                <Button variant="contained" sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }} margin="dense" onClick={handleClosePwdChange}>
+                                <Button
+                                    variant="contained"
+                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                    margin="dense"
+                                    onClick={handleClosePwdChange}
+                                >
                                     Cancel
                                 </Button>
-                                <Button variant="contained" sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }} onClick={handleClosePwdChange} autoFocus>
+                                <Button
+                                    variant="contained"
+                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                    onClick={handleClosePwdChange}
+                                    autoFocus
+                                >
                                     Change!
                                 </Button>
                             </DialogActions>
