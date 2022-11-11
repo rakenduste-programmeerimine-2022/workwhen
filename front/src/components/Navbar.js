@@ -9,18 +9,24 @@ import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 
-const pages = ['Dashboard', 'Shift Planning', 'Schedule', 'Bookmarks', 'Contacts', 'User Settings'];
+const pages = {
+    'Dashboard': 'dashboard',
+    'Shift Planning': 'shift-planning',
+    'Schedule': 'schedule',
+    'Bookmarks': 'bookmarks',
+    'Contacts': 'contacts',
+    'User Settings': 'user-settings'
+};
 
 function Navbar() {
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl" >
+    <AppBar position='static'>
+      <Container maxWidth='xl'>
         <Toolbar disableGutters >          
           <Typography
-            variant="h6"
+            variant='h6'
             noWrap
-            component="a"
             sx={{
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
@@ -30,24 +36,22 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            <Link style={{textDecoration:'none', color: 'white'}} to={"/Dashboard"}>
-            LOGO
+            <Link style={{textDecoration:'none', color: 'white'}} to={'/dashboard'}>
+            WorkWhen
             </Link>
             
           </Typography>
             <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, marginLeft: 'auto', gap: 14}} >
-                {pages.map((page) => (
-                
-                  <Button
-                      component = {NavLink}
-                      to={`/${page}`}
-                      key={page}
-                      sx={{color: 'white', display: 'block', '&.active': {
+                {Object.entries(pages).map(([page, link]) => (
+                    <Button
+                        component = {NavLink}
+                        to={`/${link}`}
+                        key={page}
+                        sx={{color: 'white', display: 'block', '&.active': {
                         background:'#1E5180',}}} 
-                  >
-                      {page}   
-                  </Button>
-                
+                    >
+                        {page}   
+                    </Button>
                 ))}
             </Box>
         </Toolbar>

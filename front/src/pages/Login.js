@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom'
 import { 
     Container, 
@@ -95,6 +95,12 @@ export default function Login(){
             setHelperText("Please fill all fields")
         }
     }
+
+    useEffect(() => {
+        if(localStorage.getItem("token") && localStorage.getItem("user")){
+            navigate("/dashboard")
+        }
+    }, [])
 
     return(
         <Container component="div" maxWidth="xs" sx={{ minWidth: "12rem" }}>
