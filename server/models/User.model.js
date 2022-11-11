@@ -72,7 +72,7 @@ userSchema.statics.login = async ({ username, password }) => {
 
 userSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
-        const users = await User.find({ deleted: false }, {})
+        const users = await User.find({ deleted: false }, " -_id email fullname contact", {})
         resolve(users)
     })
 }
