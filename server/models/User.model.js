@@ -72,8 +72,7 @@ userSchema.statics.login = async ({ username, password }) => {
 
 userSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
-        // some checks? for example if token present
-        const users = await User.find({ deleted: false }, {})
+        const users = await User.find({ deleted: false }, " -_id email fullname contact", {})
         resolve(users)
     })
 }
