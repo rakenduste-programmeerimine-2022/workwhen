@@ -1,13 +1,27 @@
-import { Box, Container, Paper, Avatar, Button, Dialog, DialogContent, DialogContentText, DialogActions, TextField, FormControl } from "@mui/material";
+import { 
+    Box,
+    Container,
+    Paper,
+    Avatar,
+    Button,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    TextField,
+    FormControl
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 export default function UserSettings() {
+    const navigate = useNavigate()
 
     const employeeData = {
         name: 'Juuli',
@@ -33,14 +47,19 @@ export default function UserSettings() {
         setOpenPwdChange(false);
     }
 
-
+    const handleLogout = () => {
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+        window.dispatchEvent(new Event("logout"))
+        navigate("/")
+    }
 
     return(
         <Container component="div" maxWidth="xs" sx={{ minWidth: "12rem" }}>
             <Paper elevation={3} sx={{ p: 4, pt: 3}}>
                 <Avatar sx={{ m: 1, bgcolor: "black", color: "white", width: 60, height: 60 }}>JK</Avatar>
                     <Box sx={{display: "flex", flexDirection: "column"}}>
-                        <TableContainer component="usrSetData" noValidate sx={{ marginTop: "5px", marginBottom: "0px" }}>
+                        <TableContainer noValidate sx={{ marginTop: "5px", marginBottom: "0px" }}>
                             <Table>
                                 <TableBody>
                                     <TableRow>
@@ -59,25 +78,40 @@ export default function UserSettings() {
                             </Table>
                             <Table>
                                 <TableRow>
-                                    <Button onClick={handleOpenPwdChange} variant="contained" sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }} margin="dense">
+                                    <Button 
+                                        onClick={handleOpenPwdChange}
+                                        variant="contained"
+                                        sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }}
+                                        margin="dense"
+                                    >
                                         Change password
                                     </Button>
                                 </TableRow>
                                 <TableRow>
-                                    <Button variant="contained" sx={{ mt: 1, mb: 1, bgcolor: "main", width: "auto" }} margin="dense">
+                                    <Button
+                                        onClick={handleLogout}
+                                        variant="contained"
+                                        sx={{ mt: 1, mb: 1, bgcolor: "main", width: "auto" }}
+                                        margin="dense"
+                                    >
                                         Logout
                                     </Button>
                                 </TableRow>
                             </Table>
                         </TableContainer>
                     </Box>
-                    <Dialog open={openPwdChange} onClose={handleClosePwdChange} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                    <Dialog 
+                        open={openPwdChange}
+                        onClose={handleClosePwdChange}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
                         </DialogContent>
                         <FormControl
                             className="PwdChangeForm"
-                            sx={{width: "20rem", p: 2}}                        
+                            sx={{width: "20rem", p: 2}}
                         >
                             <TextField
                                 autoFocus
@@ -104,10 +138,20 @@ export default function UserSettings() {
                                 sx={{ p: 2}}
                             />
                             <DialogActions>                            
-                                <Button variant="contained" sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }} margin="dense" onClick={handleClosePwdChange}>
+                                <Button
+                                    variant="contained"
+                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                    margin="dense"
+                                    onClick={handleClosePwdChange}
+                                >
                                     Cancel
                                 </Button>
-                                <Button variant="contained" sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }} onClick={handleClosePwdChange} autoFocus>
+                                <Button
+                                    variant="contained"
+                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                    onClick={handleClosePwdChange}
+                                    autoFocus
+                                >
                                     Change!
                                 </Button>
                             </DialogActions>
