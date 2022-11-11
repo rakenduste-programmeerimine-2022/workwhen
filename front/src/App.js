@@ -6,13 +6,13 @@ import Schedule from "./pages/Schedule"
 import ShiftPlanning from "./pages/ShiftPlanning"
 import UserSettings from "./pages/UserSettings"
 import { Route, Routes } from "react-router-dom"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import RouteGuard from "./components/RouteGuard"
 
 function App() {
-    // const [user, setUser] = useState(false)
+    const [user, setUser] = useState(false)
 
     // this is scuffed
     const ProtectedNavbar = () => {
@@ -22,9 +22,16 @@ function App() {
     }
 
     window.addEventListener("login", () => {
-        // setUser(true)
-        ProtectedNavbar()
+        setUser(true)
     })
+
+    window.addEventListener("logout", () => {
+        setUser(false)
+    })
+
+    useEffect(() => {
+        ProtectedNavbar()
+    }, [user])
 
     return (
     <>

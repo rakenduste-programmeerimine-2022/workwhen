@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function UserSettings() {
-    const navigate = useNavigate
+    const navigate = useNavigate()
 
     const employeeData = {
         name: 'Juuli',
@@ -50,7 +50,7 @@ export default function UserSettings() {
     const handleLogout = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("user")
-        console.log("removed localStorage, should navigate")
+        window.dispatchEvent(new Event("logout"))
         navigate("/")
     }
 
