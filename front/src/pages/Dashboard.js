@@ -11,7 +11,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 export default function Dashboard() {
     const [todoArr, setTodoArr] = useState([])
 
-    
     const getData = () => {
         //axios.get("http://localhost:8080/todo/all", { "completed": false })
         axios.get("http://localhost:8080/todo/all", 
@@ -79,8 +78,20 @@ export default function Dashboard() {
         <Container sx={{display:'flex', padding: 3, width: 500, margin: 0}}>
             <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450}}>
                 <Box sx={{display:"flex"}}>
-                    <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list <Typography sx={{display:'flex', border:'solid 1', borderRadius:'50%', background: 'red', marginLeft:'5px', padding:'2px'}}>5</Typography></Typography>
-                    <Button variant="outlined" size="small" sx={{margin:1, marginLeft: 'auto', color:'black', borderColor:'black', maxWidth: '36px', padding:'5px'}}>Me</Button>
+                    <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list
+                        <Typography
+                            sx={{display:'flex',border:'solid 1', borderRadius:'50%', background: 'red', marginLeft:'5px', padding:'2px'}}
+                        >
+                            5
+                        </Typography>
+                    </Typography>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{margin:1, marginLeft: 'auto', color:'black', borderColor:'black', maxWidth: '36px', padding:'5px'}}
+                    >
+                        Me
+                    </Button>
                     <TodoDialog getData={getData}/>
                 </Box>
                 <Divider />
@@ -93,8 +104,24 @@ export default function Dashboard() {
                                     Due Date: {moment(item.date).format('MMM Do YY')}<br />
                                     Assigned: {item.assigned}<br />
                                     <Box sx={{marginLeft:"auto", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                                        <Button variant='outlined' color="success" id={item._id} onClick={e => handleCompleted(e)} sx={{height:"50px", width:"50px"}}><CheckIcon></CheckIcon></Button>
-                                        <Button variant='outlined' color="error" id={item._id} onClick={e => handleDelete(e)} sx={{height:"50px", width:"50px"}}><DeleteIcon></DeleteIcon></Button>
+                                        <Button 
+                                            variant='outlined'
+                                            color="success"
+                                            id={item._id}
+                                            onClick={e => handleCompleted(e)} 
+                                            sx={{height:"50px", width:"50px"}}
+                                        >
+                                            <CheckIcon />
+                                        </Button>
+                                        <Button
+                                            variant='outlined'
+                                            color="error" 
+                                            id={item._id}
+                                            onClick={e => handleDelete(e)}
+                                            sx={{height:"50px", width:"50px"}}
+                                        >
+                                            <DeleteIcon />
+                                        </Button>
                                     </Box>
                                     <br />
                                     <Divider />

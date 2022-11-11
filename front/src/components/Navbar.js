@@ -10,24 +10,23 @@ import { NavLink } from 'react-router-dom';
 
 
 const pages = {
-    'Dashboard': "dashboard",
-    'Shift Planning': "shift-planning",
-    'Schedule': "schedule",
-    'Bookmarks': "bookmarks",
-    'Contacts': "contacts",
-    'User Settings': "user-settings"
+    'Dashboard': 'dashboard',
+    'Shift Planning': 'shift-planning',
+    'Schedule': 'schedule',
+    'Bookmarks': 'bookmarks',
+    'Contacts': 'contacts',
+    'User Settings': 'user-settings'
 };
 
 function Navbar() {
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl" >
+    <AppBar position='static'>
+      <Container maxWidth='xl'>
         <Toolbar disableGutters >          
           <Typography
-            variant="h6"
+            variant='h6'
             noWrap
-            component="a"
             sx={{
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
@@ -37,7 +36,7 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            <Link style={{textDecoration:'none', color: 'white'}} to={"/Dashboard"}>
+            <Link style={{textDecoration:'none', color: 'white'}} to={'/dashboard'}>
             LOGO
             </Link>
             
