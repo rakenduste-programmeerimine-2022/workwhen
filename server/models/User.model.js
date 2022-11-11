@@ -46,7 +46,7 @@ userSchema.statics.login = async ({ username, password }) => {
     return new Promise(async (resolve, reject) => {
         const existingUser = await User.findOne({ username })
         if(!existingUser) return reject("User doesn't exist!")
-        if(!await bcrypt.compare(password, existingUser.password)) return reject("Wrong password!")
+        if(!await bcrypt.compare(password, existingUser.password)) return reject("Wrong username or password!")
         else {
             const token = jwt.sign(
                 {
@@ -72,7 +72,6 @@ userSchema.statics.login = async ({ username, password }) => {
 
 userSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
-        // some checks? for example if token present
         const users = await User.find({ deleted: false }, {})
         resolve(users)
     })
