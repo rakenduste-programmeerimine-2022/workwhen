@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const key = require("../secret")
 require("dotenv").config()
 
 const userSchema = new Schema(
