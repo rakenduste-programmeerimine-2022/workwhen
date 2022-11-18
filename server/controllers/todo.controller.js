@@ -12,7 +12,7 @@ exports.add = async (req, res) => {
 }
 
 exports.all = async (req, res) => {
-    const errors = validationResult(req)
+    const errors = validationResult(req.query)
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() })
     }
