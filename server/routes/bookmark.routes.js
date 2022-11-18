@@ -7,10 +7,10 @@ const checkToken = require("../middlewares/checkToken")
 router.post(
     "/add",
     checkToken,
-    body("category").notEmpty().trim().escape(),
-    body("title").notEmpty().trim().escape(),
+    body("category").not().isEmpty().trim().escape(),
+    body("title").not().isEmpty().trim().escape(),
     body("description").trim().escape(),
-    body("link").notEmpty(),
+    body("link").not().isEmpty(),
     bookmarkController.add
 )
 
