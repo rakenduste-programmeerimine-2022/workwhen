@@ -5,6 +5,7 @@ const userRouter = require("./routes/user.routes")
 const shiftRouter = require("./routes/shift.routes")
 const bookmarkRouter = require("./routes/bookmark.routes")
 const todoRouter = require("./routes/todo.routes")
+const leaveRouter = require("./routes/leave.routes")
 require("dotenv").config()
 
 const app = express()
@@ -29,6 +30,7 @@ app.use("/user", userRouter)
 app.use("/shift", shiftRouter)
 app.use("/bookmark", bookmarkRouter)
 app.use("/todo", todoRouter)
+app.use("/leave", leaveRouter)
 
 app.get("*", (req, res) => {
     res.send("404")
