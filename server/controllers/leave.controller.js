@@ -5,3 +5,9 @@ exports.add = async (req, res) => {
         .then((data) => res.send(data))
         .catch((err) => res.send(err))
 }
+
+exports.all = async (req, res) => {
+    Leave.all()
+        .then((data) => res.send(data))
+        .catch((err) => res.send(err))
+}

@@ -15,4 +15,8 @@ router.post(
     leaveController.add
 )
 
+router.get(
+    "/all", checkToken, leaveController.all
+)
+
 module.exports = router

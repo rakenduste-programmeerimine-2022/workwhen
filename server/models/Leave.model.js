@@ -8,7 +8,8 @@ const leaveSchema = new Schema(
         type: { type: String, required: true },
         startDate: { type: Date, required: true},
         endDate: { type: Date, required: true},
-        comments: { type: String }
+        comments: { type: String },
+        deleted: { type: Boolean, default: false }
     },
     { timestamps: true }
 )
@@ -30,7 +31,6 @@ leaveSchema.statics.add = async ({ username, type, startDate, endDate, comments 
             // leave also needs to go to shift planning document
             const dates = dateRange(startDate, endDate)
             dates.forEach(date => {
-                console.log({ date, type: "leave", username })
                 Shift.add({ date, type: "leave", username })
                     .catch((err) => reject(err))
             })
@@ -39,7 +39,12 @@ leaveSchema.statics.add = async ({ username, type, startDate, endDate, comments 
     })
 }
 
-//all
+leaveSchema.statics.all = async () => {
+    return new Promise(async (resolve, reject) => {
+        const leaves = await Leave.find({}, "_id username type description startDate endDate comments")
+        resolve(leaves)
+    })
+}
 
 const Leave = model("Leave", leaveSchema)
 
