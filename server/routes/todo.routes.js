@@ -7,10 +7,10 @@ const { body, param } = require("express-validator")
 router.post(
     "/add",
     checkToken,
-    body("title").notEmpty().trim().escape(),
-    body("description").notEmpty().trim().escape(),
+    body("title").not().isEmpty().trim().escape(),
+    body("description").not().isEmpty().trim().escape(),
     body("date").isISO8601().toDate().withMessage("Wrong date format!"),
-    body("assigned").notEmpty().trim().escape(),
+    body("assigned").not().isEmpty().trim().escape(),
     todoController.add
 )
 
@@ -24,14 +24,14 @@ router.get(
 router.post(
     "/update",
     checkToken,
-    body("id").notEmpty().trim().escape(),
+    body("id").not().isEmpty().trim().escape(),
     todoController.update
 )
     
 router.post(
     "/remove",
     checkToken,
-    body("id").notEmpty().trim().escape(),
+    body("id").not().isEmpty().trim().escape(),
     todoController.remove
 )
 
