@@ -17,7 +17,7 @@ router.post(
 router.post(
     "/remove",
     checkToken,
-    body("id").notEmpty().trim().escape(),
+    body("id").not().isEmpty().trim().escape(),
     bookmarkController.remove
 )
 

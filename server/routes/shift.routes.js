@@ -8,8 +8,8 @@ router.post(
     "/add",
     checkToken,
     body("date").isISO8601().toDate().withMessage("Wrong date format!"),
-    body("type").notEmpty().trim().escape(),
-    body("username").notEmpty().trim().escape(),
+    body("type").not().isEmpty().trim().escape(),
+    body("username").not().isEmpty().trim().escape(),
     shiftController.add
 )
 
