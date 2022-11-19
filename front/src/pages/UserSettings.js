@@ -56,7 +56,7 @@ export default function UserSettings() {
 
     return(
         <Container component="div" maxWidth="xs" sx={{ minWidth: "12rem" }}>
-            <Paper elevation={3} sx={{ p: 4, pt: 3}}>
+            <Paper elevation={7} sx={{ p: 4, pt: 3}}>
                 <Avatar sx={{ m: 1, bgcolor: "black", color: "white", width: 60, height: 60 }}>JK</Avatar>
                     <Box sx={{display: "flex", flexDirection: "column"}}>
                         <TableContainer noValidate sx={{ marginTop: "5px", marginBottom: "0px" }}>
