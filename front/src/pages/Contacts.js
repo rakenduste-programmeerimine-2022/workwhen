@@ -155,6 +155,14 @@ export default function Contacts(searchQuery) {
         setOpenCnctDelete(false);
     }   
 
+    const [openContactAdd, setOpenCnctAdd] = useState(false);
+    const handleOpenCnctAdd = () => {
+        setOpenCnctAdd(true);
+    }
+    const handleCloseCnctAdd = () => {
+        setOpenCnctAdd(false);
+    }  
+
 
 
         return(
@@ -162,11 +170,18 @@ export default function Contacts(searchQuery) {
                 <TableContainer sx={{ maxHeight: "78vh", width: '100%' }}>
                     <Table>
                         <ThemeProvider theme={theme}>
-                            <TableHead variant="standart" size="large">
+                            <TableHead variant="header" size="large">
                                 <TableRow>
                                     <TableCell variant="header" size="large">Contact name</TableCell>
                                     <TableCell variant="header" size="large">Contact number</TableCell>
                                     <TableCell variant="header" size="large">Contact e-mail</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            onClick={handleOpenCnctAdd}
+                                        >
+                                            Add new contact
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -296,6 +311,7 @@ export default function Contacts(searchQuery) {
                             >
                                 Change!
                             </Button>
+                            
                         </DialogActions>
                 </Dialog>
                 <Dialog
@@ -316,6 +332,59 @@ export default function Contacts(searchQuery) {
                             sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
                             margin="dense"  
                             onClick={handleCloseCnctDelete}>Kustuta</Button>
+                    </DialogActions>
+                    
+                </Dialog>
+                <Dialog
+                    open={openContactAdd}
+                    onClose={handleCloseCnctAdd}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    sx={{}}                                
+                >
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">Add new contact</DialogContentText>
+                    </DialogContent>
+                        <FormControl
+                            className="contactAddForm"
+                            sx={{width: "20rem", p: 2}}
+                        >                            
+                        </FormControl>
+                        <TextField
+                            autoFocus
+                            id="cnctNameAdd"
+                            label="New contact name"
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <TextField
+                            autoFocus
+                            id="cnctPhoneAdd"
+                            label="New contact numnber"
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <TextField
+                            autoFocus
+                            id="cnctEmailAdd"
+                            label="New contact email"
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <DialogActions>
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                            margin="dense" 
+                            onClick={handleCloseCnctAdd}>Tühista</Button>
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                            margin="dense"  
+                            onClick={handleCloseCnctAdd}>Lisa</Button>
                     </DialogActions>
                     
                 </Dialog>
