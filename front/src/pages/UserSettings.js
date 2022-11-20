@@ -16,20 +16,12 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 export default function UserSettings() {
     const navigate = useNavigate()
-
-    const employeeData = {
-        name: 'Juuli',
-        surname: 'Kõver',
-        username: 'juulkove',
-        email: 'juuli.kover@firma.ee'
-    }
-
     const [anchorUser, setanchorUser] = useState(null);
 
     const handleOpenUserMenu = (event) => {
@@ -38,7 +30,6 @@ export default function UserSettings() {
     const handleCloseUserMenu = () => {
         setanchorUser(null);
     }
-
     const [openPwdChange, setOpenPwdChange] = useState(false);
     const handleOpenPwdChange = () => {
         setOpenPwdChange(true);
@@ -46,13 +37,43 @@ export default function UserSettings() {
     const handleClosePwdChange = () => {
         setOpenPwdChange(false);
     }
-
     const handleLogout = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("user")
         window.dispatchEvent(new Event("logout"))
         navigate("/")
     }
+    const [items, setItems] = useState([]);
+    useEffect(() => {
+        const items = JSON.parse(localStorage.getItem('user'));
+        if (items) {
+         setItems(items);
+        }
+      }, []);
+
+    const currentUsername = items.username    
+    console.log(currentUsername)
+    const form = {
+        username: currentUsername,
+        currentPwd: "",
+        newPwd: "",
+        confirmPwd: ""
+    }
+
+    const [formValue, setFormValue] = useState(form)
+    const handleFormChange = e => {
+        const { value, name } = e.target
+        const newValue = {
+            ...formValue,
+            [name]: value
+        }
+        setFormValue(newValue)
+    }
+
+    console.log(formValue)
+
+    
+
 
     return(
         <Container component="div" maxWidth="xs" sx={{ minWidth: "12rem" }}>
@@ -64,16 +85,16 @@ export default function UserSettings() {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell>Name</TableCell>
-                                        <TableCell>{employeeData.name} {employeeData.surname}</TableCell>
+                                        <TableCell>{items.fullname}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>Username</TableCell>
-                                        <TableCell>{employeeData.username}</TableCell>
+                                        <TableCell>{items.username}</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    {/* <TableRow>
                                         <TableCell>e-mail</TableCell>
                                         <TableCell>{employeeData.email}</TableCell>
-                                    </TableRow>
+                                    </TableRow> */}
                                 </TableBody>
                             </Table>
                             <Table>
@@ -109,31 +130,38 @@ export default function UserSettings() {
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
                         </DialogContent>
-                        <FormControl
-                            className="PwdChangeForm"
-                            sx={{width: "20rem", p: 2}}
-                        >
+                        <Box></Box>
+                        <FormControl>
                             <TextField
-                                autoFocus
-                                id="curPwdChange"
+                                value={formValue.currentPwd}
+                                onChange={e => handleFormChange(e)}
+                                required
+                                id="currentPwd"
+                                name="currentPwd"
                                 label="Current password"
-                                type="text"
+                                type="password"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
                             <TextField
-                                autoFocus
-                                id="newPwdChange"
+                                value={formValue.newPwd}
+                                onChange={e => handleFormChange(e)}
+                                required
+                                id="newPwd"
+                                name="newPwd"
                                 label="New password"
-                                type="text"
+                                type="password"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
                             <TextField
-                                autoFocus
+                                // value={formValue.confirmPwd}
+                                onChange={e => handleFormChange(e)}
+                                required
                                 id="repeatPwdChange"
+                                name="repeatPwdChange"
                                 label="Repeat new password"
-                                type="text"
+                                type="password"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
