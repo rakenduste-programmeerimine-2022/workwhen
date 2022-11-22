@@ -9,7 +9,7 @@ const userSchema = new Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         fullname: { type: String, required: true },
-        contact: { type: String, required: true },
+        contact: { type: String, required: true }, // not needed
         birthday: { type: Date, required: true },
         role: { type: String, default: 'employee' },
         deleted: { type: Boolean, default: false }
