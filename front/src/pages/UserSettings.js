@@ -18,18 +18,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
 
 
 export default function UserSettings() {
     const navigate = useNavigate()
-    const [anchorUser, setanchorUser] = useState(null);
-
-    const handleOpenUserMenu = (event) => {
-        setanchorUser(event.currentTarget);
-    }
-    const handleCloseUserMenu = () => {
-        setanchorUser(null);
-    }
     const [openPwdChange, setOpenPwdChange] = useState(false);
     const handleOpenPwdChange = () => {
         setOpenPwdChange(true);
@@ -42,7 +35,9 @@ export default function UserSettings() {
         localStorage.removeItem("user")
         window.dispatchEvent(new Event("logout"))
         navigate("/")
-    }
+    }   
+
+
     const [items, setItems] = useState([]);
     useEffect(() => {
         const items = JSON.parse(localStorage.getItem('user'));
@@ -51,28 +46,56 @@ export default function UserSettings() {
         }
       }, []);
 
-    const currentUsername = items.username    
-    console.log(currentUsername)
     const form = {
-        username: currentUsername,
+        username: "",
         currentPwd: "",
         newPwd: "",
         confirmPwd: ""
-    }
+    }      
 
     const [formValue, setFormValue] = useState(form)
     const handleFormChange = e => {
         const { value, name } = e.target
         const newValue = {
             ...formValue,
-            [name]: value
+            [name]: value,
+            username: items.username
         }
         setFormValue(newValue)
-    }
+    }   
 
     console.log(formValue)
 
-    
+    const [helperText, setHelperText] = useState("")
+    const [success, setSuccess] = useState(false) 
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        if(formValue.newPwd === formValue.confirmPwd){
+            setHelperText("")
+            axios.post("http://localhost:8080/user-settings/pwdchange", {
+                username: formValue.username,
+                currentPwd: formValue.currentPwd,
+                newPwd: formValue.newPwd
+            })
+            .then(function(response) {
+                console.log(response)
+                setSuccess(true)
+            })
+            .catch(function(error) {
+                if(error.response){
+                    console.log(error.response)
+                    setHelperText(error.response.data.errors[0].msg)
+                } else if (error.request){
+                    console.log(error.request)
+                } else {
+                    console.log(error.message)
+                }
+            })
+        } else {
+            setHelperText("Passwords don't match!")
+        }
+    }   
 
 
     return(
@@ -130,38 +153,38 @@ export default function UserSettings() {
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
                         </DialogContent>
-                        <Box></Box>
+                        <Box>
                         <FormControl>
                             <TextField
-                                value={formValue.currentPwd}
+                                defaultValue={formValue.currentPwd}
                                 onChange={e => handleFormChange(e)}
                                 required
                                 id="currentPwd"
                                 name="currentPwd"
                                 label="Current password"
-                                type="password"
+                                type="text"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
                             <TextField
-                                value={formValue.newPwd}
+                                defaultValue={formValue.newPwd}
                                 onChange={e => handleFormChange(e)}
                                 required
                                 id="newPwd"
                                 name="newPwd"
                                 label="New password"
-                                type="password"
+                                type="text"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
                             <TextField
-                                // value={formValue.confirmPwd}
+                                defaultValue={formValue.confirmPwd}
                                 onChange={e => handleFormChange(e)}
                                 required
-                                id="repeatPwdChange"
-                                name="repeatPwdChange"
+                                id="confirmPwd"
+                                name="confirmPwd"
                                 label="Repeat new password"
-                                type="password"
+                                type="text"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
@@ -177,13 +200,14 @@ export default function UserSettings() {
                                 <Button
                                     variant="contained"
                                     sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                                    onClick={handleClosePwdChange}
+                                    onClick={handleSubmit}
                                     autoFocus
                                 >
                                     Change!
                                 </Button>
                             </DialogActions>
                         </FormControl>
+                        </Box>
 			        </Dialog>
             </Paper>
         </Container>
