@@ -28,4 +28,11 @@ router.post(
     contactController.edit
 )
 
+router.post(
+    "/remove",
+    checkToken,
+    body("id").not().isEmpty().trim().escape(),
+    contactController.remove
+)
+
 module.exports = router

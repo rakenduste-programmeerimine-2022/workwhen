@@ -55,6 +55,13 @@ contactSchema.statics.edit = async ({ id, name, email, phone }) => {
     })
 }
 
+contactSchema.statics.remove = async ({ id }) => {
+    return new Promise(async (resolve, reject) => {
+        await Contact.findByIdAndDelete(id)
+        resolve("Successfully deleted!")
+    })
+}
+
 const Contact = model("Contact", contactSchema)
 
 module.exports = Contact
