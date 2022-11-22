@@ -130,7 +130,6 @@ export default function Signup(){
                                 value={formValue.contactNr}
                                 onChange={e => handleFormChange(e)}
                                 margin="normal"
-                                required
                                 fullWidth
                                 id="contactNr"
                                 label="Contact Nr"
