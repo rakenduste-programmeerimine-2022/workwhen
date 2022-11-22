@@ -30,7 +30,7 @@ export default function Bookmarks() {
     const handleDelete = e => {
         console.log(e.currentTarget.id)
         const id = e.currentTarget.id
-        axios.post("http://localhost:8080/bookmark/remove", {id})
+        axios.post("http://localhost:8080/bookmark/remove", {id}) // where token?
         .then(function(response){
             console.log(response)
             getData()

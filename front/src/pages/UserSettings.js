@@ -73,11 +73,12 @@ export default function UserSettings() {
         e.preventDefault()
         if(formValue.newPwd === formValue.confirmPwd){
             setHelperText("")
-            axios.post("http://localhost:8080/user-settings/pwdchange", {
+            axios.post("http://localhost:8080/user/change-password", {
                 username: formValue.username,
                 currentPwd: formValue.currentPwd,
                 newPwd: formValue.newPwd
-            })
+            },
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
             .then(function(response) {
                 console.log(response)
                 setSuccess(true)
