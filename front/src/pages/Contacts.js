@@ -91,7 +91,14 @@ function TablePaginationActions(props) {
   };
 
 export default function Contacts(searchQuery) {
+    const form = {
+        name: "",
+        email: "",
+        phone: ""
+    }
     const [contacts, setContacts] = useState([])
+    const [formValue, setFormValue] = useState(form)
+    const [contactId, setContactId] = useState("")
 
     const getData = () => {
         axios.get("http://localhost:8080/contact/all", { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
@@ -139,11 +146,46 @@ export default function Contacts(searchQuery) {
         setPage(newPage);
       };
     const [openContactChange, setOpenCnctChange] = useState(false);
-    const handleOpenCnctChange = () => {
-        setOpenCnctChange(true);
+    const handleContactChangeSave = () => {
+        if(formValue.name !== "" || formValue.email !== "" || formValue.phone !== ""){
+            axios.post("http://localhost:8080/contact/edit", {
+                id: contactId,
+                name: formValue.name,
+                email: formValue.email,
+                phone: formValue.phone
+            },
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+            .then(function(response) {
+                // add success message
+                getData()
+            })
+            .catch(function(error) {
+                if(error.response){
+                    console.log(error.response)
+                } else if (error.request){
+                    console.log(error.request)
+                } else {
+                    console.log(error.message)
+                }
+            })
+            setContactId("")
+            setFormValue(form)
+            setOpenCnctChange(false)
+        } else {
+            setContactId("")
+            setFormValue(form)
+            setOpenCnctChange(false)
+        }
     }
-    const handleCloseCnctChange = () => {
+    const handleOpenCnctChange = (e) => {
+        setOpenCnctChange(true)
+        setContactId(e.currentTarget.id)
+    }
+
+    const handleCloseCnctChange = (e) => {
         setOpenCnctChange(false);
+        setFormValue(form)
+        setContactId("")
     }
     const [openContactDelete, setOpenCnctDelete] = useState(false);
     const handleOpenCnctDelete = () => {
@@ -159,6 +201,15 @@ export default function Contacts(searchQuery) {
     }
     const handleCloseCnctAdd = () => {
         setOpenCnctAdd(false);
+    }
+
+    const handleFormChange = e => {
+        const { value, name } = e.target
+        const newValue = {
+            ...formValue,
+            [name]: value
+        }
+        setFormValue(newValue)
     }
 
     useEffect(() => {
@@ -186,7 +237,7 @@ export default function Contacts(searchQuery) {
                         </TableHead>
                         <TableBody>
                             {contacts.filter((contacts) => {
-                                if(searchQuery == ""){
+                                if(searchQuery === ""){
                                     return contacts;                            
                                 } else if(contacts.name.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
                                     return contacts;
@@ -214,7 +265,7 @@ export default function Contacts(searchQuery) {
                             <TableCell>
                                 <Button
                                     onClick={handleOpenCnctChange}
-                                    // add id
+                                    id={contact._id}
                                 >
                                     Edit
                                 </Button>
@@ -222,7 +273,7 @@ export default function Contacts(searchQuery) {
                             <TableCell>
                                 <Button
                                     onClick={handleOpenCnctDelete}
-                                    // add id
+                                    id={contact._id}
                                 >
                                     Delete
                                 </Button>
@@ -275,6 +326,9 @@ export default function Contacts(searchQuery) {
                     <TextField
                         autoFocus
                         id="cnctNameChange"
+                        name="name"
+                        value={formValue.name}
+                        onChange={e => handleFormChange(e)}
                         label="New contact name"
                         type="text"
                         variant="standard"
@@ -283,6 +337,9 @@ export default function Contacts(searchQuery) {
                     <TextField
                         autoFocus
                         id="cnctPhoneChange"
+                        name="phone"
+                        value={formValue.phone}
+                        onChange={e => handleFormChange(e)}
                         label="New contact number"
                         type="text"
                         variant="standard"
@@ -291,6 +348,9 @@ export default function Contacts(searchQuery) {
                     <TextField
                         autoFocus
                         id="cnctEmailChange"
+                        name="email"
+                        value={formValue.email}
+                        onChange={e => handleFormChange(e)}
                         label="New contact email"
                         type="text"
                         variant="standard"
@@ -308,10 +368,10 @@ export default function Contacts(searchQuery) {
                         <Button
                             variant="contained"
                             sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                            onClick={handleCloseCnctChange}
+                            onClick={handleContactChangeSave}
                             autoFocus
                         >
-                            Change!
+                            Change
                         </Button>
                         
                     </DialogActions>
