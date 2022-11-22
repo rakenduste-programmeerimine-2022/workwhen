@@ -6,7 +6,6 @@ const shiftRouter = require("./routes/shift.routes")
 const bookmarkRouter = require("./routes/bookmark.routes")
 const todoRouter = require("./routes/todo.routes")
 const leaveRouter = require("./routes/leave.routes")
-const userSettingsRouter = require("./routes/user-settings.routes")
 const contactRouter = require("./routes/contact.routes")
 require("dotenv").config()
 
@@ -33,7 +32,6 @@ app.use("/shift", shiftRouter)
 app.use("/bookmark", bookmarkRouter)
 app.use("/todo", todoRouter)
 app.use("/leave", leaveRouter)
-app.use("/user-settings", userSettingsRouter)
 app.use("/contact", contactRouter)
 
 app.get("*", (req, res) => {

@@ -26,3 +26,13 @@ exports.getAll = async (req, res) => {
         .then((data) => res.send(data))
         .catch((err) => res.send(err))
 }
+
+exports.changePassword = async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() })
+    }
+    User.changePassword(req)
+        .then((data) => res.send(data))
+        .catch((err) => res.send(err))
+}
