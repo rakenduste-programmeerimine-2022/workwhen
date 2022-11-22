@@ -11,6 +11,12 @@ exports.add = async (req, res) => {
         .catch((err) => res.send(err))
 }
 
+exports.all = async (req, res) => {
+    Contact.all()
+        .then((data) => res.send(data))
+        .catch((err) => res.send(err))
+}
+
 exports.edit = async (req, res) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()){

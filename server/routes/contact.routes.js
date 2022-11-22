@@ -13,6 +13,8 @@ router.post(
     contactController.add
 )
 
+router.get("/all", checkToken, contactController.all)
+
 router.post(
     "/edit",
     checkToken,

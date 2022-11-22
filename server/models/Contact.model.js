@@ -26,6 +26,13 @@ contactSchema.statics.add = async ({ name, email, phone }) => {
     })
 }
 
+contactSchema.statics.all = async () => {
+    return new Promise(async (resolve, reject) => {
+        const contacts = await Contact.find({}, "_id name email phone")
+        resolve(contacts)
+    })
+}
+
 contactSchema.statics.edit = async ({ id, name, email, phone }) => {
     return new Promise(async (resolve, reject) => {
         const contact = await Contact.findById(id)
