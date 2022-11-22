@@ -10,7 +10,7 @@ router.post(
     body("email").isEmail().normalizeEmail(),
     body("password").isLength({ min: 5 }).withMessage("Minimum length 5"),
     body("fullname").not().isEmpty().trim().escape(),
-    body("contact").not().isEmpty().trim().escape(),
+    body("contact").trim().escape(),
     body("birthday").isISO8601().toDate().withMessage("Wrong date format!"),
     userController.signup
 )

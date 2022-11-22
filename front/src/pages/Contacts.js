@@ -213,7 +213,8 @@ export default function Contacts(searchQuery) {
                                 </TableCell>
                                 <TableCell>
                                     <Button
-                                    onClick={handleOpenCnctChange}
+                                        onClick={handleOpenCnctChange}
+                                        // add id
                                     >
                                         Edit
                                     </Button>
@@ -221,6 +222,7 @@ export default function Contacts(searchQuery) {
                                 <TableCell>
                                     <Button
                                         onClick={handleOpenCnctDelete}
+                                        // add id
                                     >
                                         Delete
                                     </Button>
@@ -281,7 +283,7 @@ export default function Contacts(searchQuery) {
                         <TextField
                             autoFocus
                             id="cnctPhoneChange"
-                            label="New contact numnber"
+                            label="New contact number"
                             type="text"
                             variant="standard"
                             sx={{ p: 2}}
@@ -361,7 +363,7 @@ export default function Contacts(searchQuery) {
                         <TextField
                             autoFocus
                             id="cnctPhoneAdd"
-                            label="New contact numnber"
+                            label="New contact number"
                             type="text"
                             variant="standard"
                             sx={{ p: 2}}
@@ -379,12 +381,12 @@ export default function Contacts(searchQuery) {
                             variant="contained"
                             sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
                             margin="dense" 
-                            onClick={handleCloseCnctAdd}>Tühista</Button>
+                            onClick={handleCloseCnctAdd}>Cancel</Button>
                         <Button
                             variant="contained"
                             sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
                             margin="dense"  
-                            onClick={handleCloseCnctAdd}>Lisa</Button>
+                            onClick={handleCloseCnctAdd}>Save</Button>
                     </DialogActions>
                     
                 </Dialog>
