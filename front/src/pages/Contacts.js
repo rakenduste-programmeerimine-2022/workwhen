@@ -213,7 +213,8 @@ export default function Contacts(searchQuery) {
                                 </TableCell>
                                 <TableCell>
                                     <Button
-                                    onClick={handleOpenCnctChange}
+                                        onClick={handleOpenCnctChange}
+                                        // add id
                                     >
                                         Edit
                                     </Button>
@@ -221,6 +222,7 @@ export default function Contacts(searchQuery) {
                                 <TableCell>
                                     <Button
                                         onClick={handleOpenCnctDelete}
+                                        // add id
                                     >
                                         Delete
                                     </Button>

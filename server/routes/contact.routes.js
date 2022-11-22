@@ -13,4 +13,17 @@ router.post(
     contactController.add
 )
 
+router.post(
+    "/edit",
+    checkToken,
+    body("id").not().isEmpty().trim().escape(),
+    body("name").isString(),
+    body("email")
+    .if(body("email").exists({checkFalsy: true}))
+    .isEmail()
+    .withMessage("Not an email"),
+    body("phone").isString(),
+    contactController.edit
+)
+
 module.exports = router
