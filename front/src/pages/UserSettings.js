@@ -9,7 +9,10 @@ import {
     DialogContentText,
     DialogActions,
     TextField,
-    FormControl
+    Snackbar,
+    Alert,
+    FormControl,
+    FormHelperText
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -37,7 +40,6 @@ export default function UserSettings() {
         navigate("/")
     }   
 
-
     const [items, setItems] = useState([]);
     useEffect(() => {
         const items = JSON.parse(localStorage.getItem('user'));
@@ -51,6 +53,11 @@ export default function UserSettings() {
         currentPwd: "",
         newPwd: "",
         confirmPwd: ""
+    }
+
+    const snackbar = {
+        text: "",
+        severity: ""
     }      
 
     const [formValue, setFormValue] = useState(form)
@@ -67,7 +74,12 @@ export default function UserSettings() {
     console.log(formValue)
 
     const [helperText, setHelperText] = useState("")
-    const [success, setSuccess] = useState(false) 
+    const [success, setSuccess] = useState(false)
+    const [snackOpen, setSnackOpen] = useState(false)
+    const handleSnackClose = () => {
+        setSnackOpen(false)
+    }
+    const [snackbarInfo, setSnackbarInfo] = useState(snackbar)
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -82,6 +94,13 @@ export default function UserSettings() {
             .then(function(response) {
                 console.log(response)
                 setSuccess(true)
+                setOpenPwdChange(false);
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: "Password has been changed!",
+                    severity: "success"
+                })
+
             })
             .catch(function(error) {
                 if(error.response){
@@ -163,7 +182,7 @@ export default function UserSettings() {
                                 id="currentPwd"
                                 name="currentPwd"
                                 label="Current password"
-                                type="text"
+                                type="password"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
@@ -174,7 +193,7 @@ export default function UserSettings() {
                                 id="newPwd"
                                 name="newPwd"
                                 label="New password"
-                                type="text"
+                                type="password"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
@@ -185,10 +204,13 @@ export default function UserSettings() {
                                 id="confirmPwd"
                                 name="confirmPwd"
                                 label="Repeat new password"
-                                type="text"
+                                type="password"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
+                            <FormHelperText error>
+                                {helperText}
+                            </FormHelperText>
                             <DialogActions>                            
                                 <Button
                                     variant="contained"
@@ -210,6 +232,11 @@ export default function UserSettings() {
                         </FormControl>
                         </Box>
 			        </Dialog>
+                    <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                            {snackbarInfo.text}
+                        </Alert>
+                    </Snackbar>
             </Paper>
         </Container>
 
