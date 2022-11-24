@@ -94,12 +94,12 @@ TablePaginationActions.propTypes = {
 function axiosPost({ name, email, phone }, id, link){
     return new Promise(async (resolve, reject) => {
         if(name !== "" || email !== "" || phone !== ""){
-            axios.post(`http://localhost:8080/contact/${link}`, {
+            axios.post(`http://localhost:8080/contact/${link}`, id !== "" ? {
                 id,
                 name,
                 email,
                 phone
-            },
+            } : { name, email, phone },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
             .then(function(response) {
                 if(typeof response.data === "object" && response.data !== null){
@@ -111,10 +111,13 @@ function axiosPost({ name, email, phone }, id, link){
             .catch(function(error) {
                 if(error.response){
                     console.log(error.response)
+                    reject("Please fill all fields!")
                 } else if (error.request){
                     console.log(error.request)
+                    reject("Bad request!")
                 } else {
                     console.log(error.message)
+                    reject("Something went wrong!")
                 }
                 reject("Server error")
             })
@@ -192,7 +195,6 @@ export default function Contacts(searchQuery) {
     const handleContactChangeSave = () => {
         axiosPost(formValue, contactId, "edit")
             .then((response) => {
-                console.log(response)
                 setSnackOpen(true)
                 setSnackbarInfo({
                     text: response,
@@ -203,7 +205,6 @@ export default function Contacts(searchQuery) {
                 setFormValue(form)
             })
             .catch((error) => {
-                console.log(error)
                 setSnackOpen(true)
                 setSnackbarInfo({
                     text: error,
@@ -235,10 +236,28 @@ export default function Contacts(searchQuery) {
     }
     const handleCloseCnctAdd = () => {
         setOpenCnctAdd(false);
+        setFormValue(form);
     }
 
     const handleAddCnctSave = () => {
-        
+        axiosPost(formValue, "", "add")
+            .then((response) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: response,
+                    severity: "success"
+                })
+                getData()
+                setOpenCnctAdd(false)
+                setFormValue(form)
+            })
+            .catch((error) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: error,
+                    severity: "error"
+                })
+            })
     }
 
     const handleFormChange = e => {
