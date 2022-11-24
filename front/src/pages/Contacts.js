@@ -93,7 +93,7 @@ TablePaginationActions.propTypes = {
 
 function axiosPost({ name, email, phone }, id, link){
     return new Promise(async (resolve, reject) => {
-        if(name !== "" || email !== "" || phone !== ""){
+        if(name !== "" || email !== "" || phone !== "" || id !== ""){
             axios.post(`http://localhost:8080/contact/${link}`, id !== "" ? {
                 id,
                 name,
@@ -104,6 +104,8 @@ function axiosPost({ name, email, phone }, id, link){
             .then(function(response) {
                 if(typeof response.data === "object" && response.data !== null){
                     resolve("All good!")
+                } else if (typeof response.data === "string" && response.data === "Successfully deleted!"){
+                    resolve("Successfully deleted!")
                 } else {
                     reject("Something weird came from the server")
                 }
@@ -219,15 +221,17 @@ export default function Contacts(searchQuery) {
 
     const handleCloseCnctChange = (e) => {
         setOpenCnctChange(false);
-        setFormValue(form)
-        setContactId("")
+        setFormValue(form);
+        setContactId("");
     }
     const [openContactDelete, setOpenCnctDelete] = useState(false);
-    const handleOpenCnctDelete = () => {
+    const handleOpenCnctDelete = (e) => {
         setOpenCnctDelete(true);
+        setContactId(e.currentTarget.id);
     }
     const handleCloseCnctDelete = () => {
         setOpenCnctDelete(false);
+        setContactId("");
     }   
 
     const [openContactAdd, setOpenCnctAdd] = useState(false);
@@ -250,6 +254,26 @@ export default function Contacts(searchQuery) {
                 getData()
                 setOpenCnctAdd(false)
                 setFormValue(form)
+            })
+            .catch((error) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: error,
+                    severity: "error"
+                })
+            })
+    }
+
+    const handleCnctDelete = () => {
+        axiosPost({}, contactId, "remove")
+            .then((response) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: response,
+                    severity: "success"
+                })
+                getData()
+                setOpenCnctDelete(false)
             })
             .catch((error) => {
                 setSnackOpen(true)
@@ -286,6 +310,7 @@ export default function Contacts(searchQuery) {
                                 <TableCell>
                                     <Button
                                         onClick={handleOpenCnctAdd}
+                                        variant="outlined"
                                     >
                                         Add new contact
                                     </Button>
@@ -445,17 +470,23 @@ export default function Contacts(searchQuery) {
                 aria-describedby="alert-dialog-description"
                 sx={{}}                                
             >
+                <DialogContentText 
+                    id="alert-dialog-delete"
+                    sx={{padding: "8% 0 0 5%"}}
+                >
+                    Are you sure?
+                </DialogContentText>
                 <DialogActions>
                     <Button
                         variant="contained"
                         sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
                         margin="dense" 
-                        onClick={handleCloseCnctDelete}>Tühista</Button>
+                        onClick={handleCloseCnctDelete}>Cancel</Button>
                     <Button
                         variant="contained"
                         sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
                         margin="dense"  
-                        onClick={handleCloseCnctDelete}>Kustuta</Button>
+                        onClick={handleCnctDelete}>Confirm</Button>
                 </DialogActions>
                 
             </Dialog>
