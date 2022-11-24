@@ -24,7 +24,6 @@ import PropTypes from 'prop-types';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import { Fullscreen } from "@mui/icons-material";
 import axios from "axios";
 
 
@@ -81,14 +80,47 @@ function TablePaginationActions(props) {
         </IconButton>
       </Box>
     );
-  }
+}
   
-  TablePaginationActions.propTypes = {
+TablePaginationActions.propTypes = {
     count: PropTypes.number.isRequired,
     onPageChange: PropTypes.func.isRequired,
     page: PropTypes.number.isRequired,
     rowsPerPage: PropTypes.number.isRequired,
-  };
+};
+
+function axiosPost({ name, email, phone }, id, link){
+    return new Promise(async (resolve, reject) => {
+        if(name !== "" || email !== "" || phone !== ""){
+            axios.post(`http://localhost:8080/contact/${link}`, {
+                id,
+                name,
+                email,
+                phone
+            },
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+            .then(function(response) {
+                if(typeof response.data === "object"){
+                    resolve("OK")
+                } else {
+                    reject("Wrong response from server")
+                }
+            })
+            .catch(function(error) {
+                if(error.response){
+                    console.log(error.response)
+                } else if (error.request){
+                    console.log(error.request)
+                } else {
+                    console.log(error.message)
+                }
+                reject("Server error")
+            })
+        } else {
+            reject("Empty values")
+        }
+    })
+}
 
 export default function Contacts(searchQuery) {
     const form = {
@@ -147,35 +179,16 @@ export default function Contacts(searchQuery) {
       };
     const [openContactChange, setOpenCnctChange] = useState(false);
     const handleContactChangeSave = () => {
-        if(formValue.name !== "" || formValue.email !== "" || formValue.phone !== ""){
-            axios.post("http://localhost:8080/contact/edit", {
-                id: contactId,
-                name: formValue.name,
-                email: formValue.email,
-                phone: formValue.phone
-            },
-            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
-            .then(function(response) {
-                // add success message
+        axiosPost(formValue, contactId, "edit")
+            .then((response) => {
+                console.log(response)
                 getData()
+                setOpenCnctChange(false)
+                setFormValue(form)
             })
-            .catch(function(error) {
-                if(error.response){
-                    console.log(error.response)
-                } else if (error.request){
-                    console.log(error.request)
-                } else {
-                    console.log(error.message)
-                }
+            .catch((error) => {
+                console.log(error)
             })
-            setContactId("")
-            setFormValue(form)
-            setOpenCnctChange(false)
-        } else {
-            setContactId("")
-            setFormValue(form)
-            setOpenCnctChange(false)
-        }
     }
     const handleOpenCnctChange = (e) => {
         setOpenCnctChange(true)
@@ -201,6 +214,10 @@ export default function Contacts(searchQuery) {
     }
     const handleCloseCnctAdd = () => {
         setOpenCnctAdd(false);
+    }
+
+    const handleAddCnctSave = () => {
+        
     }
 
     const handleFormChange = e => {
@@ -416,6 +433,9 @@ export default function Contacts(searchQuery) {
                         autoFocus
                         id="cnctNameAdd"
                         label="New contact name"
+                        name="name"
+                        value={formValue.name}
+                        onChange={e => handleFormChange(e)}
                         type="text"
                         variant="standard"
                         sx={{ p: 2}}
@@ -424,6 +444,9 @@ export default function Contacts(searchQuery) {
                         autoFocus
                         id="cnctPhoneAdd"
                         label="New contact number"
+                        name="phone"
+                        value={formValue.phone}
+                        onChange={e => handleFormChange(e)}
                         type="text"
                         variant="standard"
                         sx={{ p: 2}}
@@ -432,6 +455,9 @@ export default function Contacts(searchQuery) {
                         autoFocus
                         id="cnctEmailAdd"
                         label="New contact email"
+                        name="email"
+                        value={formValue.email}
+                        onChange={e => handleFormChange(e)}
                         type="text"
                         variant="standard"
                         sx={{ p: 2}}
@@ -446,7 +472,7 @@ export default function Contacts(searchQuery) {
                         variant="contained"
                         sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
                         margin="dense"  
-                        onClick={handleCloseCnctAdd}>Save</Button>
+                        onClick={handleAddCnctSave}>Save</Button>
                 </DialogActions>
                 
             </Dialog>
