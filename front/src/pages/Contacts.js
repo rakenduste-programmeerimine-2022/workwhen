@@ -8,7 +8,9 @@ import {
     DialogContentText,
     DialogActions,
     FormControl,
-    TextField
+    TextField,
+    Snackbar,
+    Alert
 } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -100,10 +102,10 @@ function axiosPost({ name, email, phone }, id, link){
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
             .then(function(response) {
-                if(typeof response.data === "object"){
-                    resolve("OK")
+                if(typeof response.data === "object" && response.data !== null){
+                    resolve("All good!")
                 } else {
-                    reject("Wrong response from server")
+                    reject("Something weird came from the server")
                 }
             })
             .catch(function(error) {
@@ -117,7 +119,7 @@ function axiosPost({ name, email, phone }, id, link){
                 reject("Server error")
             })
         } else {
-            reject("Empty values")
+            reject("Please insert values to change!")
         }
     })
 }
@@ -131,6 +133,15 @@ export default function Contacts(searchQuery) {
     const [contacts, setContacts] = useState([])
     const [formValue, setFormValue] = useState(form)
     const [contactId, setContactId] = useState("")
+    const [snackOpen, setSnackOpen] = useState(false)
+    const [snackbarInfo, setSnackbarInfo] = useState({
+        test: "",
+        severity: ""
+    })
+
+    const handleSnackClose = () => {
+        setSnackOpen(false)
+    }
 
     const getData = () => {
         axios.get("http://localhost:8080/contact/all", { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
@@ -182,12 +193,22 @@ export default function Contacts(searchQuery) {
         axiosPost(formValue, contactId, "edit")
             .then((response) => {
                 console.log(response)
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: response,
+                    severity: "success"
+                })
                 getData()
                 setOpenCnctChange(false)
                 setFormValue(form)
             })
             .catch((error) => {
                 console.log(error)
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: error,
+                    severity: "error"
+                })
             })
     }
     const handleOpenCnctChange = (e) => {
@@ -326,6 +347,11 @@ export default function Contacts(searchQuery) {
                     ActionsComponent={TablePaginationActions}
                 />
             </TableContainer>
+            <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                    {snackbarInfo.text}
+                </Alert>
+            </Snackbar>
             <Dialog
                 open={openContactChange}
                 onClose={handleCloseCnctChange}
