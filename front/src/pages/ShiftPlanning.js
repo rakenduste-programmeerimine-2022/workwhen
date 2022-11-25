@@ -48,12 +48,12 @@ export default function ShiftPlanning() {
 
 
   const handleEventReceive = (eventInfo) => {
+    // console.log(eventInfo.event)
     const newEvent = {
-        id: eventInfo.event.id,
+        id: eventInfo.event._def.defId,
         title: eventInfo.event.title,
         color: eventInfo.event.backgroundColor,
-        start: eventInfo.event.startStr,
-        end: eventInfo.event.endStr, // maybe remove
+        date: eventInfo.event.startStr,
     };
     eventInfo.revert()
 
@@ -63,7 +63,7 @@ export default function ShiftPlanning() {
         calendarEvents: state.calendarEvents.concat(newEvent)
       };
     });
-    console.log(state)
+    // console.log(state)
   };
 
 
