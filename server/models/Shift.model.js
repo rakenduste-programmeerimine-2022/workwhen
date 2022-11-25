@@ -1,4 +1,6 @@
 const { Schema, model } = require("mongoose")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 const shiftSchema = new Schema(
     {
@@ -11,27 +13,30 @@ const shiftSchema = new Schema(
     { timestamps: true }
 )
 
-shiftSchema.statics.add = async ({ date, type, username }) => {
+shiftSchema.statics.add = async ({ shifts }, token) => {
     return new Promise(async (resolve, reject) => {
-        // maybe need to check if date isn't in the past
-        const shift = await Shift.findOne({ date })
-        if(shift == null){
-            const newShift = new Shift({
-                date,
-                [type]: username
-            })
+        const decoded = jwt.verify(token, `${process.env.KEY}`)
+        shifts.forEach(async shift => {
+            const date = shift.date
+            const existingShift = await Shift.findOne({ date })
+            if(existingShift == null){
+                const newShift = new Shift({
+                    date,
+                    [shift.type]: decoded.id
+                })
 
-            newShift.save((err) => {
-                if(err) return reject(err)
-                resolve(newShift)
-            })
-        } else {
-            shift[type].push(username)
-            shift.save((err) => {
-                if(err) return reject(err)
-                resolve(shift)
-            })
-        }
+                newShift.save((err) => {
+                    if(err) return reject(err)
+                    resolve(newShift)
+                })
+            } else {
+                existingShift[shift.type].push(decoded.id)
+                existingShift.save((err) => {
+                    if(err) return reject(err)
+                    resolve(existingShift)
+                })
+            }
+        })
     })
 }
 
