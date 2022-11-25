@@ -94,6 +94,7 @@ export default function ShiftPlanning() {
                 droppable={true}
                 eventReceive={handleEventReceive}
                 contentHeight={500}
+                firstDay={1}
                 // timeZone={"GMT+2"}
             />
         </Box>
