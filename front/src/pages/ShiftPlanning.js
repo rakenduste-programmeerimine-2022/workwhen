@@ -10,15 +10,14 @@ const ExternalEvent = memo(({ event }) => {
     let elRef = useRef(null);
     useEffect(() => {
         let draggable = new Draggable(elRef.current, {
-        eventData: function () {
-            return { ...event, create: true };
-            
-        }
+            eventData: function () {
+                return { ...event, create: true };
+                
+            }
         });
-    //Removes duplicates
-    return () => draggable.destroy();
-    
-    });
+        //Removes duplicates
+        return () => draggable.destroy();
+    }, []);
     return (
         <Box
             ref={elRef}
@@ -49,14 +48,14 @@ export default function ShiftPlanning() {
 
 
   const handleEventReceive = (eventInfo) => {
-    console.log(eventInfo.draggedEl)
     const newEvent = {
-      id: eventInfo.event.id,
-      title: eventInfo.event.title,
-      color: eventInfo.event.backgroundColor,
-      start: eventInfo.event.startStr,
-      end: eventInfo.event.endStr, // maybe remove
-    };  
+        id: eventInfo.event.id,
+        title: eventInfo.event.title,
+        color: eventInfo.event.backgroundColor,
+        start: eventInfo.event.startStr,
+        end: eventInfo.event.endStr, // maybe remove
+    };
+    eventInfo.revert()
 
     setState((state) => {
       return {
