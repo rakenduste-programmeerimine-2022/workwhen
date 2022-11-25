@@ -49,49 +49,52 @@ export default function ShiftPlanning() {
 
 
   const handleEventReceive = (eventInfo) => {
+    console.log(eventInfo.draggedEl)
     const newEvent = {
       id: eventInfo.draggedEl.getAttribute("data-id"),
       title: eventInfo.draggedEl.getAttribute("title"),
       color: eventInfo.draggedEl.getAttribute("data-color"),
-      start: eventInfo.date,
-      end: eventInfo.date,
-    };
+      start: eventInfo.event.startStr,
+      end: eventInfo.event.endStr, // maybe remove
+    };  
 
     setState((state) => {
-        return {
-            ...state,
-            calendarEvents: state.calendarEvents.concat(newEvent)
-        };
-        });
+      return {
+        ...state,
+        calendarEvents: state.calendarEvents.concat(newEvent)
+      };
+    });
+    console.log(state)
   };
+
 
   return (
     <Container sx={{display: "flex"}}>
         <Box sx={{marginRight:15, marginTop:20, width: 200, height:135, border:1, padding:1}}>
             <Typography sx={{border:1, borderColor:"grey" , borderRadius: "5px", textAlign:"center", marginBottom:1}}>Shifts: </Typography>
             <Typography>
-            {state.externalEvents.map((event) => (
-                <ExternalEvent key={event.id} event={event} />
-            ))}
+                {state.externalEvents.map((event) => (
+                    <ExternalEvent key={event.id} event={event} />
+                ))}
             </Typography>
         </Box>
         <Box sx={{width: 1000, marginLeft: "auto"}}>
             <FullCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            headerToolbar={{
-                right: "today prev,next",
-            }}
-            initialView="dayGridMonth"
-            editable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            weekends={state.weekendsVisible}
-            events={state.calendarEvents}
-            droppable={true}
-            eventReceive={handleEventReceive}
-            contentHeight={500}
-            
+                plugins={[dayGridPlugin, interactionPlugin]}
+                headerToolbar={{
+                    right: "today prev,next",
+                }}
+                initialView="dayGridMonth"
+                editable={true}
+                selectable={true}
+                selectMirror={true}
+                dayMaxEvents={true}
+                weekends={state.weekendsVisible}
+                events={state.calendarEvents}
+                droppable={true}
+                eventReceive={handleEventReceive}
+                contentHeight={500}
+                // timeZone={"GMT+2"}
             />
         </Box>
     </Container>
