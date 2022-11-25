@@ -51,9 +51,9 @@ export default function ShiftPlanning() {
   const handleEventReceive = (eventInfo) => {
     console.log(eventInfo.draggedEl)
     const newEvent = {
-      id: eventInfo.draggedEl.getAttribute("data-id"),
-      title: eventInfo.draggedEl.getAttribute("title"),
-      color: eventInfo.draggedEl.getAttribute("data-color"),
+      id: eventInfo.event.id,
+      title: eventInfo.event.title,
+      color: eventInfo.event.backgroundColor,
       start: eventInfo.event.startStr,
       end: eventInfo.event.endStr, // maybe remove
     };  
