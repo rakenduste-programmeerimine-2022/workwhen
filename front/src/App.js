@@ -10,14 +10,18 @@ import React, { useState, useEffect } from "react"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import RouteGuard from "./components/RouteGuard"
+import axios from "axios"
 
 function App() {
     const [user, setUser] = useState(false)
 
     // this is scuffed
     const ProtectedNavbar = () => {
-        if(localStorage.getItem("token") && localStorage.getItem("user")){
+        if(localStorage.getItem("token") && localStorage.getItem("user") && user){
             return <Navbar />
+        } else {
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
         }
     }
 
@@ -31,7 +35,7 @@ function App() {
 
     useEffect(() => {
         ProtectedNavbar()
-    }, [user])
+    }, [])
 
     return (
     <>
