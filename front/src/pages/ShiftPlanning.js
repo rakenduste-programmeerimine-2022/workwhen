@@ -38,10 +38,10 @@ const ExternalEvent = memo(({ event }) => {
 export default function ShiftPlanning() {
   const [state, setState] = useState({
     externalEvents: [
-      { title: "Day-Shift", color: "#dbd504", id: 1 },
-      { title: "Night-Shift", color: "#1604db", id: 2 },
-      { title: "Vacation", color: "#0b9e06", id: 3 },
-      { title: "Booked", color: "#d46402", id: 4 }
+      { title: "Day-Shift", color: "#dbd504"},
+      { title: "Night-Shift", color: "#1604db"},
+      { title: "Vacation", color: "#0b9e06"},
+      { title: "Booked", color: "#d46402"}
     ],
     calendarEvents: []
   });
@@ -56,6 +56,7 @@ export default function ShiftPlanning() {
         date: eventInfo.event.startStr,
     };
     eventInfo.revert()
+
 
     setState((state) => {
       return {
@@ -88,13 +89,13 @@ export default function ShiftPlanning() {
                 selectable={true}
                 selectMirror={true}
                 dayMaxEvents={true}
+                draggable={true}
                 weekends={state.weekendsVisible}
                 events={state.calendarEvents}
                 droppable={true}
                 eventReceive={handleEventReceive}
                 contentHeight={500}
                 firstDay={1}
-                // timeZone={"GMT+2"}
             />
         </Box>
     </Container>
