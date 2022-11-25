@@ -59,6 +59,7 @@ userSchema.statics.login = async ({ username, password }) => {
                 token,
                 data: {
                     username: existingUser.username,
+                    email: existingUser.email,
                     fullname: existingUser.fullname,
                     role: existingUser.role
                 }
