@@ -12,6 +12,10 @@ exports.add = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() })
+    }
     Shift.get(req.body)
         .then((data) => res.send(data))
         .catch((err) => res.send(err))

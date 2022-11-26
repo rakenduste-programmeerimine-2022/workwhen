@@ -30,6 +30,11 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
                     resolve(newShift)
                 })
             } else {
+                /*
+                    check if user is present in type,
+                    if user is in another type, then remove from old and push to new
+                    if not present in type then push 
+                */
                 existingShift[shift.type].push(decoded.id)
                 existingShift.save((err) => {
                     if(err) return reject(err)
@@ -40,6 +45,10 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
     })
 }
 
+/* 
+    should rewrite to return all user shifts based on month
+    if scheduler then return everyones shift based on month
+*/
 shiftSchema.statics.get = async ({ date }) => {
     return new Promise(async (resolve, reject) => {
         const shift = await Shift.findOne(
