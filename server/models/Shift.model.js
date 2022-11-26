@@ -31,15 +31,34 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
                 })
             } else {
                 /*
-                    check if user is present in type,
-                    if user is in another type, then remove from old and push to new
-                    if not present in type then push 
+                    check if user is present in correct type,
+                    if user is in another type, then remove
+                    if not present in type then push
                 */
-                existingShift[shift.type].push(decoded.id)
-                existingShift.save((err) => {
-                    if(err) return reject(err)
-                    resolve(existingShift)
-                })
+                const inCorrectShift = existingShift[shift.type].includes(decoded.id)
+                if(!inCorrectShift){
+                    const inDayShift = existingShift.dayShift.includes(decoded.id)
+                    const inNightShift = existingShift.nightShift.includes(decoded.id)
+                    const inBooked = existingShift.booked.includes(decoded.id)
+                    const inLeave = existingShift.leave.includes(decoded.id)
+                    if(!(inDayShift == inCorrectShift)){
+                        existingShift.dayShift.pull(decoded.id)
+                    }
+                    if(!(inNightShift == inCorrectShift)){
+                        existingShift.nightShift.pull(decoded.id)
+                    }
+                    if(!(inBooked == inCorrectShift)){
+                        existingShift.booked.pull(decoded.id)
+                    }
+                    if(!(inLeave == inCorrectShift)){
+                        existingShift.leave.pull(decoded.id)
+                    }
+                    existingShift[shift.type].push(decoded.id)
+                    existingShift.save((err) => {
+                        if(err) return reject(err)
+                        resolve(existingShift)
+                    })
+                }
             }
         })
     })
