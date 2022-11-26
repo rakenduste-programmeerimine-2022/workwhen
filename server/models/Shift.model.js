@@ -5,10 +5,10 @@ require("dotenv").config()
 const shiftSchema = new Schema(
     {
         date: { type: Date },
-        dayShift: [{ type: String }],
-        nightShift: [{ type: String }],
-        booked: [{ type: String }],
-        leave: [{ type: String }],
+        dayShift: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        nightShift: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        booked: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        leave: [{ type: Schema.Types.ObjectId, ref: "User" }],
     },
     { timestamps: true }
 )
@@ -42,8 +42,12 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
 
 shiftSchema.statics.get = async ({ date }) => {
     return new Promise(async (resolve, reject) => {
-        const shift = await Shift.findOne({ date })
-        if(shift != null) resolve(shift)
+        const shift = await Shift.findOne(
+                { date },
+                "-_id date dayShift nightShift booked leave"
+            )
+            .populate("dayShift nightShift booked leave", "fullname")
+        if(shift != null) return resolve(shift)
         reject("No shifts planned for this date")
     })
 }
