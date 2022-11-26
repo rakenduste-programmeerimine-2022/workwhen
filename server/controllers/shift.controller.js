@@ -16,7 +16,7 @@ exports.get = async (req, res) => {
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() })
     }
-    Shift.get(req.body)
+    Shift.get(req.body, req.headers["authorization"].split(" ")[1])
         .then((data) => res.send(data))
         .catch((err) => res.send(err))
 }
