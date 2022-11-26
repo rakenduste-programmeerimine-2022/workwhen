@@ -68,15 +68,44 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
     should rewrite to return all user shifts based on month
     if scheduler then return everyones shift based on month
 */
-shiftSchema.statics.get = async ({ date }) => {
+shiftSchema.statics.get = async ({ date }, token) => {
     return new Promise(async (resolve, reject) => {
-        const shift = await Shift.findOne(
-                { date },
-                "-_id date dayShift nightShift booked leave"
-            )
-            .populate("dayShift nightShift booked leave", "fullname")
-        if(shift != null) return resolve(shift)
-        reject("No shifts planned for this date")
+        const decoded = jwt.verify(token, `${process.env.KEY}`)
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 2)
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1)
+        if(decoded.role === "scheduler"){
+            const shift = await Shift.find(
+                    { date: { $gte: firstDay, $lte: lastDay} },
+                    "-_id date dayShift nightShift booked leave"
+                )
+                .populate("dayShift nightShift booked leave", "fullname")
+                .sort({ date: 1 })
+            if(shift != null) return resolve(shift)
+            reject("No shifts planned for this date")
+        } else {
+            const shift = await Shift.find(
+                { 
+                    date: { $gte: firstDay, $lte: lastDay },
+                    $or: 
+                    [
+                        { dayShift: decoded.id },
+                        { nightShift: decoded.id },
+                        { booked: decoded.id },
+                        { leave: decoded.id }
+                    ]
+                    // dayShift: { $in: decoded.id},
+                    // nightShift: { $in: decoded.id},
+                    // booked: { $in: decoded.id},
+                    // leave: { $in: decoded.id}
+                    
+                },
+                "_id date dayShift nightShift booked leave")
+                .populate("dayShift nightShift booked leave", "fullname")
+                .sort({ date: 1 })
+                console.log(shift)
+            if(shift != null) return resolve(shift)
+            reject("No shifts planned for this date")
+        }
     })
 }
 

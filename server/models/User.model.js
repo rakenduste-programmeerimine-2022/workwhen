@@ -49,7 +49,8 @@ userSchema.statics.login = async ({ username, password }) => {
         else {
             const token = jwt.sign(
                 {
-                    id: existingUser._id
+                    id: existingUser._id,
+                    role: existingUser.role
                 },
                 `${process.env.KEY}`,
                 { expiresIn: "12h" }
