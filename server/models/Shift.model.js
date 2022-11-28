@@ -65,14 +65,14 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
 }
 
 /* 
-    should rewrite to return all user shifts based on month
-    if scheduler then return everyones shift based on month
+    if not scheduler then return months shifts
+    if scheduler then return everyones shifts based on month
 */
 shiftSchema.statics.get = async ({ date }, token) => {
     return new Promise(async (resolve, reject) => {
         const decoded = jwt.verify(token, `${process.env.KEY}`)
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 2)
-        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1)
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 2).setUTCHours(0)
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
         if(decoded.role === "scheduler"){
             const shift = await Shift.find(
                     { date: { $gte: firstDay, $lte: lastDay} },
@@ -86,23 +86,24 @@ shiftSchema.statics.get = async ({ date }, token) => {
             const shift = await Shift.find(
                 { 
                     date: { $gte: firstDay, $lte: lastDay },
-                    $or: 
+                    $or:
                     [
                         { dayShift: decoded.id },
                         { nightShift: decoded.id },
                         { booked: decoded.id },
                         { leave: decoded.id }
                     ]
-                    // dayShift: { $in: decoded.id},
-                    // nightShift: { $in: decoded.id},
-                    // booked: { $in: decoded.id},
-                    // leave: { $in: decoded.id}
-                    
                 },
-                "_id date dayShift nightShift booked leave")
+                "_id date dayShift nightShift booked leave",)
                 .populate("dayShift nightShift booked leave", "fullname")
                 .sort({ date: 1 })
-                console.log(shift)
+            // cleaning the output document
+            shift.forEach((elem) => {
+                elem.dayShift = elem.dayShift.filter(user => user._id.toString() == decoded.id)
+                elem.nightShift = elem.nightShift.filter(user => user._id.toString() == decoded.id)
+                elem.booked = elem.booked.filter(user => user._id.toString() == decoded.id)
+                elem.leave = elem.leave.filter(user => user._id.toString() == decoded.id)
+            })
             if(shift != null) return resolve(shift)
             reject("No shifts planned for this date")
         }
