@@ -17,7 +17,7 @@ const ExternalEvent = memo(({ event }) => {
         });
         //Removes duplicates
         return () => draggable.destroy();
-    }, []);
+    },);
     return (
         <Box
             ref={elRef}
@@ -47,25 +47,48 @@ export default function ShiftPlanning() {
   });
 
 
-  const handleEventReceive = (eventInfo) => {
-    // console.log(eventInfo.event)
-    const newEvent = {
-        id: eventInfo.event._def.defId,
-        title: eventInfo.event.title,
-        color: eventInfo.event.backgroundColor,
-        date: eventInfo.event.startStr,
+    const handleEventReceive = (eventInfo) => {
+        // console.log(eventInfo.event)
+        const newEvent = {
+            id: eventInfo.event._def.defId,
+            title: eventInfo.event.title,
+            color: eventInfo.event.backgroundColor,
+            date: eventInfo.event.startStr,
+        };
+        eventInfo.revert()
+
+
+        setState((state) => {
+            return {
+                ...state,
+                calendarEvents: state.calendarEvents.concat(newEvent)
+            };
+            });
+        console.log(state)
     };
-    eventInfo.revert()
+
+    const handleEventDrop = (eventInfo) => {
 
 
-    setState((state) => {
-      return {
-        ...state,
-        calendarEvents: state.calendarEvents.concat(newEvent)
-      };
-    });
-    // console.log(state)
-  };
+        
+        const oldEvent ={
+            id: eventInfo.oldEvent._def.defId,
+            title: eventInfo.oldEvent.title,
+            color: eventInfo.oldEvent.backgroundColor,
+            date: eventInfo.oldEvent.startStr
+        }
+        console.log(oldEvent)
+
+        
+        const newEvent = {
+            id: eventInfo.event._def.defId,
+            title: eventInfo.event.title,
+            color: eventInfo.event.backgroundColor,
+            date: eventInfo.event.startStr,
+        };
+        console.log(newEvent)
+
+    };
 
 
   return (
@@ -90,10 +113,11 @@ export default function ShiftPlanning() {
                 selectMirror={true}
                 dayMaxEvents={true}
                 draggable={true}
+                droppable={true}
                 weekends={state.weekendsVisible}
                 events={state.calendarEvents}
-                droppable={true}
                 eventReceive={handleEventReceive}
+                eventDrop={handleEventDrop}
                 contentHeight={500}
                 firstDay={1}
             />
