@@ -29,7 +29,7 @@ const ExternalEvent = memo(({ event }) => {
             }}
         >
             <Box className="fc-event-main">
-                <Typography sx={{textAlign: "center"}}>{event.title}</Typography>
+                <Typography sx={{textAlign: "center"}}>{event.type}</Typography>
             </Box>
         </Box>
     );
@@ -38,10 +38,10 @@ const ExternalEvent = memo(({ event }) => {
 export default function ShiftPlanning() {
   const [state, setState] = useState({
     externalEvents: [
-      { title: "Day-Shift", color: "#dbd504", id: 1},
-      { title: "Night-Shift", color: "#1604db", id: 2},
-      { title: "Vacation", color: "#0b9e06", id: 3},
-      { title: "Booked", color: "#d46402", id: 4}
+      { type: "Day-Shift", color: "#dbd504", id: 1},
+      { type: "Night-Shift", color: "#1604db", id: 2},
+      { type: "Vacation", color: "#0b9e06", id: 3},
+      { type: "Booked", color: "#d46402", id: 4}
     ],
     calendarEvents: []
   });
@@ -50,8 +50,8 @@ export default function ShiftPlanning() {
     const handleEventReceive = (eventInfo) => {
         // console.log(eventInfo.event)
         const newEvent = {
-            id: eventInfo.event.id,
-            title: eventInfo.event.title,
+            id: eventInfo.event._def.defId,
+            type: eventInfo.event.type,
             color: eventInfo.event.backgroundColor,
             date: eventInfo.event.startStr,
         };
@@ -68,26 +68,24 @@ export default function ShiftPlanning() {
     };
 
     const handleEventDrop = (eventInfo) => {
-
-
-        
-        const oldEvent ={
-            id: eventInfo.oldEvent.id,
-            title: eventInfo.oldEvent.title,
-            color: eventInfo.oldEvent.backgroundColor,
-            date: eventInfo.oldEvent.startStr
-        }
-        console.log("moved 1st event")
+        console.log(eventInfo.oldEvent)
+            const oldEvent ={
+                id: eventInfo.oldEvent._def.publicId,
+                type: eventInfo.oldEvent.type,
+                color: eventInfo.oldEvent.backgroundColor,
+                date: eventInfo.oldEvent.startStr
+            }
+        console.log("moved 1st event (old)")
         console.log(oldEvent)
 
         
         const newEvent = {
-            id: eventInfo.event.id,
-            title: eventInfo.event.title,
+            id: eventInfo.oldEvent._def.publicId,
+            type: eventInfo.event.type,
             color: eventInfo.event.backgroundColor,
             date: eventInfo.event.startStr,
         };
-        console.log("moved 1st event")
+        console.log("moved 1st event (new)")
         console.log(newEvent)
 
         setState((state) => {
@@ -103,6 +101,7 @@ export default function ShiftPlanning() {
                 })
             };
             });
+            // console.log(state)
     };
 
 
