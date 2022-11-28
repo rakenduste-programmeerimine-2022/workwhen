@@ -38,10 +38,10 @@ const ExternalEvent = memo(({ event }) => {
 export default function ShiftPlanning() {
   const [state, setState] = useState({
     externalEvents: [
-      { title: "Day-Shift", color: "#dbd504"},
-      { title: "Night-Shift", color: "#1604db"},
-      { title: "Vacation", color: "#0b9e06"},
-      { title: "Booked", color: "#d46402"}
+      { title: "Day-Shift", color: "#dbd504", id: 1},
+      { title: "Night-Shift", color: "#1604db", id: 2},
+      { title: "Vacation", color: "#0b9e06", id: 3},
+      { title: "Booked", color: "#d46402", id: 4}
     ],
     calendarEvents: []
   });
@@ -50,7 +50,7 @@ export default function ShiftPlanning() {
     const handleEventReceive = (eventInfo) => {
         // console.log(eventInfo.event)
         const newEvent = {
-            id: eventInfo.event._def.defId,
+            id: eventInfo.event.id,
             title: eventInfo.event.title,
             color: eventInfo.event.backgroundColor,
             date: eventInfo.event.startStr,
@@ -72,22 +72,37 @@ export default function ShiftPlanning() {
 
         
         const oldEvent ={
-            id: eventInfo.oldEvent._def.defId,
+            id: eventInfo.oldEvent.id,
             title: eventInfo.oldEvent.title,
             color: eventInfo.oldEvent.backgroundColor,
             date: eventInfo.oldEvent.startStr
         }
+        console.log("moved 1st event")
         console.log(oldEvent)
 
         
         const newEvent = {
-            id: eventInfo.event._def.defId,
+            id: eventInfo.event.id,
             title: eventInfo.event.title,
             color: eventInfo.event.backgroundColor,
             date: eventInfo.event.startStr,
         };
+        console.log("moved 1st event")
         console.log(newEvent)
 
+        setState((state) => {
+            return {
+                ...state,
+                calendarEvents: state.calendarEvents.map(event => {
+                    if (event.id == newEvent.id){
+                        event.date = newEvent.date
+                        return event
+                    } else {
+                        return event
+                    }
+                })
+            };
+            });
     };
 
 
