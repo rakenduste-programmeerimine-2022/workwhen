@@ -4,7 +4,7 @@ require("dotenv").config()
 
 const shiftSchema = new Schema(
     {
-        date: { type: Date },
+        date: { type: Date, required: true },
         dayShift: [{ type: Schema.Types.ObjectId, ref: "User" }],
         nightShift: [{ type: Schema.Types.ObjectId, ref: "User" }],
         booked: [{ type: Schema.Types.ObjectId, ref: "User" }],
