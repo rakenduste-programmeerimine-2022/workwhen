@@ -16,19 +16,20 @@ const leaveSchema = new Schema(
     { timestamps: true }
 )
 
-leaveSchema.statics.add = async ({ id, type, startDate, endDate, comments }) => {
+leaveSchema.statics.add = async ({ employee, type, startDate, endDate, comments }) => {
     return new Promise(async (resolve, reject) => {
-        const leave = await Leave.findOne({ id, type, startDate, endDate })
+        const leave = await Leave.findOne({ employee, type, startDate, endDate, deleted: false })
         if(leave) return reject("Planned/unplanned leave is already registered!")
         const newLeave = new Leave({
-            employee: id,
+            employee,
             type,
             startDate,
             endDate,
             comments
         })
 
-        const token = jwt.sign({ id }, `${process.env.KEY}`, { expiresIn: 60 })
+        // token for shift.add
+        const token = jwt.sign({ employee }, `${process.env.KEY}`, { expiresIn: 60 })
         if(!token) return reject("Something went wrong!")
 
         // leave also needs to go to shift planning documents

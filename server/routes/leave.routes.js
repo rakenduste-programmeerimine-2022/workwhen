@@ -7,7 +7,7 @@ const checkToken = require("../middlewares/checkToken")
 router.post(
     "/add",
     checkToken,
-    body("id").not().isEmpty().trim().escape(),
+    body("employee").not().isEmpty().trim().escape(),
     body("type").not().isEmpty().trim().escape(),
     body("startDate").isISO8601().toDate().withMessage("Wrong date format!"),
     body("endDate").isISO8601().toDate().withMessage("Wrong date format!"),
