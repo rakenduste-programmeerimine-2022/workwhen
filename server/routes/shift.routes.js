@@ -7,9 +7,7 @@ const checkToken = require("../middlewares/checkToken")
 router.post(
     "/add",
     checkToken,
-    body("date").isISO8601().toDate().withMessage("Wrong date format!"),
-    body("type").not().isEmpty().trim().escape(),
-    body("username").not().isEmpty().trim().escape(),
+    body("shifts").isArray().not().isEmpty(),
     shiftController.add
 )
 
