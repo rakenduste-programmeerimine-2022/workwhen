@@ -11,7 +11,7 @@ router.post(
     shiftController.add
 )
 
-router.get(
+router.post(
     "/get",
     checkToken,
     body("date").isISO8601().toDate().withMessage("Wrong date format!"),

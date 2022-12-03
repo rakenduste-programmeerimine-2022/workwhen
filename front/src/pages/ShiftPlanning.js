@@ -50,7 +50,7 @@ export default function ShiftPlanning() {
         externalEvents: [
         { title: "Day-Shift", color: "#dbd504", id: 1},
         { title: "Night-Shift", color: "#1604db", id: 2},
-        { title: "Vacation", color: "#0b9e06", id: 3},
+        //{ title: "Leave", color: "#0b9e06", id: 3},
         { title: "Booked", color: "#d46402", id: 4}
         ],
         calendarEvents: [],
@@ -136,11 +136,30 @@ export default function ShiftPlanning() {
     const handleSnackClose = () => {
         setSnackOpen(false)
     }
+    const getData = () => {
+        axios.post("http://localhost:8080/shift/get", 
+        {
+            date: new Date ()
+        }, 
+        {   
+            headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} 
+        })
+        .then(function(response){
+            console.log(response)    
+        })
+        .catch(function(err){
+            console.log(err)
+        })
+    }
+
+    useEffect(() => {
+        getData()
+    },[])
 
     const handleSubmit = e => {
         e.preventDefault()
-        axios.post("http://localhost:8080/shiftplanning/add", {
-                array: state.calendarSave
+        axios.post("http://localhost:8080/shift/add", {
+                shifts: state.calendarSave
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response){
@@ -185,11 +204,13 @@ export default function ShiftPlanning() {
                     ...state,
                     
                     calendarEvents: state.calendarEvents.filter(event => {
-                       return event.id != eventInfo.event.id                      
+                       return event.id !== eventInfo.event.id                      
                     }),
 
                     calendarSave: state.calendarEvents.filter(event => {
-                        return event.id != eventInfo.event.id                      
+                        if(event.id !== eventInfo.event.id){
+                            return event
+                        }                      
                      })
                 }
             

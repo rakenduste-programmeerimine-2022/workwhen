@@ -39,6 +39,7 @@ exports.add = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
+    console.log(req)
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() })
