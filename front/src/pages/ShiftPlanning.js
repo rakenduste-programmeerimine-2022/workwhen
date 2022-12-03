@@ -2,9 +2,10 @@ import React, { useEffect, useState, useRef, memo } from 'react'
 import axios from "axios"
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { Box, Typography, Button, Snackbar, Alert} from '@mui/material'
+import { Box, Typography, Button, Snackbar, Alert, IconButton} from '@mui/material'
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction"
 import { Container } from '@mui/system'
+import HighlightOffSharpIcon from '@mui/icons-material/HighlightOffSharp'
 
 
 
@@ -59,6 +60,7 @@ export default function ShiftPlanning() {
 
     const handleEventReceive = (eventInfo) => {
         // console.log(eventInfo.event)
+        
         const newEvent = {
             id: eventInfo.event._def.defId,
             title: eventInfo.event.title,
@@ -71,8 +73,9 @@ export default function ShiftPlanning() {
             date: eventInfo.event.startStr
         }
         eventInfo.revert()
+        newEvent.overlap = false
 
-
+        console.log(eventInfo)
         setState((state) => {
             return {
                 ...state,
@@ -136,7 +139,7 @@ export default function ShiftPlanning() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        axios.post("http://localhost:8080/todo/add", {
+        axios.post("http://localhost:8080/shiftplanning/add", {
                 array: state.calendarSave
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
@@ -170,9 +173,40 @@ export default function ShiftPlanning() {
                 severity: "error"
             })
         })
-        
+    }
+
+    const handleEventRender = (eventInfo) => {
+
+        const handleEventDelete = () =>{
+            console.log("Clicked button (next_line is id)")
+            console.log(eventInfo.event.id)
+            setState((state) => {
+                return {
+                    ...state,
+                    
+                    calendarEvents: state.calendarEvents.filter(event => {
+                       return event.id != eventInfo.event.id                      
+                    }),
+
+                    calendarSave: state.calendarEvents.filter(event => {
+                        return event.id != eventInfo.event.id                      
+                     })
+                }
+            
+        })
+        }
+
+        return (
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
+              <Typography sx={{marginLeft: 0.5}}>{eventInfo.event.title}</Typography>
+              <IconButton sx={{marginLeft: "auto", marginRight: 0.1, padding: 0}} onClick={handleEventDelete}><HighlightOffSharpIcon /></IconButton>
+            </Box>
+        )
 
     }
+
+    
+
 
     
 
@@ -210,8 +244,10 @@ export default function ShiftPlanning() {
                 droppable={true}
                 weekends={state.weekendsVisible}
                 events={state.calendarEvents}
+                eventContent={handleEventRender}
                 eventReceive={handleEventReceive}
                 eventDrop={handleEventDrop}
+                eventDurationEditable={false}
                 contentHeight={500}
                 firstDay={1}
             />
