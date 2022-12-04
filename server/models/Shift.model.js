@@ -77,7 +77,7 @@ shiftSchema.statics.get = async ({ date }, token) => {
         const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
         if(decoded.role === "scheduler"){
             const shift = await Shift.find(
-                    { date: { $gte: firstDay, $lte: lastDay} },
+                    { date: { $gte: firstDay, $lte: lastDay } },
                     "-_id date dayShift nightShift booked leave published"
                 )
                 .populate("dayShift nightShift booked leave", "fullname")
@@ -96,7 +96,7 @@ shiftSchema.statics.get = async ({ date }, token) => {
                         { leave: decoded.id }
                     ]
                 },
-                "_id date dayShift nightShift booked leave published",)
+                "_id date dayShift nightShift booked leave published")
                 .populate("dayShift nightShift booked leave", "fullname")
                 .sort({ date: 1 })
                 .lean()
@@ -144,7 +144,7 @@ shiftSchema.statics.publish = async ({ date }, token) => {
         const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
         
         if(decoded.role !== "scheduler") return reject(`Cannot publish schedule with ${decoded.role} role!`)
-        const shifts = await Shift.find({ date: { $gte: firstDay, $lte: lastDay}, published: false})
+        const shifts = await Shift.find({ date: { $gte: firstDay, $lte: lastDay }, published: false})
         if(shifts.length === 0) return reject("No shifts in this month or it's already published!")
 
         shifts.forEach(shift => {
@@ -154,6 +154,30 @@ shiftSchema.statics.publish = async ({ date }, token) => {
             })
         })
         resolve(shifts)
+    })
+}
+
+shiftSchema.statics.getSchedule = async ({ date }) => {
+    return new Promise(async (resolve, reject) => {
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 2).setUTCHours(0)
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
+
+        const schedule = await Shift.find(
+            { date: { $gte: firstDay, $lte: lastDay }, published: true},
+            "-_id date dayShift nightShift booked leave")
+            .populate("dayShift nightShift booked leave", "-_id fullname")
+            .sort({ date: 1 })
+            .lean()
+
+        if(schedule.length === 0) return reject("Schedule hasn't been published yet!")
+
+        schedule.forEach((shift) => {
+            if(shift.dayShift.length === 0) delete shift.dayShift
+            if(shift.nightShift.length === 0) delete shift.nightShift
+            if(shift.booked.length === 0) delete shift.booked
+            if(shift.leave.length === 0) delete shift.leave
+        })
+        resolve(schedule)
     })
 }
 
