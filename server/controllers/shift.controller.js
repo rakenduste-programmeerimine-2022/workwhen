@@ -47,3 +47,13 @@ exports.get = async (req, res) => {
         .then((data) => res.send(data))
         .catch((err) => res.send(err))
 }
+
+exports.publish = async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() })
+    }
+    Shift.publish(req.body, req.headers["authorization"].split(" ")[1])
+        .then((data) => res.send(data))
+        .catch((err) => res.send(err))
+}

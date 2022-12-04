@@ -9,6 +9,7 @@ const shiftSchema = new Schema(
         nightShift: [{ type: Schema.Types.ObjectId, ref: "User" }],
         booked: [{ type: Schema.Types.ObjectId, ref: "User" }],
         leave: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        published: { type: Boolean, default: false}
     },
     { timestamps: true }
 )
@@ -132,6 +133,26 @@ shiftSchema.statics.get = async ({ date }, token) => {
             if(shift.length >= 1 && employeeShifts.length >= 1) return resolve(employeeShifts)
             reject("No shifts planned for this date")
         }
+    })
+}
+
+shiftSchema.statics.publish = async ({ date }, token) => {
+    return new Promise(async (resolve, reject) => {
+        const decoded = jwt.verify(token, `${process.env.KEY}`)
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 2).setUTCHours(0)
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
+        
+        if(decoded.role !== "scheduler") return reject(`Cannot publish schedule with ${decoded.role} role!`)
+        const shifts = await Shift.find({ date: { $gte: firstDay, $lte: lastDay}, published: false})
+        if(shifts.length === 0) return reject("No shifts in this month or it's already published!")
+
+        shifts.forEach(shift => {
+            shift.published = true
+            shift.save((err) => {
+                if(err) return reject(err)
+            })
+        })
+        resolve(shifts)
     })
 }
 
