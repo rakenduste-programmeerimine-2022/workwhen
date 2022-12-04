@@ -3,9 +3,9 @@ import { styled } from "@mui/material/styles"
 
 export default function CalendarLegends(){
     const types = {
-        "Day shift": "day-shift",
-        "Night shift": "night-shift",
-        "Vacation": "vacation",
+        "Day-Shift": "day-shift",
+        "Night-Shift": "night-shift",
+        "Leave": "leave",
         "Booked": "booked"
     }
 
@@ -20,7 +20,7 @@ export default function CalendarLegends(){
                 case "night-shift":
                     bgColor = "rgb(102, 0, 255)"
                     break
-                case "vacation":
+                case "leave":
                     bgColor = "rgb(51, 204, 51)"
                     break
                 case "booked":
