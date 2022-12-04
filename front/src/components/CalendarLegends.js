@@ -15,16 +15,16 @@ export default function CalendarLegends(){
             let bgColor
             switch (style) {
                 case "day-shift":
-                    bgColor = "rgb(255, 255, 0)"
+                    bgColor = "#dbd504"
                     break
                 case "night-shift":
-                    bgColor = "rgb(102, 0, 255)"
+                    bgColor = "#1604db"
                     break
                 case "leave":
-                    bgColor = "rgb(51, 204, 51)"
+                    bgColor = "#0b9e06"
                     break
                 case "booked":
-                    bgColor = "rgb(255, 153, 0)"
+                    bgColor = "#d46402"
                     break
             }
             const Legend = styled(Button)(({ theme }) => ({
