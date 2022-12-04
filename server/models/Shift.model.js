@@ -97,14 +97,39 @@ shiftSchema.statics.get = async ({ date }, token) => {
                 "_id date dayShift nightShift booked leave",)
                 .populate("dayShift nightShift booked leave", "fullname")
                 .sort({ date: 1 })
+                .lean()
+
             // cleaning the output document
+            const employeeShifts = []
             shift.forEach((elem) => {
+                let title = ["Day-Shift", "Night-Shift", "Booked", "Leave"]
+
                 elem.dayShift = elem.dayShift.filter(user => user._id.toString() == decoded.id)
+                if(elem.dayShift.length === 0){
+                    title = title.filter(type => type !== "Day-Shift")
+                }
+
                 elem.nightShift = elem.nightShift.filter(user => user._id.toString() == decoded.id)
+                if(elem.nightShift.length === 0){
+                    title = title.filter(type => type !== "Night-Shift")
+                }
+
                 elem.booked = elem.booked.filter(user => user._id.toString() == decoded.id)
+                if(elem.booked.length === 0){
+                    title = title.filter(type => type !== "Booked")
+                }
+
                 elem.leave = elem.leave.filter(user => user._id.toString() == decoded.id)
+                if(elem.leave.length === 0){
+                    title = title.filter(type => type !== "Leave")
+                }
+
+                employeeShifts.push({
+                    date: elem.date,
+                    title: title[0]
+                })
             })
-            if(shift != null) return resolve(shift)
+            if(shift.length >= 1 && employeeShifts.length >= 1) return resolve(employeeShifts)
             reject("No shifts planned for this date")
         }
     })
