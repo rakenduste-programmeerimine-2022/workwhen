@@ -8,7 +8,8 @@ import {
     DialogContentText,
     DialogActions,
     FormControl,
-    TextField } from "@mui/material";
+    TextField, 
+    CssBaseline} from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -23,7 +24,9 @@ import PropTypes from 'prop-types';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import { Fullscreen } from "@mui/icons-material";
+import globalTheme from "../styles/globalTheme";
+import GlobalPaper from "../styles/GlobalPaper";
+
 
 
 
@@ -108,24 +111,6 @@ export default function Contacts(searchQuery) {
         {id: 15, name: "Mariina", phone: 5555555, email: "mingi@mail.ee"}
     ]
 
-    const theme = createTheme({
-        components: {
-            MuiTableCell: {
-                variants: [
-                    {
-                    props: { variant: 'header'},
-                    style: {
-                        textTransform: 'capitalize',
-                        fontWeight: 'bold',
-                        fontSize: 16,
-                    },
-
-                    },
-                ],
-            },
-        },
-    });
-
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -166,25 +151,46 @@ export default function Contacts(searchQuery) {
 
 
         return(
-            <Paper sx={{ width: '100%'}} elevation={7}>
-                <TableContainer sx={{ maxHeight: "78vh", width: '100%' }}>
-                    <Table>
-                        <ThemeProvider theme={theme}>
-                            <TableHead variant="header" size="large">
-                                <TableRow>
-                                    <TableCell variant="header" size="large">Contact name</TableCell>
+            <ThemeProvider theme={globalTheme}>
+            <CssBaseline />
+            <Paper 
+            sx={{ 
+                maxWidth: "90%",
+                backgroundColor: "#E4C5AF",
+                overflow: "hidden"  }}
+                elevation={7}
+                className="contactPaper"
+                
+            >
+                <TableContainer sx={{ maxHeight: "78vh" }} >
+                    <Table className="primaryTable" >
+                        <colgroup>
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                        </colgroup>
+                            <TableHead variant="header" size="large" className="primary">
+                                {/* <TableRow> */}
+                                    <TableCell color="primary" className="primary" variant="header" size="small">Contact name</TableCell>
                                     <TableCell variant="header" size="large">Contact number</TableCell>
                                     <TableCell variant="header" size="large">Contact e-mail</TableCell>
                                     <TableCell>
                                         <Button
                                             onClick={handleOpenCnctAdd}
+                                            sx={{backgroundColor: "#2F3E46"}} 
                                         >
                                             Add new contact
                                         </Button>
                                     </TableCell>
-                                </TableRow>
+                                    <TableCell
+                                        
+                                    >
+                                    </TableCell>
+                                {/* </TableRow> */}
                             </TableHead>
-                            <TableBody>
+                            <TableBody className="primaryBody">
                                 {rows.filter((rows) => {
                                     if(searchQuery == ""){
                                         return rows;                            
@@ -211,9 +217,12 @@ export default function Contacts(searchQuery) {
                                 <TableCell>
                                     {row.email}
                                 </TableCell>
-                                <TableCell>
-                                    <Button
+                                <TableCell
+                                    className="contactButton"
+                                >
+                                    <Button                                        
                                         onClick={handleOpenCnctChange}
+                                        sx={{backgroundColor: "#2F3E46"}}                                        
                                         // add id
                                     >
                                         Edit
@@ -221,7 +230,10 @@ export default function Contacts(searchQuery) {
                                 </TableCell>
                                 <TableCell>
                                     <Button
+                                        className="contactButton"
                                         onClick={handleOpenCnctDelete}
+                                        sx={{backgroundColor: "#2F3E46"}} 
+                                        
                                         // add id
                                     >
                                         Delete
@@ -237,12 +249,11 @@ export default function Contacts(searchQuery) {
                                 )}
                         
                             </TableBody>
-                        </ThemeProvider>
                     </Table>
                 </TableContainer>
-                <TableContainer>
+                <TableContainer className="primary">
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 50, { label: 'All', value: -1 }]}
+                        rowsPerPageOptions={[5, 20, 40, { label: 'All', value: -1 }]}
                         colSpan={3}
                         count={rows.length}
                         rowsPerPage={rowsPerPage}
@@ -299,7 +310,7 @@ export default function Contacts(searchQuery) {
                         <DialogActions>                            
                             <Button
                                 variant="contained"
-                                sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46" }}
                                 margin="dense"
                                 onClick={handleCloseCnctChange}
                             >
@@ -307,7 +318,7 @@ export default function Contacts(searchQuery) {
                             </Button>
                             <Button
                                 variant="contained"
-                                sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46" }}
                                 onClick={handleCloseCnctChange}
                                 autoFocus
                             >
@@ -379,17 +390,18 @@ export default function Contacts(searchQuery) {
                         <DialogActions>
                         <Button
                             variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "white" }}
                             margin="dense" 
                             onClick={handleCloseCnctAdd}>Cancel</Button>
                         <Button
                             variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46" }}
                             margin="dense"  
                             onClick={handleCloseCnctAdd}>Save</Button>
                     </DialogActions>
                     
                 </Dialog>
             </Paper>
+            </ThemeProvider>
         );
 }

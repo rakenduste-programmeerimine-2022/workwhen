@@ -9,8 +9,13 @@ export default function Schedule() {
         <Box sx={{ padding: "2%" }}>
             <CalendarLegends />
         </Box>
-        <Box sx={{ padding: "0 2% 2% 2%" }}>
+        <Box sx={{ padding: "0 2% 2% 2%", maxWidth: "90%", backgroundColor: "#E4C5AF", color: "#2F3E46"}}
+                elevation={7}
+                className="contactPaper"
+                
+        >
             <FullCalendar
+                
                 plugins={[ dayGridPlugin ]}
                 initialView="dayGridMonth"
                 firstDay={1}

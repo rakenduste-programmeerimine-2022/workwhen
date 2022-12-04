@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"
 
 
+
 export default function UserSettings() {
     const navigate = useNavigate()
     const [openPwdChange, setOpenPwdChange] = useState(false);
@@ -105,7 +106,7 @@ export default function UserSettings() {
             .catch(function(error) {
                 if(error.response){
                     console.log(error.response)
-                    setHelperText(error.response.data.errors[0].msg)
+                    // setHelperText(error.response.data.errors[0].msg)
                 } else if (error.request){
                     console.log(error.request)
                 } else {
@@ -120,8 +121,8 @@ export default function UserSettings() {
 
     return(
         <Container component="div" maxWidth="xs" sx={{ minWidth: "12rem" }}>
-            <Paper elevation={7} sx={{ p: 4, pt: 3}}>
-                <Avatar sx={{ m: 1, bgcolor: "black", color: "white", width: 60, height: 60 }}>JK</Avatar>
+            <Paper elevation={7} sx={{ p: 4, pt: 3, backgroundColor: "#E4C5AF"}}>
+                <Avatar sx={{ m: 1, bgcolor: "black", color: "white", width: 60, height: 60, backgroundColor: "#2F3E46"}}>JK</Avatar>
                     <Box sx={{display: "flex", flexDirection: "column"}}>
                         <TableContainer noValidate sx={{ marginTop: "5px", marginBottom: "0px" }}>
                             <Table>
@@ -145,7 +146,7 @@ export default function UserSettings() {
                                     <Button 
                                         onClick={handleOpenPwdChange}
                                         variant="contained"
-                                        sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }}
+                                        sx={{ mt: 2, mb: 1, width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                         margin="dense"
                                     >
                                         Change password
@@ -155,7 +156,7 @@ export default function UserSettings() {
                                     <Button
                                         onClick={handleLogout}
                                         variant="contained"
-                                        sx={{ mt: 1, mb: 1, bgcolor: "main", width: "auto" }}
+                                        sx={{ mt: 1, mb: 1, width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                         margin="dense"
                                     >
                                         Logout
@@ -182,7 +183,7 @@ export default function UserSettings() {
                                 id="currentPwd"
                                 name="currentPwd"
                                 label="Current password"
-                                type="password"
+                                type="text"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
@@ -193,7 +194,7 @@ export default function UserSettings() {
                                 id="newPwd"
                                 name="newPwd"
                                 label="New password"
-                                type="password"
+                                type="text"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
@@ -204,7 +205,7 @@ export default function UserSettings() {
                                 id="confirmPwd"
                                 name="confirmPwd"
                                 label="Repeat new password"
-                                type="password"
+                                type="text"
                                 variant="standard"
                                 sx={{ p: 2}}
                             />
@@ -214,7 +215,7 @@ export default function UserSettings() {
                             <DialogActions>                            
                                 <Button
                                     variant="contained"
-                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                     margin="dense"
                                     onClick={handleClosePwdChange}
                                 >
@@ -222,7 +223,7 @@ export default function UserSettings() {
                                 </Button>
                                 <Button
                                     variant="contained"
-                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                     onClick={handleSubmit}
                                     autoFocus
                                 >
@@ -232,7 +233,7 @@ export default function UserSettings() {
                         </FormControl>
                         </Box>
 			        </Dialog>
-                    <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                    <Snackbar sx={{ backgroundColor: "" }} open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
                         <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
                             {snackbarInfo.text}
                         </Alert>

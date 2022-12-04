@@ -31,6 +31,7 @@ exports.changePassword = async (req, res) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() })
+        console.log(res)
     }
     User.changePassword(req)
         .then((data) => res.send(data))

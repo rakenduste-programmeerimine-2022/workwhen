@@ -110,7 +110,13 @@ export default function BookmarkDialog({getData}){
         <>
             <Button variant="outlined" onClick={handleClickOpen} size="small" sx={{margin:1, color:'black', borderColor:'black', maxWidth: '36px', padding:'5px'}}><AddIcon></AddIcon></Button>
             <Dialog open={open} onClose={handleClose}>
-                <Box component="form" onSubmit={handleSubmit} noValidate>
+                <Box component="form" onSubmit={handleSubmit} noValidate
+                    sx={{ 
+                        backgroundColor: "#E4C5AF",
+                        overflow: "hidden"
+                    }}
+                    elevation={7}
+                >
                     <DialogTitle>Add a new to-do assignment</DialogTitle>
                     <DialogContent sx={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
                         <TextField 

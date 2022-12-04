@@ -57,9 +57,15 @@ export default function Bookmarks() {
                 <h1>Bookmarks</h1>
                 <BookmarkDialog getData={getData}/>
             </Box>
-            <Paper elevation={7}>
+            <Paper elevation={7} 
+                sx={{ 
+                maxWidth: "90%",
+                backgroundColor: "#E4C5AF",
+                overflow: "hidden"  }}
+            >
                 <Typography variant="h5">Monitooringu tööriistad</Typography>
-                <Paper elevation={3} sx={{marginBottom: "2vw"}}>
+                <Paper elevation={3}
+                    sx={{marginBottom: "2vw"}}>
                     {monitoringArr.map(item => {
                         return(
                             <>
