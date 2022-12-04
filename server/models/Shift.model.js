@@ -36,6 +36,7 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
                     if user is in another type, then remove
                     if not present in type then push
                 */
+                if(existingShift.published) return reject("Cannot add to an already published schedule!")
                 const inCorrectShift = existingShift[shift.type].includes(decoded.id)
                 if(!inCorrectShift){
                     const inDayShift = existingShift.dayShift.includes(decoded.id)
@@ -77,7 +78,7 @@ shiftSchema.statics.get = async ({ date }, token) => {
         if(decoded.role === "scheduler"){
             const shift = await Shift.find(
                     { date: { $gte: firstDay, $lte: lastDay} },
-                    "-_id date dayShift nightShift booked leave"
+                    "-_id date dayShift nightShift booked leave published"
                 )
                 .populate("dayShift nightShift booked leave", "fullname")
                 .sort({ date: 1 })
@@ -95,7 +96,7 @@ shiftSchema.statics.get = async ({ date }, token) => {
                         { leave: decoded.id }
                     ]
                 },
-                "_id date dayShift nightShift booked leave",)
+                "_id date dayShift nightShift booked leave published",)
                 .populate("dayShift nightShift booked leave", "fullname")
                 .sort({ date: 1 })
                 .lean()
