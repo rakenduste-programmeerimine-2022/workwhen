@@ -24,8 +24,8 @@ exports.add = async (req, res) => {
                 break
             default:
                 return res.status(400).json(
-                    { errors: 
-                        `Was expecting 'Day-Shift', 'Night-Shift', 'Booked', 'Leave', but got ${shiftsArr[shift].title}!`
+                    { 
+                        errors: `Was expecting 'Day-Shift', 'Night-Shift', 'Booked', 'Leave', but got ${shiftsArr[shift].title}!`
                     })
         }
         shiftsArr[shift] = {
