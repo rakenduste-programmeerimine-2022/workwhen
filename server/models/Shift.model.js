@@ -125,6 +125,7 @@ shiftSchema.statics.get = async ({ date }, token) => {
                 }
 
                 employeeShifts.push({
+                    id: elem._id,
                     date: elem.date,
                     title: title[0]
                 })
