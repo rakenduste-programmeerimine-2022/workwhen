@@ -13,11 +13,11 @@ import axios from "axios"
 export default function Schedule() {
     const getSchedule = () => {
         axios.post("http://localhost:8080/shift/schedule",
-        { date: "2022-11-01" },
+        { date: "2022-12-01" },
         { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response){
-            setState([])
             // add return snackbar if typeof response.data === "string"
+            let eventsFromDB = []
             response.data.forEach(shift => {
                 let date = shift.date
                 Object.keys(shift).forEach((key) => {
@@ -37,15 +37,28 @@ export default function Schedule() {
                                 color = "#0b9e06"
                                 break
                         }
+
                         const newEvent = {
                             date,
                             title: shift[key][0].fullname,
                             color
                         }
-                        setState({
-                            ...state,
-                            events: state.events.push(newEvent)
-                        })
+
+                        eventsFromDB.push(newEvent)
+                    }
+                })
+            })
+            setState(state => {
+                return {
+                    ...state,
+                    events: []
+                }
+            })
+            eventsFromDB.map(event => {
+                return setState(state => {
+                    return {
+                        ...state,
+                        events: state.events.concat(event)
                     }
                 })
             })
@@ -58,17 +71,30 @@ export default function Schedule() {
         events: []
     })
 
-    const handleEventRender = () => {
+    const handleEventRender = (eventInfo) => {
         return (
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <Typography sx={{marginLeft: 0.5}}>{state.events.title}</Typography>
+            <Box className="fc-event fc-h-event mb-1 fc-daygrid-event fc-daygrid-block-event p-2" style={{
+                width: "100%",
+                backgroundColor: eventInfo.event.backgroundColor,
+                borderColor: eventInfo.event.borderColor,
+                color: "white",
+                borderRadius: "3px"
+            }}>
+                <Box className="fc-event-main" style={{
+                    width: '100%',
+                    height: '25px',
+                }}
+                sx={{display: 'flex', alignItems: 'center'}}>
+                    <Typography sx={{marginLeft: 0.5}}>{eventInfo.event.title}</Typography>
+                </Box>
             </Box>
         )
+
     }
 
     useEffect(() => {
         getSchedule()
-        console.log(state.events)
+        console.log(state)
     }, [])
     return(
         <>
@@ -80,7 +106,7 @@ export default function Schedule() {
                 plugins={[ dayGridPlugin ]}
                 initialView="dayGridMonth"
                 firstDay={1}
-                contentHeight={500}
+                contentHeight={550}
                 events={state.events}
                 eventContent={handleEventRender}
             />
