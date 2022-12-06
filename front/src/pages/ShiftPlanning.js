@@ -48,18 +48,82 @@ export default function ShiftPlanning() {
     const [snackbarInfo, setSnackbarInfo] = useState(snackbar)
     const [state, setState] = useState({
         externalEvents: [
-        { title: "Day-Shift", color: "#dbd504", id: 1},
-        { title: "Night-Shift", color: "#1604db", id: 2},
+        { title: "Day-Shift", color: "#dbd504"},
+        { title: "Night-Shift", color: "#1604db"},
         //{ title: "Leave", color: "#0b9e06", id: 3},
-        { title: "Booked", color: "#d46402", id: 4}
+        { title: "Booked", color: "#d46402"}
         ],
         calendarEvents: [],
         calendarSave: []
     });
 
+    
+    const getData = () => {
+        axios.post("http://localhost:8080/shift/get", 
+        {
+            date: new Date ()
+        }, 
+        {   
+            headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} 
+        })
+        .then(function(response){
+            const events = []
+            response.data.forEach(element => {
+                let eventColor = ""
+                switch (element.title) {
+                    case "Day-Shift":
+                        eventColor = "#dbd504"
+                        break
+                    case "Night-Shift":
+                        eventColor = "#1604db"
+                        break
+                    case "Booked":
+                        eventColor = "#d46402"
+                        break
+                    case "Leave":
+                        eventColor = "#0b9e06"
+                        break
+                }
+                console.log(element)
+
+                const dbEvent = {
+                    title: element.title,
+                    date: element.date,
+                    color: eventColor,
+                    overlap: false
+                }
+                events.push(dbEvent)
+                console.log(dbEvent) 
+             
+            })
+            console.log(events)
+            setState((state) => {
+                return {
+                    ...state,
+                    calendarEvents: [],
+                }
+            })
+
+            events.map(event => {
+                setState((state) => {
+                    return {
+                        ...state,
+                        calendarEvents: state.calendarEvents.concat(event)
+                    }
+                })
+            })
+        })
+        .catch(function(err){
+            console.log(err)
+        })
+    }
+
+    useEffect(() => {
+        getData()
+    },[])
 
     const handleEventReceive = (eventInfo) => {
-        // console.log(eventInfo.event)
+        console.log(eventInfo)
         
         const newEvent = {
             id: eventInfo.event._def.defId,
@@ -82,12 +146,14 @@ export default function ShiftPlanning() {
                 calendarSave: state.calendarSave.concat(saveEvent),
                 calendarEvents: state.calendarEvents.concat(newEvent)
                 
-            };
-            });
+            }
+            })
         console.log(state.calendarSave)
+        console.log(state.calendarEvents)
     };
 
     const handleEventDrop = (eventInfo) => {
+
         console.log(eventInfo.oldEvent)
             const oldEvent ={
                 id: eventInfo.oldEvent._def.publicId,
@@ -127,7 +193,6 @@ export default function ShiftPlanning() {
                         return event
                     }
                 })
-
             }
             })
             console.log(state.calendarSave)
@@ -136,25 +201,7 @@ export default function ShiftPlanning() {
     const handleSnackClose = () => {
         setSnackOpen(false)
     }
-    const getData = () => {
-        axios.post("http://localhost:8080/shift/get", 
-        {
-            date: new Date ()
-        }, 
-        {   
-            headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} 
-        })
-        .then(function(response){
-            console.log(response)    
-        })
-        .catch(function(err){
-            console.log(err)
-        })
-    }
-
-    useEffect(() => {
-        getData()
-    },[])
+    
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -195,14 +242,11 @@ export default function ShiftPlanning() {
     }
 
     const handleEventRender = (eventInfo) => {
-
+        console.log(eventInfo)
         const handleEventDelete = () =>{
-            console.log("Clicked button (next_line is id)")
-            console.log(eventInfo.event.id)
             setState((state) => {
                 return {
-                    ...state,
-                    
+                    ...state,                    
                     calendarEvents: state.calendarEvents.filter(event => {
                        return event.id !== eventInfo.event.id                      
                     }),
@@ -218,9 +262,21 @@ export default function ShiftPlanning() {
         }
 
         return (
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-              <Typography sx={{marginLeft: 0.5}}>{eventInfo.event.title}</Typography>
-              <IconButton sx={{marginLeft: "auto", marginRight: 0.1, padding: 0}} onClick={handleEventDelete}><HighlightOffSharpIcon /></IconButton>
+            <Box className="fc-event fc-h-event mb-1 fc-daygrid-event fc-daygrid-block-event p-2" style={{
+                width: "100%",
+                backgroundColor: eventInfo.event.backgroundColor,
+                borderColor: eventInfo.event.borderColor,
+                color: "white",
+                borderRadius: "3px"
+            }}>
+                <Box className="fc-event-main" style={{
+                    width: '100%',
+                    height: '25px',
+                }}
+                sx={{display: 'flex', alignItems: 'center'}}>
+                    <Typography sx={{marginLeft: 0.5}}>{eventInfo.event.title}</Typography>
+                    <IconButton sx={{marginLeft: "auto", marginRight: 0.1, padding: 0}} onClick={handleEventDelete}><HighlightOffSharpIcon /></IconButton>
+                </Box>
             </Box>
         )
 
