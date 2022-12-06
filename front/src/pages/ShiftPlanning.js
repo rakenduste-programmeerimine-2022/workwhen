@@ -87,13 +87,15 @@ export default function ShiftPlanning() {
                 console.log(element)
 
                 const dbEvent = {
+                    id: element.id,
                     title: element.title,
                     date: element.date,
                     color: eventColor,
                     overlap: false
                 }
                 events.push(dbEvent)
-                console.log(dbEvent) 
+                //console.log(element.id)
+                //console.log(dbEvent) 
              
             })
             console.log(events)
@@ -123,7 +125,7 @@ export default function ShiftPlanning() {
     },[])
 
     const handleEventReceive = (eventInfo) => {
-        console.log(eventInfo)
+        //console.log(eventInfo)
         
         const newEvent = {
             id: eventInfo.event._def.defId,
@@ -139,7 +141,7 @@ export default function ShiftPlanning() {
         eventInfo.revert()
         newEvent.overlap = false
 
-        console.log(eventInfo)
+        //console.log(eventInfo)
         setState((state) => {
             return {
                 ...state,
@@ -262,7 +264,7 @@ export default function ShiftPlanning() {
         }
 
         return (
-            <Box className="fc-event fc-h-event mb-1 fc-daygrid-event fc-daygrid-block-event p-2" style={{
+            <Box style={{
                 width: "100%",
                 backgroundColor: eventInfo.event.backgroundColor,
                 borderColor: eventInfo.event.borderColor,
