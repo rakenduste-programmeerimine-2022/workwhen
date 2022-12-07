@@ -34,14 +34,98 @@ const globalTheme = createTheme({
                 },
             ],
         },
-    },
-    root: {
-        "& .MuiPaper-root": {
-            primary: Colors.primary
-        }
-    },
+        MuiPaper: {
+            styleOverrides: {
+                root: ({  }) => ({
 
-    
+                    backgroundColor: "#e4c5af",
+                    maxWidth: "80%",
+                    overflow: "visible",
+                    elevation: "7",
+                    margin: "5%",
+                    fontFamily: "Overpass",
+                }),          
+
+            },
+        },
+
+        MuiTable: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    justifyContent: "center",
+                    alignContent: "center",
+
+                }),
+            },
+        },
+
+        MuiTableContainer: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    overflow: "visible",
+                }),
+            },
+        },
+
+        MuiTableRow: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    alignContent: "center"
+
+                }),
+            },
+        },
+
+        MuiTableCell: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    fontFamily: "Overpass",
+                }),
+            },
+        },
+
+        MuiLink: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    color: "#354f52",
+                    underline:"hover",
+                }),
+            },
+        },
+
+        MuiButton: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    backgroundColor: "#2F3E46",
+                    color: "#e4c5af",
+                    margin: "5px",
+                    maxWidth: "10rem"
+
+                }),
+            },
+        },
+
+
+        MuiBox: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    backgroundColor: "#e4c5af",
+                    overflow: "visible",
+                    margin: "5%"
+                }),
+            },
+        },
+
+        MuiDialog: {
+            styleOverrides: {
+                root: ({ }) => ({
+                    width: "auto",
+                }),
+            },
+        },
+    },    
+
+
 });
 
 export default globalTheme;

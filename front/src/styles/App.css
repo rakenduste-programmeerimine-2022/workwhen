@@ -10,8 +10,7 @@
 
 body {
     font-weight: 400;
-    overflow: hidden; 
-    overflow-x: hidden;
+
     position: relative;
     background-color: #2F3E46 !important;
     color: #fff !important;
@@ -19,6 +18,10 @@ body {
   }
 
   .contactPaper {
-    margin: 5%;
-    overflow: hidden 
+    overflow: hidden;
+    font-family: 'Overpass';
+  }
+
+  .headerCell {
+    font-style: bold;
   }

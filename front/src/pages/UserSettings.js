@@ -12,7 +12,8 @@ import {
     Snackbar,
     Alert,
     FormControl,
-    FormHelperText
+    FormHelperText,
+    ThemeProvider
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -22,6 +23,7 @@ import TableRow from "@mui/material/TableRow";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
+import globalTheme from "../styles/globalTheme";
 
 
 
@@ -120,11 +122,13 @@ export default function UserSettings() {
 
 
     return(
-        <Container component="div" maxWidth="xs" sx={{ minWidth: "12rem" }}>
-            <Paper elevation={7} sx={{ p: 4, pt: 3, backgroundColor: "#E4C5AF"}}>
-                <Avatar sx={{ m: 1, bgcolor: "black", color: "white", width: 60, height: 60, backgroundColor: "#2F3E46"}}>JK</Avatar>
-                    <Box sx={{display: "flex", flexDirection: "column"}}>
+        <ThemeProvider theme={globalTheme}>
+        <Container>
+            <Paper>
+                <Avatar sx={{ m: 2, bgcolor: "black", color: "#e4c5af", width: 60, height: 60, backgroundColor: "#2F3E46"}}>JK</Avatar>
+                    <Box>
                         <TableContainer noValidate sx={{ marginTop: "5px", marginBottom: "0px" }}>
+
                             <Table>
                                 <TableBody>
                                     <TableRow>
@@ -142,26 +146,24 @@ export default function UserSettings() {
                                 </TableBody>
                             </Table>
                             <Table>
-                                <TableRow>
-                                    <Button 
+
+                                    <Button
                                         onClick={handleOpenPwdChange}
                                         variant="contained"
-                                        sx={{ mt: 2, mb: 1, width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                         margin="dense"
                                     >
                                         Change password
                                     </Button>
-                                </TableRow>
-                                <TableRow>
+
+
                                     <Button
                                         onClick={handleLogout}
                                         variant="contained"
-                                        sx={{ mt: 1, mb: 1, width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                         margin="dense"
                                     >
                                         Logout
                                     </Button>
-                                </TableRow>
+
                             </Table>
                         </TableContainer>
                     </Box>
@@ -171,51 +173,50 @@ export default function UserSettings() {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
-                        </DialogContent>
                         <Box>
-                        <FormControl>
-                            <TextField
-                                defaultValue={formValue.currentPwd}
-                                onChange={e => handleFormChange(e)}
-                                required
-                                id="currentPwd"
-                                name="currentPwd"
-                                label="Current password"
-                                type="text"
-                                variant="standard"
-                                sx={{ p: 2}}
-                            />
-                            <TextField
-                                defaultValue={formValue.newPwd}
-                                onChange={e => handleFormChange(e)}
-                                required
-                                id="newPwd"
-                                name="newPwd"
-                                label="New password"
-                                type="text"
-                                variant="standard"
-                                sx={{ p: 2}}
-                            />
-                            <TextField
-                                defaultValue={formValue.confirmPwd}
-                                onChange={e => handleFormChange(e)}
-                                required
-                                id="confirmPwd"
-                                name="confirmPwd"
-                                label="Repeat new password"
-                                type="text"
-                                variant="standard"
-                                sx={{ p: 2}}
-                            />
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
+                            </DialogContent>
+                            <FormControl>
+                                <TextField
+                                    defaultValue={formValue.currentPwd}
+                                    onChange={e => handleFormChange(e)}
+                                    required
+                                    id="currentPwd"
+                                    name="currentPwd"
+                                    label="Current password"
+                                    type="text"
+                                    variant="standard"
+                                    sx={{ p: 2}}
+                                />
+                                <TextField
+                                    defaultValue={formValue.newPwd}
+                                    onChange={e => handleFormChange(e)}
+                                    required
+                                    id="newPwd"
+                                    name="newPwd"
+                                    label="New password"
+                                    type="text"
+                                    variant="standard"
+                                    sx={{ p: 2}}
+                                />
+                                <TextField
+                                    defaultValue={formValue.confirmPwd}
+                                    onChange={e => handleFormChange(e)}
+                                    required
+                                    id="confirmPwd"
+                                    name="confirmPwd"
+                                    label="Repeat new password"
+                                    type="text"
+                                    variant="standard"
+                                    sx={{ p: 2}}
+                                />
                             <FormHelperText error>
                                 {helperText}
                             </FormHelperText>
                             <DialogActions>                            
                                 <Button
                                     variant="contained"
-                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                     margin="dense"
                                     onClick={handleClosePwdChange}
                                 >
@@ -223,7 +224,6 @@ export default function UserSettings() {
                                 </Button>
                                 <Button
                                     variant="contained"
-                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#E4C5AF" }}
                                     onClick={handleSubmit}
                                     autoFocus
                                 >
@@ -240,6 +240,7 @@ export default function UserSettings() {
                     </Snackbar>
             </Paper>
         </Container>
+    </ThemeProvider>
 
     );    
 }

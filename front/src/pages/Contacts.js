@@ -23,9 +23,8 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import globalTheme from "../styles/globalTheme";
-import GlobalPaper from "../styles/GlobalPaper";
 
 
 
@@ -153,16 +152,8 @@ export default function Contacts(searchQuery) {
         return(
             <ThemeProvider theme={globalTheme}>
             <CssBaseline />
-            <Paper 
-            sx={{ 
-                maxWidth: "90%",
-                backgroundColor: "#E4C5AF",
-                overflow: "hidden"  }}
-                elevation={7}
-                className="contactPaper"
-                
-            >
-                <TableContainer sx={{ maxHeight: "78vh" }} >
+            <Paper>
+                <TableContainer>
                     <Table className="primaryTable" >
                         <colgroup>
                             <col width="10%" />
@@ -173,22 +164,16 @@ export default function Contacts(searchQuery) {
                         </colgroup>
                             <TableHead variant="header" size="large" className="primary">
                                 {/* <TableRow> */}
-                                    <TableCell color="primary" className="primary" variant="header" size="small">Contact name</TableCell>
-                                    <TableCell variant="header" size="large">Contact number</TableCell>
-                                    <TableCell variant="header" size="large">Contact e-mail</TableCell>
+                                    <TableCell sx={{ fontWeight: "bold" }}>Contact name</TableCell>
+                                    <TableCell sx={{ fontWeight: "bold" }}>Contact number</TableCell>
+                                    <TableCell sx={{ fontWeight: "bold" }}>Contact e-mail</TableCell>
                                     <TableCell>
-                                        <Button
-                                            onClick={handleOpenCnctAdd}
-                                            sx={{backgroundColor: "#2F3E46"}} 
-                                        >
+                                        <Button onClick={handleOpenCnctAdd}>
                                             Add new contact
                                         </Button>
                                     </TableCell>
-                                    <TableCell
-                                        
-                                    >
+                                    <TableCell>
                                     </TableCell>
-                                {/* </TableRow> */}
                             </TableHead>
                             <TableBody className="primaryBody">
                                 {rows.filter((rows) => {
@@ -217,25 +202,13 @@ export default function Contacts(searchQuery) {
                                 <TableCell>
                                     {row.email}
                                 </TableCell>
-                                <TableCell
-                                    className="contactButton"
-                                >
-                                    <Button                                        
-                                        onClick={handleOpenCnctChange}
-                                        sx={{backgroundColor: "#2F3E46"}}                                        
-                                        // add id
-                                    >
+                                <TableCell className="contactButton">
+                                    <Button onClick={handleOpenCnctChange}>
                                         Edit
                                     </Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button
-                                        className="contactButton"
-                                        onClick={handleOpenCnctDelete}
-                                        sx={{backgroundColor: "#2F3E46"}} 
-                                        
-                                        // add id
-                                    >
+                                    <Button onClick={handleOpenCnctDelete}>
                                         Delete
                                     </Button>
                                 </TableCell>
@@ -275,6 +248,13 @@ export default function Contacts(searchQuery) {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column", 
+                            backgroundColor: "#E4C5AF",
+                        }}
+                    >
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">Contact change</DialogContentText>
                     </DialogContent>
@@ -309,8 +289,7 @@ export default function Contacts(searchQuery) {
                         />
                         <DialogActions>                            
                             <Button
-                                variant="contained"
-                                sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46" }}
+                                variant="contained"                                
                                 margin="dense"
                                 onClick={handleCloseCnctChange}
                             >
@@ -318,7 +297,6 @@ export default function Contacts(searchQuery) {
                             </Button>
                             <Button
                                 variant="contained"
-                                sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46" }}
                                 onClick={handleCloseCnctChange}
                                 autoFocus
                             >
@@ -326,6 +304,7 @@ export default function Contacts(searchQuery) {
                             </Button>
                             
                         </DialogActions>
+                    </Box>
                 </Dialog>
                 <Dialog
                     open={openContactDelete}
@@ -334,20 +313,23 @@ export default function Contacts(searchQuery) {
                     aria-describedby="alert-dialog-description"
                     sx={{}}                                
                 >
+
                     <DialogActions>
                         <Button
                             variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#e4c5af" }}
                             margin="dense" 
                             onClick={handleCloseCnctDelete}>Tühista</Button>
                         <Button
                             variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#e4c5af" }}
                             margin="dense"  
                             onClick={handleCloseCnctDelete}>Kustuta</Button>
                     </DialogActions>
+
                     
                 </Dialog>
+
                 <Dialog
                     open={openContactAdd}
                     onClose={handleCloseCnctAdd}
@@ -355,6 +337,7 @@ export default function Contacts(searchQuery) {
                     aria-describedby="alert-dialog-description"
                     sx={{}}                                
                 >
+
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">Add new contact</DialogContentText>
                     </DialogContent>
@@ -390,15 +373,14 @@ export default function Contacts(searchQuery) {
                         <DialogActions>
                         <Button
                             variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "white" }}
                             margin="dense" 
                             onClick={handleCloseCnctAdd}>Cancel</Button>
                         <Button
                             variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46" }}
                             margin="dense"  
                             onClick={handleCloseCnctAdd}>Save</Button>
                     </DialogActions>
+
                     
                 </Dialog>
             </Paper>

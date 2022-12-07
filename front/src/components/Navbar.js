@@ -34,11 +34,11 @@ function Navbar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#e4c5af',
               textDecoration: 'none',
             }}
           >
-            <Link style={{textDecoration:'none', color: 'white'}} to={'/dashboard'}>
+            <Link style={{textDecoration:'none', color: '#e4c5af'}} to={'/dashboard'}>
             <img src={Logo} />
             </Link>
             
@@ -49,8 +49,8 @@ function Navbar() {
                         component = {NavLink}
                         to={`/${link}`}
                         key={page}
-                        sx={{color: 'white', display: 'block', '&.active': {
-                        background:'#1E5180',}}} 
+                        sx={{color: '#e4c5af', display: 'block', '&.active': {
+                        background:'#2f3e46',}}} 
                     >
                         {page}   
                     </Button>
