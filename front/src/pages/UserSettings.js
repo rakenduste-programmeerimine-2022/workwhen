@@ -108,10 +108,21 @@ export default function UserSettings() {
             .catch(function(error) {
                 if(error.response){
                     console.log(error.response)
-                    // setHelperText(error.response.data.errors[0].msg)
+                    setHelperText(error.response.data.errors[0].msg);
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: "Wrong current password!",
+                        severity: "error"
+                    })
                 } else if (error.request){
                     console.log(error.request)
-                } else {
+                } else if (typeof error.response.data === "string" && error.response.data !== null){
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: error.response.data,
+                        severity: "error"
+                    })
+                 } else {
                     console.log(error.message)
                 }
             })
