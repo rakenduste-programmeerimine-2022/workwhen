@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
     Button,
     Dialog,
@@ -26,6 +26,8 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import globalTheme from "../styles/globalTheme";
 
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import axios from "axios";
 
 
 
@@ -81,34 +83,84 @@ function TablePaginationActions(props) {
         </IconButton>
       </Box>
     );
-  }
+}
   
-  TablePaginationActions.propTypes = {
+TablePaginationActions.propTypes = {
     count: PropTypes.number.isRequired,
     onPageChange: PropTypes.func.isRequired,
     page: PropTypes.number.isRequired,
     rowsPerPage: PropTypes.number.isRequired,
-  };
+};
+
+function axiosPost({ name, email, phone }, id, link){
+    return new Promise(async (resolve, reject) => {
+        if(name !== "" || email !== "" || phone !== "" || id !== ""){
+            axios.post(`http://localhost:8080/contact/${link}`, id !== "" ? {
+                id,
+                name,
+                email,
+                phone
+            } : { name, email, phone },
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+            .then(function(response) {
+                if(typeof response.data === "object" && response.data !== null){
+                    resolve("All good!")
+                } else if (typeof response.data === "string" && response.data === "Successfully deleted!"){
+                    resolve("Successfully deleted!")
+                } else {
+                    reject("Something weird came from the server")
+                }
+            })
+            .catch(function(error) {
+                if(error.response){
+                    console.log(error.response)
+                    reject("Please fill all fields!")
+                } else if (error.request){
+                    console.log(error.request)
+                    reject("Bad request!")
+                } else {
+                    console.log(error.message)
+                    reject("Something went wrong!")
+                }
+                reject("Server error")
+            })
+        } else {
+            reject("Please insert values to change!")
+        }
+    })
+}
 
 export default function Contacts(searchQuery) {
-    
-    const rows = [
-        {id: 1, name: "Juku", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 2, name: "Kuku", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 3, name: "Luku", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 4, name: "Muku", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 5, name: "Niina", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 6, name: "Miina", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 7, name: "Siina", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 8, name: "Tiina", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 9, name: "Kiina", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 10, name: "Toomas", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 11, name: "Roomas", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 12, name: "Meelis", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 13, name: "Veelis", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 14, name: "Kristiina", phone: 5555555, email: "mingi@mail.ee"},
-        {id: 15, name: "Mariina", phone: 5555555, email: "mingi@mail.ee"}
-    ]
+    const form = {
+        name: "",
+        email: "",
+        phone: ""
+    }
+    const [contacts, setContacts] = useState([])
+    const [formValue, setFormValue] = useState(form)
+    const [contactId, setContactId] = useState("")
+    const [snackOpen, setSnackOpen] = useState(false)
+    const [snackbarInfo, setSnackbarInfo] = useState({
+        test: "",
+        severity: ""
+    })
+
+    const handleSnackClose = () => {
+        setSnackOpen(false)
+    }
+
+    const getData = () => {
+        axios.get("http://localhost:8080/contact/all", { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+        .then(function(response) {
+            setContacts([])
+            response.data.forEach(element => {
+                setContacts(oldArr => [...oldArr, element])
+            })
+        })
+        .catch(function(err) {
+            console.log(err)
+        })
+    }
 
 
     const [page, setPage] = useState(0);
@@ -119,24 +171,50 @@ export default function Contacts(searchQuery) {
       };
 
     const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - contacts.length) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
       };
     const [openContactChange, setOpenCnctChange] = useState(false);
-    const handleOpenCnctChange = () => {
-        setOpenCnctChange(true);
+    const handleContactChangeSave = () => {
+        axiosPost(formValue, contactId, "edit")
+            .then((response) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: response,
+                    severity: "success"
+                })
+                getData()
+                setOpenCnctChange(false)
+                setFormValue(form)
+            })
+            .catch((error) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: error,
+                    severity: "error"
+                })
+            })
     }
-    const handleCloseCnctChange = () => {
+    const handleOpenCnctChange = (e) => {
+        setOpenCnctChange(true)
+        setContactId(e.currentTarget.id)
+    }
+
+    const handleCloseCnctChange = (e) => {
         setOpenCnctChange(false);
+        setFormValue(form);
+        setContactId("");
     }
     const [openContactDelete, setOpenCnctDelete] = useState(false);
-    const handleOpenCnctDelete = () => {
+    const handleOpenCnctDelete = (e) => {
         setOpenCnctDelete(true);
+        setContactId(e.currentTarget.id);
     }
     const handleCloseCnctDelete = () => {
         setOpenCnctDelete(false);
+        setContactId("");
     }   
 
     const [openContactAdd, setOpenCnctAdd] = useState(false);
@@ -145,11 +223,64 @@ export default function Contacts(searchQuery) {
     }
     const handleCloseCnctAdd = () => {
         setOpenCnctAdd(false);
-    }  
+        setFormValue(form);
+    }
 
+    const handleAddCnctSave = () => {
+        axiosPost(formValue, "", "add")
+            .then((response) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: response,
+                    severity: "success"
+                })
+                getData()
+                setOpenCnctAdd(false)
+                setFormValue(form)
+            })
+            .catch((error) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: error,
+                    severity: "error"
+                })
+            })
+    }
 
+    const handleCnctDelete = () => {
+        axiosPost({}, contactId, "remove")
+            .then((response) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: response,
+                    severity: "success"
+                })
+                getData()
+                setOpenCnctDelete(false)
+            })
+            .catch((error) => {
+                setSnackOpen(true)
+                setSnackbarInfo({
+                    text: error,
+                    severity: "error"
+                })
+            })
+    }
+    const handleFormChange = e => {
+        const { value, name } = e.target
+        const newValue = {
+            ...formValue,
+            [name]: value
+        }
+        setFormValue(newValue)
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
 
         return(
+            
             <ThemeProvider theme={globalTheme}>
             <CssBaseline />
             <Paper>

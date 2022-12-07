@@ -18,8 +18,11 @@ function App() {
 
     // this is scuffed
     const ProtectedNavbar = () => {
-        if(localStorage.getItem("token") && localStorage.getItem("user")){
+        if(localStorage.getItem("token") && localStorage.getItem("user") && user){
             return <Navbar />
+        } else {
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
         }
     }
 
@@ -33,7 +36,7 @@ function App() {
 
     useEffect(() => {
         ProtectedNavbar()
-    }, [user])
+    }, [])
 
     return (
     <>
