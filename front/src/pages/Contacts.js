@@ -25,8 +25,6 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import globalTheme from "../styles/globalTheme";
-
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import axios from "axios";
 
 

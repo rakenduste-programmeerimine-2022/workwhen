@@ -74,7 +74,7 @@ export default function UserSettings() {
         setFormValue(newValue)
     }   
 
-    console.log(formValue)
+
 
     const [helperText, setHelperText] = useState("")
     const [success, setSuccess] = useState(false)
@@ -94,41 +94,47 @@ export default function UserSettings() {
                 newPwd: formValue.newPwd
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+            
             .then(function(response) {
-                console.log(response)
-                setSuccess(true)
-                setOpenPwdChange(false);
-                setSnackOpen(true)
-                setSnackbarInfo({
-                    text: "Password has been changed!",
-                    severity: "success"
-                })
-
+                if(response.data === "Successfully changed password!"
+                && response.data !== null){
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: response.data,
+                        severity: "success"
+                    })
+                } else if (typeof response.data === "string" && response.data !== null){
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: response.data,
+                        severity: "error"
+                    })
+                } else {
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: "Something went wrong!",
+                        severity: "error"
+                    })
+                }
             })
             .catch(function(error) {
+                console.log(error)
+
                 if(error.response){
-                    console.log(error.response)
+
                     setHelperText(error.response.data.errors[0].msg);
                     setSnackOpen(true)
                     setSnackbarInfo({
-                        text: "Wrong current password!",
+                        text: "Something went wrong!",
                         severity: "error"
                     })
-                } else if (error.request){
-                    console.log(error.request)
-                } else if (typeof error.response.data === "string" && error.response.data !== null){
-                    setSnackOpen(true)
-                    setSnackbarInfo({
-                        text: error.response.data,
-                        severity: "error"
-                    })
-                 } else {
-                    console.log(error.message)
-                }
+                } 
             })
+            setFormValue(form)
+            handleClosePwdChange()
         } else {
             setHelperText("Passwords don't match!")
-        }
+        } 
     }   
 
 
@@ -196,7 +202,7 @@ export default function UserSettings() {
                                     id="currentPwd"
                                     name="currentPwd"
                                     label="Current password"
-                                    type="text"
+                                    type="password"
                                     variant="standard"
                                     sx={{ p: 2}}
                                 />
@@ -207,7 +213,7 @@ export default function UserSettings() {
                                     id="newPwd"
                                     name="newPwd"
                                     label="New password"
-                                    type="text"
+                                    type="password"
                                     variant="standard"
                                     sx={{ p: 2}}
                                 />
@@ -218,7 +224,7 @@ export default function UserSettings() {
                                     id="confirmPwd"
                                     name="confirmPwd"
                                     label="Repeat new password"
-                                    type="text"
+                                    type="password"
                                     variant="standard"
                                     sx={{ p: 2}}
                                 />
