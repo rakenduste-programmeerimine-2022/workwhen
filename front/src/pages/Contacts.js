@@ -9,7 +9,10 @@ import {
     DialogActions,
     FormControl,
     TextField, 
-    CssBaseline} from "@mui/material";
+    CssBaseline,
+    Snackbar,
+    Alert
+} from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -26,8 +29,6 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import globalTheme from "../styles/globalTheme";
 import axios from "axios";
-
-
 
 function TablePaginationActions(props) {
     const theme = useTheme();
@@ -112,7 +113,7 @@ function axiosPost({ name, email, phone }, id, link){
             .catch(function(error) {
                 if(error.response){
                     console.log(error.response)
-                    reject("Please fill all fields!")
+                    reject("Check inputs - make sure that they are in the correct format!")
                 } else if (error.request){
                     console.log(error.request)
                     reject("Bad request!")
@@ -123,7 +124,7 @@ function axiosPost({ name, email, phone }, id, link){
                 reject("Server error")
             })
         } else {
-            reject("Please insert values to change!")
+            reject("Please fill all fields!")
         }
     })
 }
@@ -278,7 +279,6 @@ export default function Contacts(searchQuery) {
     }, [])
 
         return(
-            
             <ThemeProvider theme={globalTheme}>
             <CssBaseline />
             <Paper>
@@ -305,39 +305,45 @@ export default function Contacts(searchQuery) {
                                     </TableCell>
                             </TableHead>
                             <TableBody className="primaryBody">
-                                {rows.filter((rows) => {
+                                {contacts.filter((contacts) => {
                                     if(searchQuery == ""){
-                                        return rows;                            
-                                    } else if(rows.name.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                        return rows;
-                                    } else if(rows.phone.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                        return rows;
-                                    } else if(rows.email.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                        return rows;
+                                        return contacts;                            
+                                    } else if(contacts.name.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
+                                        return contacts;
+                                    } else if(contacts.phone.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
+                                        return contacts;
+                                    } else if(contacts.email.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
+                                        return contacts;
                                     }
                                 })}
                                 {(rowsPerPage > 0
-                                ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : rows
-                                ).map((row) => (
+                                ? contacts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : contacts
+                                ).map((contact) => (
                                 
                                 <TableRow>
                                 <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {contact.name}
                                 </TableCell>
                                 <TableCell>
-                                    {row.phone}
+                                    {contact.phone}
                                 </TableCell>
                                 <TableCell>
-                                    {row.email}
+                                    {contact.email}
                                 </TableCell>
                                 <TableCell className="contactButton">
-                                    <Button onClick={handleOpenCnctChange}>
+                                    <Button 
+                                        onClick={handleOpenCnctChange}
+                                        id={contact._id}
+                                    >
                                         Edit
                                     </Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button onClick={handleOpenCnctDelete}>
+                                    <Button 
+                                        onClick={handleOpenCnctDelete}
+                                        id={contact._id}
+                                    >
                                         Delete
                                     </Button>
                                 </TableCell>
@@ -357,7 +363,7 @@ export default function Contacts(searchQuery) {
                     <TablePagination
                         rowsPerPageOptions={[5, 20, 40, { label: 'All', value: -1 }]}
                         colSpan={3}
-                        count={rows.length}
+                        count={contacts.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         SelectProps={{
@@ -371,6 +377,11 @@ export default function Contacts(searchQuery) {
                         ActionsComponent={TablePaginationActions}
                     />
                 </TableContainer>
+                <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                    <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                        {snackbarInfo.text}
+                    </Alert>
+                </Snackbar>
                 <Dialog
                     open={openContactChange}
                     onClose={handleCloseCnctChange}
@@ -395,6 +406,9 @@ export default function Contacts(searchQuery) {
                         <TextField
                             autoFocus
                             id="cnctNameChange"
+                            name="name"
+                            value={formValue.name}
+                            onChange={e => handleFormChange(e)}
                             label="New contact name"
                             type="text"
                             variant="standard"
@@ -403,6 +417,9 @@ export default function Contacts(searchQuery) {
                         <TextField
                             autoFocus
                             id="cnctPhoneChange"
+                            name="phone"
+                            value={formValue.phone}
+                            onChange={e => handleFormChange(e)}
                             label="New contact number"
                             type="text"
                             variant="standard"
@@ -411,6 +428,9 @@ export default function Contacts(searchQuery) {
                         <TextField
                             autoFocus
                             id="cnctEmailChange"
+                            name="email"
+                            value={formValue.email}
+                            onChange={e => handleFormChange(e)}
                             label="New contact email"
                             type="text"
                             variant="standard"
@@ -426,10 +446,10 @@ export default function Contacts(searchQuery) {
                             </Button>
                             <Button
                                 variant="contained"
-                                onClick={handleCloseCnctChange}
+                                onClick={handleContactChangeSave}
                                 autoFocus
                             >
-                                Change!
+                                Change
                             </Button>
                             
                         </DialogActions>
@@ -440,20 +460,25 @@ export default function Contacts(searchQuery) {
                     onClose={handleCloseCnctDelete}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
-                    sx={{}}                                
+                    sx={{}} // ?
                 >
-
+                    <DialogContentText 
+                        id="alert-dialog-delete"
+                        sx={{padding: "8% 0 0 5%"}}
+                    >
+                        Are you sure?
+                    </DialogContentText>
                     <DialogActions>
                         <Button
                             variant="contained"
                             sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#e4c5af" }}
                             margin="dense" 
-                            onClick={handleCloseCnctDelete}>Tühista</Button>
+                            onClick={handleCloseCnctDelete}>Cancel</Button>
                         <Button
                             variant="contained"
                             sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#e4c5af" }}
                             margin="dense"  
-                            onClick={handleCloseCnctDelete}>Kustuta</Button>
+                            onClick={handleCnctDelete}>Delete</Button>
                     </DialogActions>
 
                     
@@ -464,7 +489,7 @@ export default function Contacts(searchQuery) {
                     onClose={handleCloseCnctAdd}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
-                    sx={{}}                                
+                    sx={{}} // ?
                 >
 
                     <DialogContent>
@@ -479,6 +504,9 @@ export default function Contacts(searchQuery) {
                             autoFocus
                             id="cnctNameAdd"
                             label="New contact name"
+                            name="name"
+                            value={formValue.name}
+                            onChange={e => handleFormChange(e)}
                             type="text"
                             variant="standard"
                             sx={{ p: 2}}
@@ -487,6 +515,9 @@ export default function Contacts(searchQuery) {
                             autoFocus
                             id="cnctPhoneAdd"
                             label="New contact number"
+                            name="phone"
+                            value={formValue.phone}
+                            onChange={e => handleFormChange(e)}
                             type="text"
                             variant="standard"
                             sx={{ p: 2}}
@@ -495,6 +526,9 @@ export default function Contacts(searchQuery) {
                             autoFocus
                             id="cnctEmailAdd"
                             label="New contact email"
+                            name="email"
+                            value={formValue.email}
+                            onChange={e => handleFormChange(e)}
                             type="text"
                             variant="standard"
                             sx={{ p: 2}}
@@ -507,10 +541,8 @@ export default function Contacts(searchQuery) {
                         <Button
                             variant="contained"
                             margin="dense"  
-                            onClick={handleCloseCnctAdd}>Save</Button>
+                            onClick={handleAddCnctSave}>Save</Button>
                     </DialogActions>
-
-                    
                 </Dialog>
             </Paper>
             </ThemeProvider>
