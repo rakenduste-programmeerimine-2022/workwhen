@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { Box, Divider, IconButton, Link, Paper, Typography } from '@mui/material'
+import { Box, Divider, IconButton, Link, Paper, ThemeProvider, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import axios from "axios"
 import BookmarkDialog from "../components/BookmarkDialog"
+import globalTheme from "../styles/globalTheme"
 
 export default function Bookmarks() {
     const [monitoringArr, setMonitoringArr] = useState([])
@@ -30,7 +31,7 @@ export default function Bookmarks() {
     const handleDelete = e => {
         console.log(e.currentTarget.id)
         const id = e.currentTarget.id
-        axios.post("http://localhost:8080/bookmark/remove", {id})
+        axios.post("http://localhost:8080/bookmark/remove", {id}) // where token?
         .then(function(response){
             console.log(response)
             getData()
@@ -52,14 +53,16 @@ export default function Bookmarks() {
     
     return (
         <>
+        <ThemeProvider theme={globalTheme}>
         <Box sx={{padding: "0 1rem 0 1rem"}}>
             <Box sx={{display: "flex", alignItems: "center", gap: "1rem"}}>
                 <h1>Bookmarks</h1>
                 <BookmarkDialog getData={getData}/>
             </Box>
-            <Paper elevation={7}>
+
+            <Paper>
                 <Typography variant="h5">Monitooringu tööriistad</Typography>
-                <Paper elevation={3} sx={{marginBottom: "2vw"}}>
+                <Paper>
                     {monitoringArr.map(item => {
                         return(
                             <>
@@ -67,7 +70,6 @@ export default function Bookmarks() {
                                     <DeleteIcon />
                                 </IconButton>
                                 <Link
-                                    underline="hover"
                                     href={item.link}
                                     target="_blank"
                                 >
@@ -81,7 +83,7 @@ export default function Bookmarks() {
                 </Paper>
                 <Divider />
                 <Typography variant="h5">Maps</Typography>
-                <Paper elevation={3}>
+                <Paper>
                     {mapsArr.map(item => {
                         return(
                             <>
@@ -89,7 +91,6 @@ export default function Bookmarks() {
                                     <DeleteIcon />
                                 </IconButton>
                                 <Link
-                                    underline="hover"
                                     href={item.link}
                                     target="_blank"
                                 >
@@ -102,7 +103,9 @@ export default function Bookmarks() {
                     })}
                 </Paper>
             </Paper>
+
         </Box>
+        </ThemeProvider>
         </>
     )
 }

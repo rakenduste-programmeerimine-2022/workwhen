@@ -23,4 +23,13 @@ router.post(
 )
 
 router.get("/all", checkToken, userController.getAll)
+
+router.post(
+    "/change-password",
+    checkToken,
+    body("username").not().isEmpty().trim().escape(),
+    body("currentPwd").isLength({ min: 5 }).withMessage("Minimum length 5"),
+    body("newPwd").isLength({ min: 5 }).withMessage("Minimum length 5"),
+    userController.changePassword
+)
 module.exports = router
