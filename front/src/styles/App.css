@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Overpass';
+    src: url('./fonts/Overpass-VariableFont_wght.ttf');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+  }
+
+body {
+    font-weight: 400;
+
+    position: relative;
+    background-color: #2F3E46 !important;
+    color: #fff !important;
+    font-family: 'Overpass', sans-serif !important;
+  }
+
+  .contactPaper {
+    overflow: hidden;
+    font-family: 'Overpass';
+  }
+
+  .headerCell {
+    font-style: bold;
+  }
