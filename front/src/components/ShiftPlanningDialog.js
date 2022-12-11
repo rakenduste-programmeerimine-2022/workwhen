@@ -23,6 +23,7 @@ export default function ShiftPlanningDialog({getData}){
         type: "",
         startDate: "",
         endDate: "",
+        comment: "",
     }
 
     const snackbar = {
@@ -61,7 +62,8 @@ export default function ShiftPlanningDialog({getData}){
                 title: formValue.title,
                 type: formValue.type,
                 startDate: formValue.startDate,
-                endDate: formValue.endDate
+                endDate: formValue.endDate,
+                comment: formValue.comment
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
             .then(function(response){
@@ -110,14 +112,14 @@ export default function ShiftPlanningDialog({getData}){
     return(
         
         <>
-            <Button variant="outlined" onClick={handleClickOpen} size="small" sx={{marginBottom:1, color:'black', borderColor:'black', Width: '100%', padding:'5px', textTransform: "unset", fontSize: 12}}>Planned/Unplanned Leave</Button>
+            <Button variant="outlined" onClick={handleClickOpen} size="small" sx={{marginBottom:1, borderColor:'white', Width: '100%', padding:'5px', textTransform: "unset", fontSize: 12, color: "white"}}>Planned/Unplanned Leave</Button>
             <Dialog open={open} onClose={handleClose}>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <DialogTitle>Schedule time off</DialogTitle>
                     <DialogContent sx={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
                         <InputLabel id="leave-type-label">Leave-type:</InputLabel>
                         <Select
-                            value={formValue.type}
+                            value={formValue.type }
                             onChange={e => handleFormChange(e)}
                             labelId="leave-type-label"
                             label="Leave-type"
@@ -148,6 +150,14 @@ export default function ShiftPlanningDialog({getData}){
                             id="endDate"
                             label="Select end date"
                             name="endDate"
+                        />
+
+                        <TextField 
+                            value={formValue.comment}
+                            onChange={e => handleFormChange(e)}
+                            id="comment"
+                            label="Comment"
+                            name="comment"
                         />
                     </DialogContent>
                     <DialogActions>
