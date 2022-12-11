@@ -6,6 +6,7 @@ import { Box, Typography, Button, Snackbar, Alert, IconButton} from '@mui/materi
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction"
 import { Container } from '@mui/system'
 import HighlightOffSharpIcon from '@mui/icons-material/HighlightOffSharp'
+import ShiftPlanningDialog from "../components/ShiftPlanningDialog"
 
 
 
@@ -294,7 +295,8 @@ export default function ShiftPlanning() {
 
   return (
     <Container sx={{display: "flex"}}>
-        <Box sx={{display:"flex", flexDirection:"column" ,marginRight:15, marginTop:20, width: 200, height:170, border:1, padding:1}}>
+        <Box sx={{display:"flex", flexDirection:"column" ,marginRight:15, marginTop:20, width: 200, height:190, border:1, padding:1}}>
+            <ShiftPlanningDialog getData={getData}/>
             <Typography sx={{border:1, borderColor:"grey" , borderRadius: "5px", textAlign:"center", marginBottom:1}}>Shifts: </Typography>
             <Typography>
                 {state.externalEvents.map((event) => (
