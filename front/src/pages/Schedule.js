@@ -1,24 +1,37 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { Box, Typography, ThemeProvider, Paper } from '@mui/material'
+import { Box, Typography, ThemeProvider, Paper, Snackbar, Alert } from '@mui/material'
 import CalendarLegends from '../components/CalendarLegends'
 import { useEffect, useState } from 'react'
 import axios from "axios"
 import globalTheme from '../styles/globalTheme'
-/*
-{ title: "Day-Shift", color: "#dbd504", id: 1},
-{ title: "Night-Shift", color: "#1604db", id: 2},
-{ title: "Leave", color: "#0b9e06", id: 3},
-{ title: "Booked", color: "#d46402", id: 4}
-*/
 
 export default function Schedule() {
-    const getSchedule = () => {
+    const [state, setState] = useState({
+        events: []
+    })
+    const [snackOpen, setSnackOpen] = useState(false)
+    const [snackbarInfo, setSnackbarInfo] = useState({
+        text: "",
+        severity: ""
+    })
+
+    const handleSnackClose = () => {
+        setSnackOpen(false)
+    }
+    
+    const getSchedule = (date) => {
         axios.post("http://localhost:8080/shift/schedule",
-        { date: "2022-12-01" },
+        { date },
         { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response){
-            // add return snackbar if typeof response.data === "string"
+            if(typeof response.data === "string"){
+                setSnackOpen(true)
+                return setSnackbarInfo({
+                    text: response.data,
+                    severity: "info"
+                })
+            }
             let eventsFromDB = []
             response.data.forEach(shift => {
                 let date = shift.date
@@ -67,11 +80,13 @@ export default function Schedule() {
         })
         .catch(function(error){
             console.log(error)
+            setSnackOpen(true)
+            setSnackbarInfo({
+                text: "Something went wrong!",
+                severity: "error"
+            })
         })
     }
-    const [state, setState] = useState({
-        events: []
-    })
 
     const handleEventRender = (eventInfo) => {
         return (
@@ -95,32 +110,34 @@ export default function Schedule() {
     }
 
     useEffect(() => {
-        getSchedule()
-        console.log(state)
+        getSchedule(new Date())
     }, [])
+
     return(
         <>
         <ThemeProvider theme={globalTheme}>
-
-        <Box sx={{ padding: "2%" }}>
-            <CalendarLegends />
-        </Box>
-        <Paper>
-        <Box sx={{ padding: "0 2% 2% 2%", maxWidth: "90%", color: "#2F3E46"}}
-                
-        >
-
-            <FullCalendar
-                
-                plugins={[ dayGridPlugin ]}
-                initialView="dayGridMonth"
-                firstDay={1}
-                contentHeight={550}
-                events={state.events}
-                eventContent={handleEventRender}
-            />
-        </Box>
-        </Paper>
+            <Box sx={{ padding: "2%", marginLeft: "3%" }}>
+                <CalendarLegends />
+            </Box>
+            <Paper sx={{ marginTop: 0} }>
+                <Box sx={{ padding: "1% 2% 2% 2%", maxWidth: "90%", color: "#2F3E46"}}>
+                    <FullCalendar
+                        plugins={[ dayGridPlugin ]}
+                        initialView="dayGridMonth"
+                        firstDay={1}
+                        contentHeight={550}
+                        events={state.events}
+                        eventContent={handleEventRender}
+                        datesSet={arg => getSchedule(arg.startStr)}
+                        showNonCurrentDates={false}
+                    />
+                </Box>
+            </Paper>
+            <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                    {snackbarInfo.text}
+                </Alert>
+            </Snackbar>
         </ThemeProvider>
         </>
     )
