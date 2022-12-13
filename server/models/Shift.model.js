@@ -170,7 +170,7 @@ shiftSchema.statics.getSchedule = async ({ date }) => {
             .sort({ date: 1 })
             .lean()
 
-        if(schedule.length === 0) return reject("Schedule hasn't been published yet!")
+        if(schedule.length === 0) return reject("Schedule hasn't been published!")
 
         schedule.forEach((shift) => {
             if(shift.dayShift.length === 0) delete shift.dayShift
