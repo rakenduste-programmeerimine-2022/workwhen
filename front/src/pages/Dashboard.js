@@ -81,7 +81,7 @@ export default function Dashboard() {
     }, [])
     return (
         <Container sx={{display:'flex', padding: 3, width: 500, margin: 0}}>
-            <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450}}>
+            <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450, backgroundColor: "#E4C5AF"}}>
                 <Box sx={{display:"flex"}}>
                     <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list
                         <Typography

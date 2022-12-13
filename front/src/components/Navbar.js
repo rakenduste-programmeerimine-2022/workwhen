@@ -7,6 +7,8 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import "../styles/index.css";
+import Logo from "../styles/logo.png";
 
 
 const pages = {
@@ -21,7 +23,7 @@ const pages = {
 function Navbar() {
 
   return (
-    <AppBar position='static'>
+    <AppBar position='static' sx={{ backgroundColor: "#354F52"}}>
       <Container maxWidth='xl'>
         <Toolbar disableGutters >          
           <Typography
@@ -32,12 +34,12 @@ function Navbar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#e4c5af',
               textDecoration: 'none',
             }}
           >
-            <Link style={{textDecoration:'none', color: 'white'}} to={'/dashboard'}>
-            WorkWhen
+            <Link style={{textDecoration:'none', color: '#e4c5af'}} to={'/dashboard'}>
+            <img src={Logo} />
             </Link>
             
           </Typography>
@@ -47,8 +49,8 @@ function Navbar() {
                         component = {NavLink}
                         to={`/${link}`}
                         key={page}
-                        sx={{color: 'white', display: 'block', '&.active': {
-                        background:'#1E5180',}}} 
+                        sx={{color: '#e4c5af', display: 'block', '&.active': {
+                        background:'#2f3e46',}}} 
                     >
                         {page}   
                     </Button>

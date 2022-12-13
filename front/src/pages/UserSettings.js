@@ -9,36 +9,26 @@ import {
     DialogContentText,
     DialogActions,
     TextField,
-    FormControl
+    Snackbar,
+    Alert,
+    FormControl,
+    FormHelperText,
+    ThemeProvider
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
+import globalTheme from "../styles/globalTheme";
+
 
 
 export default function UserSettings() {
     const navigate = useNavigate()
-
-    const employeeData = {
-        name: 'Juuli',
-        surname: 'Kõver',
-        username: 'juulkove',
-        email: 'juuli.kover@firma.ee'
-    }
-
-    const [anchorUser, setanchorUser] = useState(null);
-
-    const handleOpenUserMenu = (event) => {
-        setanchorUser(event.currentTarget);
-    }
-    const handleCloseUserMenu = () => {
-        setanchorUser(null);
-    }
-
     const [openPwdChange, setOpenPwdChange] = useState(false);
     const handleOpenPwdChange = () => {
         setOpenPwdChange(true);
@@ -46,57 +36,151 @@ export default function UserSettings() {
     const handleClosePwdChange = () => {
         setOpenPwdChange(false);
     }
-
     const handleLogout = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("user")
         window.dispatchEvent(new Event("logout"))
         navigate("/")
+    }   
+
+    const [items, setItems] = useState([]);
+    useEffect(() => {
+        const items = JSON.parse(localStorage.getItem('user'));
+        if (items) {
+         setItems(items);
+        }
+      }, []);
+
+    const form = {
+        username: "",
+        currentPwd: "",
+        newPwd: "",
+        confirmPwd: ""
     }
 
+    const snackbar = {
+        text: "",
+        severity: ""
+    }      
+
+    const [formValue, setFormValue] = useState(form)
+    const handleFormChange = e => {
+        const { value, name } = e.target
+        const newValue = {
+            ...formValue,
+            [name]: value,
+            username: items.username
+        }
+        setFormValue(newValue)
+    }   
+
+
+
+    const [helperText, setHelperText] = useState("")
+    const [success, setSuccess] = useState(false)
+    const [snackOpen, setSnackOpen] = useState(false)
+    const handleSnackClose = () => {
+        setSnackOpen(false)
+    }
+    const [snackbarInfo, setSnackbarInfo] = useState(snackbar)
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        if(formValue.newPwd === formValue.confirmPwd){
+            setHelperText("")
+            axios.post("http://localhost:8080/user/change-password", {
+                username: formValue.username,
+                currentPwd: formValue.currentPwd,
+                newPwd: formValue.newPwd
+            },
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
+            
+            .then(function(response) {
+                if(response.data === "Successfully changed password!"
+                && response.data !== null){
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: response.data,
+                        severity: "success"
+                    })
+                } else if (typeof response.data === "string" && response.data !== null){
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: response.data,
+                        severity: "error"
+                    })
+                } else {
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: "Something went wrong!",
+                        severity: "error"
+                    })
+                }
+            })
+            .catch(function(error) {
+                console.log(error)
+
+                if(error.response){
+
+                    setHelperText(error.response.data.errors[0].msg);
+                    setSnackOpen(true)
+                    setSnackbarInfo({
+                        text: "Something went wrong!",
+                        severity: "error"
+                    })
+                } 
+            })
+            setFormValue(form)
+            handleClosePwdChange()
+        } else {
+            setHelperText("Passwords don't match!")
+        } 
+    }   
+
+
     return(
-        <Container component="div" maxWidth="xs" sx={{ minWidth: "12rem" }}>
-            <Paper elevation={7} sx={{ p: 4, pt: 3}}>
-                <Avatar sx={{ m: 1, bgcolor: "black", color: "white", width: 60, height: 60 }}>JK</Avatar>
-                    <Box sx={{display: "flex", flexDirection: "column"}}>
+        <ThemeProvider theme={globalTheme}>
+        <Container>
+            <Paper>
+                <Avatar sx={{ m: 2, bgcolor: "black", color: "#e4c5af", width: 60, height: 60, backgroundColor: "#2F3E46"}}>JK</Avatar>
+                    <Box>
                         <TableContainer noValidate sx={{ marginTop: "5px", marginBottom: "0px" }}>
+
                             <Table>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell>Name</TableCell>
-                                        <TableCell>{employeeData.name} {employeeData.surname}</TableCell>
+                                        <TableCell>{items.fullname}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>Username</TableCell>
-                                        <TableCell>{employeeData.username}</TableCell>
+                                        <TableCell>{items.username}</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    {/* <TableRow>
                                         <TableCell>e-mail</TableCell>
                                         <TableCell>{employeeData.email}</TableCell>
-                                    </TableRow>
+                                    </TableRow> */}
                                 </TableBody>
                             </Table>
                             <Table>
-                                <TableRow>
-                                    <Button 
+
+                                    <Button
                                         onClick={handleOpenPwdChange}
                                         variant="contained"
-                                        sx={{ mt: 2, mb: 1, bgcolor: "main", width: "auto" }}
                                         margin="dense"
                                     >
                                         Change password
                                     </Button>
-                                </TableRow>
-                                <TableRow>
+
+
                                     <Button
                                         onClick={handleLogout}
                                         variant="contained"
-                                        sx={{ mt: 1, mb: 1, bgcolor: "main", width: "auto" }}
                                         margin="dense"
                                     >
                                         Logout
                                     </Button>
-                                </TableRow>
+
                             </Table>
                         </TableContainer>
                     </Box>
@@ -106,41 +190,50 @@ export default function UserSettings() {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
-                        </DialogContent>
-                        <FormControl
-                            className="PwdChangeForm"
-                            sx={{width: "20rem", p: 2}}
-                        >
-                            <TextField
-                                autoFocus
-                                id="curPwdChange"
-                                label="Current password"
-                                type="text"
-                                variant="standard"
-                                sx={{ p: 2}}
-                            />
-                            <TextField
-                                autoFocus
-                                id="newPwdChange"
-                                label="New password"
-                                type="text"
-                                variant="standard"
-                                sx={{ p: 2}}
-                            />
-                            <TextField
-                                autoFocus
-                                id="repeatPwdChange"
-                                label="Repeat new password"
-                                type="text"
-                                variant="standard"
-                                sx={{ p: 2}}
-                            />
+                        <Box>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">Password change</DialogContentText>
+                            </DialogContent>
+                            <FormControl>
+                                <TextField
+                                    defaultValue={formValue.currentPwd}
+                                    onChange={e => handleFormChange(e)}
+                                    required
+                                    id="currentPwd"
+                                    name="currentPwd"
+                                    label="Current password"
+                                    type="password"
+                                    variant="standard"
+                                    sx={{ p: 2}}
+                                />
+                                <TextField
+                                    defaultValue={formValue.newPwd}
+                                    onChange={e => handleFormChange(e)}
+                                    required
+                                    id="newPwd"
+                                    name="newPwd"
+                                    label="New password"
+                                    type="password"
+                                    variant="standard"
+                                    sx={{ p: 2}}
+                                />
+                                <TextField
+                                    defaultValue={formValue.confirmPwd}
+                                    onChange={e => handleFormChange(e)}
+                                    required
+                                    id="confirmPwd"
+                                    name="confirmPwd"
+                                    label="Repeat new password"
+                                    type="password"
+                                    variant="standard"
+                                    sx={{ p: 2}}
+                                />
+                            <FormHelperText error>
+                                {helperText}
+                            </FormHelperText>
                             <DialogActions>                            
                                 <Button
                                     variant="contained"
-                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
                                     margin="dense"
                                     onClick={handleClosePwdChange}
                                 >
@@ -148,17 +241,23 @@ export default function UserSettings() {
                                 </Button>
                                 <Button
                                     variant="contained"
-                                    sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                                    onClick={handleClosePwdChange}
+                                    onClick={handleSubmit}
                                     autoFocus
                                 >
                                     Change!
                                 </Button>
                             </DialogActions>
                         </FormControl>
+                        </Box>
 			        </Dialog>
+                    <Snackbar sx={{ backgroundColor: "" }} open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                            {snackbarInfo.text}
+                        </Alert>
+                    </Snackbar>
             </Paper>
         </Container>
+    </ThemeProvider>
 
     );    
 }

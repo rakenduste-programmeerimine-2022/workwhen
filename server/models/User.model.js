@@ -41,6 +41,27 @@ userSchema.statics.signup = async ({ username, email, password, fullname, contac
     })
 }
 
+userSchema.statics.changePassword = async (req) => {
+    return new Promise(async (resolve, reject) => {
+        const { username, currentPwd, newPwd } = req.body
+        const token = req.headers["authorization"].split(" ")[1]
+
+        const decoded = jwt.verify(token, `${process.env.KEY}`)
+
+        const existingUser = await User.findById(decoded.id)
+        if(!existingUser) return reject("Something went wrong!")
+        if(!await bcrypt.compare(currentPwd, existingUser.password)) return reject("Wrong current password!")
+        console.log(newPwd)
+
+        existingUser.password = await bcrypt.hash(newPwd, 10)
+
+        existingUser.save((err) => {
+            if(err) return reject(err)
+            resolve("Successfully changed password!")
+        })
+    })
+}
+
 userSchema.statics.login = async ({ username, password }) => {
     return new Promise(async (resolve, reject) => {
         const existingUser = await User.findOne({ username })

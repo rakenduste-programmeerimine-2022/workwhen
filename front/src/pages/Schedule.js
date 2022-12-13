@@ -1,15 +1,17 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, ThemeProvider, Paper } from '@mui/material'
 import CalendarLegends from '../components/CalendarLegends'
 import { useEffect, useState } from 'react'
 import axios from "axios"
+import globalTheme from '../styles/globalTheme'
 /*
-        { title: "Day-Shift", color: "#dbd504", id: 1},
-        { title: "Night-Shift", color: "#1604db", id: 2},
-        { title: "Leave", color: "#0b9e06", id: 3},
-        { title: "Booked", color: "#d46402", id: 4}
+{ title: "Day-Shift", color: "#dbd504", id: 1},
+{ title: "Night-Shift", color: "#1604db", id: 2},
+{ title: "Leave", color: "#0b9e06", id: 3},
+{ title: "Booked", color: "#d46402", id: 4}
 */
+
 export default function Schedule() {
     const getSchedule = () => {
         axios.post("http://localhost:8080/shift/schedule",
@@ -98,11 +100,18 @@ export default function Schedule() {
     }, [])
     return(
         <>
+        <ThemeProvider theme={globalTheme}>
+
         <Box sx={{ padding: "2%" }}>
             <CalendarLegends />
         </Box>
-        <Box sx={{ padding: "0 2% 2% 2%" }}>
+        <Paper>
+        <Box sx={{ padding: "0 2% 2% 2%", maxWidth: "90%", color: "#2F3E46"}}
+                
+        >
+
             <FullCalendar
+                
                 plugins={[ dayGridPlugin ]}
                 initialView="dayGridMonth"
                 firstDay={1}
@@ -111,6 +120,8 @@ export default function Schedule() {
                 eventContent={handleEventRender}
             />
         </Box>
+        </Paper>
+        </ThemeProvider>
         </>
     )
 }

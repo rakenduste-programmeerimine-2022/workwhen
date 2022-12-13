@@ -8,7 +8,8 @@ import {
     DialogContentText,
     DialogActions,
     FormControl,
-    TextField,
+    TextField, 
+    CssBaseline,
     Snackbar,
     Alert
 } from "@mui/material";
@@ -25,10 +26,9 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
+import globalTheme from "../styles/globalTheme";
 import axios from "axios";
-
-
 
 function TablePaginationActions(props) {
     const theme = useTheme();
@@ -113,7 +113,7 @@ function axiosPost({ name, email, phone }, id, link){
             .catch(function(error) {
                 if(error.response){
                     console.log(error.response)
-                    reject("Please fill all fields!")
+                    reject("Check inputs - make sure that they are in the correct format!")
                 } else if (error.request){
                     console.log(error.request)
                     reject("Bad request!")
@@ -124,7 +124,7 @@ function axiosPost({ name, email, phone }, id, link){
                 reject("Server error")
             })
         } else {
-            reject("Please insert values to change!")
+            reject("Please fill all fields!")
         }
     })
 }
@@ -160,24 +160,6 @@ export default function Contacts(searchQuery) {
             console.log(err)
         })
     }
-
-    const theme = createTheme({
-        components: {
-            MuiTableCell: {
-                variants: [
-                    {
-                    props: { variant: 'header'},
-                    style: {
-                        textTransform: 'capitalize',
-                        fontWeight: 'bold',
-                        fontSize: 16,
-                    },
-
-                    },
-                ],
-            },
-        },
-    });
 
 
     const [page, setPage] = useState(0);
@@ -283,7 +265,6 @@ export default function Contacts(searchQuery) {
                 })
             })
     }
-
     const handleFormChange = e => {
         const { value, name } = e.target
         const newValue = {
@@ -297,261 +278,273 @@ export default function Contacts(searchQuery) {
         getData()
     }, [])
 
-    return(
-        <Paper sx={{ width: '100%'}} elevation={7}>
-            <TableContainer sx={{ maxHeight: "78vh", width: '100%' }}>
-                <Table>
-                    <ThemeProvider theme={theme}>
-                        <TableHead variant="header" size="large">
-                            <TableRow>
-                                <TableCell variant="header" size="large">Contact name</TableCell>
-                                <TableCell variant="header" size="large">Contact number</TableCell>
-                                <TableCell variant="header" size="large">Contact e-mail</TableCell>
+        return(
+            <ThemeProvider theme={globalTheme}>
+            <CssBaseline />
+            <Paper>
+                <TableContainer>
+                    <Table className="primaryTable" >
+                        <colgroup>
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                        </colgroup>
+                            <TableHead variant="header" size="large" className="primary">
+                                {/* <TableRow> */}
+                                    <TableCell sx={{ fontWeight: "bold" }}>Contact name</TableCell>
+                                    <TableCell sx={{ fontWeight: "bold" }}>Contact number</TableCell>
+                                    <TableCell sx={{ fontWeight: "bold" }}>Contact e-mail</TableCell>
+                                    <TableCell>
+                                        <Button onClick={handleOpenCnctAdd}>
+                                            Add new contact
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                    </TableCell>
+                            </TableHead>
+                            <TableBody className="primaryBody">
+                                {contacts.filter((contacts) => {
+                                    if(searchQuery == ""){
+                                        return contacts;                            
+                                    } else if(contacts.name.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
+                                        return contacts;
+                                    } else if(contacts.phone.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
+                                        return contacts;
+                                    } else if(contacts.email.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
+                                        return contacts;
+                                    }
+                                })}
+                                {(rowsPerPage > 0
+                                ? contacts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : contacts
+                                ).map((contact) => (
+                                
+                                <TableRow>
+                                <TableCell component="th" scope="row">
+                                    {contact.name}
+                                </TableCell>
                                 <TableCell>
-                                    <Button
-                                        onClick={handleOpenCnctAdd}
-                                        variant="outlined"
+                                    {contact.phone}
+                                </TableCell>
+                                <TableCell>
+                                    {contact.email}
+                                </TableCell>
+                                <TableCell className="contactButton">
+                                    <Button 
+                                        onClick={handleOpenCnctChange}
+                                        id={contact._id}
                                     >
-                                        Add new contact
+                                        Edit
                                     </Button>
                                 </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {contacts.filter((contacts) => {
-                                if(searchQuery === ""){
-                                    return contacts;                            
-                                } else if(contacts.name.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                    return contacts;
-                                } else if(contacts.phone.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                    return contacts;
-                                } else if(contacts.email.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                    return contacts;
-                                }
-                            })}
-                            {(rowsPerPage > 0
-                            ? contacts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : contacts
-                            ).map((contact) => (
-                            
-                            <TableRow>
-                            <TableCell component="th" scope="row">
-                                {contact.name}
-                            </TableCell>
-                            <TableCell>
-                                {contact.phone}
-                            </TableCell>
-                            <TableCell>
-                                {contact.email}
-                            </TableCell>
-                            <TableCell>
-                                <Button
-                                    onClick={handleOpenCnctChange}
-                                    id={contact._id}
-                                >
-                                    Edit
-                                </Button>
-                            </TableCell>
-                            <TableCell>
-                                <Button
-                                    onClick={handleOpenCnctDelete}
-                                    id={contact._id}
-                                >
-                                    Delete
-                                </Button>
-                            </TableCell>
-                            </TableRow>
-                            ))}
+                                <TableCell>
+                                    <Button 
+                                        onClick={handleOpenCnctDelete}
+                                        id={contact._id}
+                                    >
+                                        Delete
+                                    </Button>
+                                </TableCell>
+                                </TableRow>
+                                ))}
 
-                            {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                            <TableCell colSpan={6} />
-                            </TableRow>
-                            )}
-                    
-                        </TableBody>
-                    </ThemeProvider>
-                </Table>
-            </TableContainer>
-            <TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 50, { label: 'All', value: -1 }]}
-                    colSpan={3}
-                    count={contacts.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    SelectProps={{
-                        inputProps: {
-                        'aria-label': 'entries per page',
-                        },
-                        native: true,
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    ActionsComponent={TablePaginationActions}
-                />
-            </TableContainer>
-            <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
-                <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
-                    {snackbarInfo.text}
-                </Alert>
-            </Snackbar>
-            <Dialog
-                open={openContactChange}
-                onClose={handleCloseCnctChange}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">Contact change</DialogContentText>
-                </DialogContent>
-                    <FormControl
-                        className="contactChangeForm"
-                        sx={{width: "20rem", p: 2}}
-                    >                            
-                    </FormControl>
-                    <TextField
-                        autoFocus
-                        id="cnctNameChange"
-                        name="name"
-                        value={formValue.name}
-                        onChange={e => handleFormChange(e)}
-                        label="New contact name"
-                        type="text"
-                        variant="standard"
-                        sx={{ p: 2}}
-                    />
-                    <TextField
-                        autoFocus
-                        id="cnctPhoneChange"
-                        name="phone"
-                        value={formValue.phone}
-                        onChange={e => handleFormChange(e)}
-                        label="New contact number"
-                        type="text"
-                        variant="standard"
-                        sx={{ p: 2}}
-                    />
-                    <TextField
-                        autoFocus
-                        id="cnctEmailChange"
-                        name="email"
-                        value={formValue.email}
-                        onChange={e => handleFormChange(e)}
-                        label="New contact email"
-                        type="text"
-                        variant="standard"
-                        sx={{ p: 2}}
-                    />
-                    <DialogActions>                            
-                        <Button
-                            variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                            margin="dense"
-                            onClick={handleCloseCnctChange}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="contained"
-                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                            onClick={handleContactChangeSave}
-                            autoFocus
-                        >
-                            Change
-                        </Button>
+                                {emptyRows > 0 && (
+                                <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                                </TableRow>
+                                )}
                         
-                    </DialogActions>
-            </Dialog>
-            <Dialog
-                open={openContactDelete}
-                onClose={handleCloseCnctDelete}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                sx={{}}                                
-            >
-                <DialogContentText 
-                    id="alert-dialog-delete"
-                    sx={{padding: "8% 0 0 5%"}}
+                            </TableBody>
+                    </Table>
+                </TableContainer>
+                <TableContainer className="primary">
+                    <TablePagination
+                        rowsPerPageOptions={[5, 20, 40, { label: 'All', value: -1 }]}
+                        colSpan={3}
+                        count={contacts.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                            inputProps: {
+                            'aria-label': 'entries per page',
+                            },
+                            native: true,
+                        }}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                    />
+                </TableContainer>
+                <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                    <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                        {snackbarInfo.text}
+                    </Alert>
+                </Snackbar>
+                <Dialog
+                    open={openContactChange}
+                    onClose={handleCloseCnctChange}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
                 >
-                    Are you sure?
-                </DialogContentText>
-                <DialogActions>
-                    <Button
-                        variant="contained"
-                        sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                        margin="dense" 
-                        onClick={handleCloseCnctDelete}>Cancel</Button>
-                    <Button
-                        variant="contained"
-                        sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                        margin="dense"  
-                        onClick={handleCnctDelete}>Confirm</Button>
-                </DialogActions>
-                
-            </Dialog>
-            <Dialog
-                open={openContactAdd}
-                onClose={handleCloseCnctAdd}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                sx={{}}                                
-            >
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">Add new contact</DialogContentText>
-                </DialogContent>
-                    <FormControl
-                        className="contactAddForm"
-                        sx={{width: "20rem", p: 2}}
-                    >                            
-                    </FormControl>
-                    <TextField
-                        autoFocus
-                        id="cnctNameAdd"
-                        label="New contact name"
-                        name="name"
-                        value={formValue.name}
-                        onChange={e => handleFormChange(e)}
-                        type="text"
-                        variant="standard"
-                        sx={{ p: 2}}
-                    />
-                    <TextField
-                        autoFocus
-                        id="cnctPhoneAdd"
-                        label="New contact number"
-                        name="phone"
-                        value={formValue.phone}
-                        onChange={e => handleFormChange(e)}
-                        type="text"
-                        variant="standard"
-                        sx={{ p: 2}}
-                    />
-                    <TextField
-                        autoFocus
-                        id="cnctEmailAdd"
-                        label="New contact email"
-                        name="email"
-                        value={formValue.email}
-                        onChange={e => handleFormChange(e)}
-                        type="text"
-                        variant="standard"
-                        sx={{ p: 2}}
-                    />
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column", 
+                            backgroundColor: "#E4C5AF",
+                        }}
+                    >
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">Contact change</DialogContentText>
+                    </DialogContent>
+                        <FormControl
+                            className="contactChangeForm"
+                            sx={{width: "20rem", p: 2}}
+                        >                            
+                        </FormControl>
+                        <TextField
+                            autoFocus
+                            id="cnctNameChange"
+                            name="name"
+                            value={formValue.name}
+                            onChange={e => handleFormChange(e)}
+                            label="New contact name"
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <TextField
+                            autoFocus
+                            id="cnctPhoneChange"
+                            name="phone"
+                            value={formValue.phone}
+                            onChange={e => handleFormChange(e)}
+                            label="New contact number"
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <TextField
+                            autoFocus
+                            id="cnctEmailChange"
+                            name="email"
+                            value={formValue.email}
+                            onChange={e => handleFormChange(e)}
+                            label="New contact email"
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <DialogActions>                            
+                            <Button
+                                variant="contained"                                
+                                margin="dense"
+                                onClick={handleCloseCnctChange}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleContactChangeSave}
+                                autoFocus
+                            >
+                                Change
+                            </Button>
+                            
+                        </DialogActions>
+                    </Box>
+                </Dialog>
+                <Dialog
+                    open={openContactDelete}
+                    onClose={handleCloseCnctDelete}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    sx={{}} // ?
+                >
+                    <DialogContentText 
+                        id="alert-dialog-delete"
+                        sx={{padding: "8% 0 0 5%"}}
+                    >
+                        Are you sure?
+                    </DialogContentText>
                     <DialogActions>
-                    <Button
-                        variant="contained"
-                        sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                        margin="dense" 
-                        onClick={handleCloseCnctAdd}>Cancel</Button>
-                    <Button
-                        variant="contained"
-                        sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto" }}
-                        margin="dense"  
-                        onClick={handleAddCnctSave}>Save</Button>
-                </DialogActions>
-                
-            </Dialog>
-        </Paper>
-    );
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#e4c5af" }}
+                            margin="dense" 
+                            onClick={handleCloseCnctDelete}>Cancel</Button>
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 2, mb: 2, bgcolor: "main", width: "auto", backgroundColor: "#2F3E46", color: "#e4c5af" }}
+                            margin="dense"  
+                            onClick={handleCnctDelete}>Delete</Button>
+                    </DialogActions>
+
+                    
+                </Dialog>
+
+                <Dialog
+                    open={openContactAdd}
+                    onClose={handleCloseCnctAdd}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    sx={{}} // ?
+                >
+
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">Add new contact</DialogContentText>
+                    </DialogContent>
+                        <FormControl
+                            className="contactAddForm"
+                            sx={{width: "20rem", p: 2}}
+                        >                            
+                        </FormControl>
+                        <TextField
+                            autoFocus
+                            id="cnctNameAdd"
+                            label="New contact name"
+                            name="name"
+                            value={formValue.name}
+                            onChange={e => handleFormChange(e)}
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <TextField
+                            autoFocus
+                            id="cnctPhoneAdd"
+                            label="New contact number"
+                            name="phone"
+                            value={formValue.phone}
+                            onChange={e => handleFormChange(e)}
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <TextField
+                            autoFocus
+                            id="cnctEmailAdd"
+                            label="New contact email"
+                            name="email"
+                            value={formValue.email}
+                            onChange={e => handleFormChange(e)}
+                            type="text"
+                            variant="standard"
+                            sx={{ p: 2}}
+                        />
+                        <DialogActions>
+                        <Button
+                            variant="contained"
+                            margin="dense" 
+                            onClick={handleCloseCnctAdd}>Cancel</Button>
+                        <Button
+                            variant="contained"
+                            margin="dense"  
+                            onClick={handleAddCnctSave}>Save</Button>
+                    </DialogActions>
+                </Dialog>
+            </Paper>
+            </ThemeProvider>
+        );
 }

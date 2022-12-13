@@ -102,7 +102,7 @@ export default function BookmarkDialog({ getData }){
 
     return(
         <>
-        <Button variant="outlined" onClick={handleClickOpen}>Add</Button>
+        <Button sx={{color: "#E4C5AF", borderColor: "#E4C5AF"}} variant="outlined" onClick={handleClickOpen}>Add</Button>
         <Dialog open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit} noValidate>
                 <DialogTitle>Add a new bookmark</DialogTitle>
@@ -146,6 +146,7 @@ export default function BookmarkDialog({ getData }){
                         size="normal"
                         variant="contained"
                         margin="normal"
+                        sx={{backgroundColor: "#2F3E46"}} 
                         >
                         Cancel
                     </Button>
@@ -154,6 +155,7 @@ export default function BookmarkDialog({ getData }){
                         size="normal"
                         variant="contained"
                         margin="normal"
+                        sx={{backgroundColor: "#2F3E46"}} 
                         >
                         Save
                     </Button>
