@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "react-test-renderer": "^18.2.0"
+  },
+  "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1"
+  }
+}
