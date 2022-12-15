@@ -37,9 +37,9 @@ export default function UserSettings() {
         setOpenPwdChange(false);
     }
     const handleLogout = () => {
+        window.dispatchEvent(new Event("logout"))
         localStorage.removeItem("token")
         localStorage.removeItem("user")
-        window.dispatchEvent(new Event("logout"))
         navigate("/")
     }   
 

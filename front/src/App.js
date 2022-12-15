@@ -10,6 +10,7 @@ import React, { useState, useEffect } from "react"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import RouteGuard from "./components/RouteGuard"
+import NotFound from "./pages/NotFound"
 import "./styles/App.css";
 import globalTheme from "./styles/globalTheme"
 
@@ -18,7 +19,8 @@ function App() {
 
     // this is scuffed
     const ProtectedNavbar = () => {
-        if(localStorage.getItem("token") && localStorage.getItem("user") && user){
+        if(localStorage.getItem("token") && localStorage.getItem("user")){
+            console.log("AAA")
             return <Navbar />
         } else {
             localStorage.removeItem("token")
@@ -36,7 +38,7 @@ function App() {
 
     useEffect(() => {
         ProtectedNavbar()
-    }, [])
+    }, [user])
 
     return (
     <>
@@ -50,6 +52,7 @@ function App() {
                 <Route path="/bookmarks" element={<Bookmarks />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/user-settings" element={<UserSettings />} />
+                <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
     </>
