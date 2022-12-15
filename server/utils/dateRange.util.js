@@ -1,7 +1,7 @@
 const dateRange = (start, end) => {
     let dateArray = new Array()
-    let currentDate = start
-    while(currentDate <= end){
+    let currentDate = new Date(start)
+    while(currentDate <= new Date(end)){
         dateArray.push(new Date(currentDate))
         currentDate.setDate(currentDate.getDate() + 1)
     }
