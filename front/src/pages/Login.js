@@ -47,13 +47,11 @@ export default function Login(){
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log(formValue)
         if(formValue.password && formValue.username){
             setHelperText("")
             axios.post("http://localhost:8080/user/login", formValue)
             .then(function(response) {
                 if(typeof response.data === "object" && response.data !== null && response.data.token){
-                    console.log(response)
                     setSnackOpen(true)
                     setSnackbarInfo({
                         text: "Logged in!",

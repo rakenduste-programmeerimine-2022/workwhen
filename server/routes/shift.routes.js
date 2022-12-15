@@ -18,4 +18,18 @@ router.post(
     shiftController.get
 )
 
+router.post(
+    "/publish",
+    checkToken,
+    body("date").isISO8601().toDate().withMessage("Wrong date format!"),
+    shiftController.publish
+)
+
+router.post(
+    "/schedule",
+    checkToken,
+    body("date").isISO8601().toDate().withMessage("Wrong date format!"),
+    shiftController.seeSchedule
+)
+
 module.exports = router
