@@ -8,6 +8,7 @@ import { Container, ThemeProvider } from '@mui/system'
 import HighlightOffSharpIcon from '@mui/icons-material/HighlightOffSharp'
 import ShiftPlanningDialog from "../components/ShiftPlanningDialog"
 import globalTheme from '../styles/globalTheme'
+import PublishSchedule from '../components/PublishSchedule'
 
 const ExternalEvent = memo(({ event }) => {
     let elRef = useRef(null);
@@ -45,6 +46,7 @@ export default function ShiftPlanning() {
         severity: ""
     }
 
+    const [currentDate, setCurrentDate] = useState(new Date())
     const [snackOpen, setSnackOpen] = useState(false)
     const [snackbarInfo, setSnackbarInfo] = useState(snackbar)
     const [state, setState] = useState({
@@ -61,9 +63,7 @@ export default function ShiftPlanning() {
     
     const getData = () => {
         axios.post("http://localhost:8080/shift/get", 
-        {
-            date: new Date ()
-        }, 
+        { date: currentDate }, 
         {   
             headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} 
         })
@@ -123,7 +123,7 @@ export default function ShiftPlanning() {
 
     useEffect(() => {
         getData()
-    },[])
+    }, [currentDate])
 
     const handleEventReceive = (eventInfo) => {
         //console.log(eventInfo)
@@ -310,6 +310,7 @@ export default function ShiftPlanning() {
                         {snackbarInfo.text}
                     </Alert>
                 </Snackbar>
+                <PublishSchedule date={currentDate}/>
             </Box>
             <Paper>
                 <Box sx={{ padding: "1% 2% 2% 2%", maxWidth: "90%", color: "#2F3E46", width: "60rem"}}>
@@ -333,6 +334,8 @@ export default function ShiftPlanning() {
                         eventDurationEditable={false}
                         contentHeight={500}
                         firstDay={1}
+                        showNonCurrentDates={false}
+                        datesSet={arg => setCurrentDate(arg.startStr)}
                     />
                 </Box>
             </Paper>
