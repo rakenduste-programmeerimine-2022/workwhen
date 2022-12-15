@@ -34,6 +34,7 @@ export default function Schedule() {
             }
             let eventsFromDB = []
             response.data.forEach(shift => {
+                console.log(shift)
                 let date = shift.date
                 Object.keys(shift).forEach((key) => {
                     if(key !== "date"){

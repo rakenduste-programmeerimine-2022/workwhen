@@ -292,7 +292,6 @@ export default function ShiftPlanning() {
                     display:"flex",
                     flexDirection:"column",
                     marginTop: "5%",
-                    border: 1,
                     padding: "1%",
                     height: "20%"
                 }}>
