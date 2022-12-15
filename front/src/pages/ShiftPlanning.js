@@ -213,7 +213,7 @@ export default function ShiftPlanning() {
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response){
-            console.log(response)
+            // console.log(response)
             if(typeof response.data === "object" && response.data !== null){
                 setSnackOpen(true)
                 setSnackbarInfo({
