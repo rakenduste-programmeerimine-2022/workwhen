@@ -25,7 +25,7 @@ export default function BookmarkDialog({getData}){
 
     const snackbar = {
         text: "",
-        severity: ""
+        severity: "info"
     }
 
     const [formValue, setFormValue] = useState(form)

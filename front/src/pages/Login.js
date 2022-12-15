@@ -21,7 +21,7 @@ export default function Login(){
     }
     const snackbar = {
         text: "",
-        severity: ""
+        severity: "info"
     }
 
     let navigate = useNavigate()
