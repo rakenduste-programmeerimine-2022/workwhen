@@ -18,7 +18,7 @@ function App() {
 
     // this is scuffed
     const ProtectedNavbar = () => {
-        if(localStorage.getItem("token") && localStorage.getItem("user") && user){
+        if(localStorage.getItem("token") && localStorage.getItem("user")){
             return <Navbar />
         } else {
             localStorage.removeItem("token")
@@ -50,6 +50,7 @@ function App() {
                 <Route path="/bookmarks" element={<Bookmarks />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/user-settings" element={<UserSettings />} />
+                <Route path="/signup" element={<Signup />} />
             </Route>
         </Routes>
     </>

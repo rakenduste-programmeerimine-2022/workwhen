@@ -29,7 +29,7 @@ leaveSchema.statics.add = async ({ employee, type, startDate, endDate, comments 
         })
 
         // token for shift.add
-        const token = jwt.sign({ employee }, `${process.env.KEY}`, { expiresIn: 60 })
+        const token = jwt.sign({ id: employee }, `${process.env.KEY}`, { expiresIn: 60 })
         if(!token) return reject("Something went wrong!")
 
         // leave also needs to go to shift planning documents
