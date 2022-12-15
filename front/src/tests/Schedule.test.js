@@ -10,10 +10,10 @@ test("Renders Schedule page and sees if it can find correct Legend values", () =
             <CalendarLegends />
         </Router>
     )
-    const DayShift = screen.getByText("Day shift")
-    const NightShift = screen.getByText("Night shift")
+    const DayShift = screen.getByText("Day-Shift")
+    const NightShift = screen.getByText("Night-Shift")
     const Booked = screen.getByText("Booked")
-    const Vacation = screen.getByText("Vacation")
+    const Vacation = screen.getByText("Leave")
     
     expect(DayShift).toBeInTheDocument()
     expect(NightShift).toBeInTheDocument()  
