@@ -14,7 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import axios from "axios"; 
 import Select from '@mui/material/Select';
 
-export default function ShiftPlanningDialog(){
+export default function ShiftPlanningDialog({ getData }){
     const [open, setOpen] = useState(false)
     const [snackOpen, setSnackOpen] = useState(false)
 
@@ -61,7 +61,6 @@ export default function ShiftPlanningDialog(){
     }
 
     const handleSubmit = e => {
-        console.log(formValue)
         e.preventDefault()
         if(formValue.employee && formValue.type && formValue.comments && formValue.startDate && formValue.endDate){
             axios.post("http://localhost:8080/leave/add", {
@@ -81,6 +80,7 @@ export default function ShiftPlanningDialog(){
                         severity: "success"
                     })
                     setOpen(false)
+                    getData()
                 } else if (typeof response.data === "string" && response.data !== null){
                     setSnackOpen(true)
                     setSnackbarInfo({
@@ -194,13 +194,15 @@ export default function ShiftPlanningDialog(){
                             Save
                         </Button>
                     </DialogActions>
-                    <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
-                        <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
-                            {snackbarInfo.text}
-                        </Alert>
-                    </Snackbar>
+                    
                 </Box>
+                
             </Dialog>
+            <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                    {snackbarInfo.text}
+                </Alert>
+            </Snackbar>
         </>
     )
     
