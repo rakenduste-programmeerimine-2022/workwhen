@@ -36,7 +36,8 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
                     if user is in another type, then remove
                     if not present in type then push
                 */
-                if(existingShift.published) return reject("Cannot add to an already published schedule!")
+                // causes errors? -> in DB id null
+                // if(existingShift.published) return reject("Cannot add to an already published schedule!")
                 const inCorrectShift = existingShift[shift.type].includes(decoded.id)
                 if(!inCorrectShift){
                     const inDayShift = existingShift.dayShift.includes(decoded.id)
