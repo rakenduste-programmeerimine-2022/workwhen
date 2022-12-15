@@ -116,7 +116,7 @@ export default function ShiftPlanningDialog(){
     return(
         
         <>
-            <Button variant="outlined" onClick={handleClickOpen} size="small" sx={{marginBottom:1, borderColor:'white', Width: '100%', padding:'5px', textTransform: "unset", fontSize: 12, color: "white"}}>Planned/Unplanned Leave</Button>
+            <Button variant="outlined" onClick={handleClickOpen} sx={{color: "#E4C5AF", borderColor: "#E4C5AF"}}>Add</Button>
             <Dialog open={open} onClose={handleClose}>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <DialogTitle>Schedule time off</DialogTitle>
@@ -141,7 +141,7 @@ export default function ShiftPlanningDialog(){
                             labelId="leave-type-label"
                             name="type"
                             id="type"
-                            >
+                        >
                             <MenuItem value={"Planned"}>Planned</MenuItem>
                             <MenuItem value={"Unplanned"}>Unplanned</MenuItem>
                         </Select>

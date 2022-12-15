@@ -2,13 +2,12 @@ import React, { useEffect, useState, useRef, memo } from 'react'
 import axios from "axios"
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { Box, Typography, Button, Snackbar, Alert, IconButton} from '@mui/material'
+import { Box, Typography, Button, Snackbar, Alert, IconButton, Paper} from '@mui/material'
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction"
-import { Container } from '@mui/system'
+import { Container, ThemeProvider } from '@mui/system'
 import HighlightOffSharpIcon from '@mui/icons-material/HighlightOffSharp'
 import ShiftPlanningDialog from "../components/ShiftPlanningDialog"
-
-
+import globalTheme from '../styles/globalTheme'
 
 const ExternalEvent = memo(({ event }) => {
     let elRef = useRef(null);
@@ -29,7 +28,8 @@ const ExternalEvent = memo(({ event }) => {
             style={{
                 backgroundColor: event.color,
                 borderColor: event.color,
-                cursor: "pointer"
+                cursor: "pointer",
+                marginBottom: "5%"
             }}
         >
             <Box className="fc-event-main">
@@ -51,7 +51,7 @@ export default function ShiftPlanning() {
         externalEvents: [
         { title: "Day-Shift", color: "#dbd504"},
         { title: "Night-Shift", color: "#1604db"},
-        //{ title: "Leave", color: "#0b9e06", id: 3},
+        // { title: "Leave", color: "#0b9e06", id: 3},
         { title: "Booked", color: "#d46402"}
         ],
         calendarEvents: [],
@@ -85,7 +85,7 @@ export default function ShiftPlanning() {
                         eventColor = "#0b9e06"
                         break
                 }
-                console.log(element)
+                // console.log(element)
 
                 const dbEvent = {
                     id: element.id,
@@ -151,21 +151,21 @@ export default function ShiftPlanning() {
                 
             }
             })
-        console.log(state.calendarSave)
-        console.log(state.calendarEvents)
+        // console.log(state.calendarSave)
+        // console.log(state.calendarEvents)
     };
 
     const handleEventDrop = (eventInfo) => {
 
-        console.log(eventInfo.oldEvent)
-            const oldEvent ={
-                id: eventInfo.oldEvent._def.publicId,
-                title: eventInfo.oldEvent.title,
-                color: eventInfo.oldEvent.backgroundColor,
-                date: eventInfo.oldEvent.startStr
-            }
-        console.log("moved 1st event (old)")
-        console.log(oldEvent)
+        // console.log(eventInfo.oldEvent)
+        const oldEvent ={
+            id: eventInfo.oldEvent._def.publicId,
+            title: eventInfo.oldEvent.title,
+            color: eventInfo.oldEvent.backgroundColor,
+            date: eventInfo.oldEvent.startStr
+        }
+        // console.log("moved 1st event (old)")
+        // console.log(oldEvent)
 
         
         const newEvent = {
@@ -174,8 +174,8 @@ export default function ShiftPlanning() {
             color: eventInfo.event.backgroundColor,
             date: eventInfo.event.startStr,
         };
-        console.log("moved 1st event (new)")
-        console.log(newEvent)
+        // console.log("moved 1st event (new)")
+        // console.log(newEvent)
 
         setState((state) => {
             return {
@@ -198,7 +198,7 @@ export default function ShiftPlanning() {
                 })
             }
             })
-            console.log(state.calendarSave)
+            // console.log(state.calendarSave)
     };
     
     const handleSnackClose = () => {
@@ -245,7 +245,7 @@ export default function ShiftPlanning() {
     }
 
     const handleEventRender = (eventInfo) => {
-        console.log(eventInfo)
+        // console.log(eventInfo)
         const handleEventDelete = () =>{
             setState((state) => {
                 return {
@@ -285,54 +285,60 @@ export default function ShiftPlanning() {
 
     }
 
-    
-
-
-    
-
-    
-
-
   return (
-    <Container sx={{display: "flex"}}>
-        <Box sx={{display:"flex", flexDirection:"column" ,marginRight:15, marginTop:20, width: 200, height:190, border:1, padding:1}}>
-            <ShiftPlanningDialog />
-            <Typography sx={{border:1, borderColor:"grey" , borderRadius: "5px", textAlign:"center", marginBottom:1}}>Shifts: </Typography>
-            <Typography>
-                {state.externalEvents.map((event) => (
-                    <ExternalEvent key={event.id} event={event} />
-                ))}
-            </Typography>
-            <Button  variant="outlined" size="small" sx={{marginTop: 0.5}} onClick={handleSubmit} >Save</Button>
-            <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
-                <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
-                    {snackbarInfo.text}
-                </Alert>
-            </Snackbar>
-        </Box>
-        <Box sx={{width: 1000, marginLeft: "auto"}}>
-            <FullCalendar
-                plugins={[dayGridPlugin, interactionPlugin]}
-                headerToolbar={{
-                    right: "today prev,next",
-                }}
-                initialView="dayGridMonth"
-                editable={true}
-                selectable={true}
-                selectMirror={true}
-                dayMaxEvents={true}
-                draggable={true}
-                droppable={true}
-                weekends={state.weekendsVisible}
-                events={state.calendarEvents}
-                eventContent={handleEventRender}
-                eventReceive={handleEventReceive}
-                eventDrop={handleEventDrop}
-                eventDurationEditable={false}
-                contentHeight={500}
-                firstDay={1}
-            />
-        </Box>
-    </Container>
+    <ThemeProvider theme={globalTheme}>
+        <Container sx={{display: "flex", width: "100%"}}>
+            <Box sx={{
+                    display:"flex",
+                    flexDirection:"column",
+                    marginTop: "5%",
+                    border: 1,
+                    padding: "1%",
+                    height: "20%"
+                }}>
+                <h2>Planned/Unplanned leave:</h2>
+                <ShiftPlanningDialog />
+                <h2>Shifts:</h2>
+                <Box sx={{width: "8rem"}}>
+                    <Typography>
+                        {state.externalEvents.map((event) => (
+                            <ExternalEvent key={event.id} event={event} />
+                        ))}
+                    </Typography>
+                </Box>
+                <Button  variant="outlined" sx={{color: "#E4C5AF", borderColor: "#E4C5AF"}} onClick={handleSubmit}>Save</Button>
+                <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                    <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                        {snackbarInfo.text}
+                    </Alert>
+                </Snackbar>
+            </Box>
+            <Paper>
+                <Box sx={{ padding: "1% 2% 2% 2%", maxWidth: "90%", color: "#2F3E46", width: "60rem"}}>
+                    <FullCalendar
+                        plugins={[dayGridPlugin, interactionPlugin]}
+                        headerToolbar={{
+                            right: "today prev,next",
+                        }}
+                        initialView="dayGridMonth"
+                        editable={true}
+                        selectable={true}
+                        selectMirror={true}
+                        dayMaxEvents={true}
+                        draggable={true}
+                        droppable={true}
+                        weekends={state.weekendsVisible}
+                        events={state.calendarEvents}
+                        eventContent={handleEventRender}
+                        eventReceive={handleEventReceive}
+                        eventDrop={handleEventDrop}
+                        eventDurationEditable={false}
+                        contentHeight={500}
+                        firstDay={1}
+                    />
+                </Box>
+            </Paper>
+        </Container>
+    </ThemeProvider>
   );
 }
