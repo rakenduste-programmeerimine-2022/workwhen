@@ -19,7 +19,7 @@ export default function ShiftPlanningDialog({getData}){
     const [snackOpen, setSnackOpen] = useState(false)
 
     const form = {
-        title: "Leave",
+        employee: localStorage.getItem('user').username,
         type: "",
         startDate: "",
         endDate: "",
@@ -57,9 +57,9 @@ export default function ShiftPlanningDialog({getData}){
 
     const handleSubmit = e => {
         e.preventDefault()
-        if(formValue.title && formValue.description && formValue.date && formValue.assigned){
-            axios.post("http://localhost:8080/todo/add", {
-                title: formValue.title,
+        if(formValue.type && formValue.comment && formValue.startDate && formValue.endDate){
+            axios.post("http://localhost:8080/leave/add", {
+                employee: formValue.employee,
                 type: formValue.type,
                 startDate: formValue.startDate,
                 endDate: formValue.endDate,
