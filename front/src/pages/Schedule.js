@@ -53,13 +53,14 @@ export default function Schedule() {
                                 break
                         }
 
-                        const newEvent = {
-                            date,
-                            title: shift[key][0].fullname,
-                            color
-                        }
-
-                        eventsFromDB.push(newEvent)
+                        shift[key].forEach(type => {
+                            const newEvent = {
+                                date,
+                                title: type.fullname,
+                                color
+                            }
+                            eventsFromDB.push(newEvent)
+                        })
                     }
                 })
             })
