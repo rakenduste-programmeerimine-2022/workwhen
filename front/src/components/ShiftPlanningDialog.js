@@ -14,21 +14,21 @@ import InputLabel from '@mui/material/InputLabel';
 import axios from "axios"; 
 import Select from '@mui/material/Select';
 
-export default function ShiftPlanningDialog({getData}){
+export default function ShiftPlanningDialog(){
     const [open, setOpen] = useState(false)
     const [snackOpen, setSnackOpen] = useState(false)
 
     const form = {
-        employee: localStorage.getItem('user').username,
+        employee: "",
         type: "",
         startDate: "",
         endDate: "",
-        comment: "",
+        comments: "",
     }
 
     const snackbar = {
         text: "",
-        severity: ""
+        severity: "info"
     }
 
     const [formValue, setFormValue] = useState(form)
@@ -45,6 +45,11 @@ export default function ShiftPlanningDialog({getData}){
 
     const handleClickOpen = () => {
         setOpen(true)
+        const newValue = {
+            ...formValue,
+            ['employee']: JSON.parse(localStorage.getItem("user")).username
+        }
+        setFormValue(newValue)
     }
 
     const handleClose = () => {
@@ -56,14 +61,15 @@ export default function ShiftPlanningDialog({getData}){
     }
 
     const handleSubmit = e => {
+        console.log(formValue)
         e.preventDefault()
-        if(formValue.type && formValue.comment && formValue.startDate && formValue.endDate){
+        if(formValue.employee && formValue.type && formValue.comments && formValue.startDate && formValue.endDate){
             axios.post("http://localhost:8080/leave/add", {
                 employee: formValue.employee,
                 type: formValue.type,
                 startDate: formValue.startDate,
                 endDate: formValue.endDate,
-                comment: formValue.comment
+                comments: formValue.comments
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
             .then(function(response){
@@ -75,7 +81,6 @@ export default function ShiftPlanningDialog({getData}){
                         severity: "success"
                     })
                     setOpen(false)
-                    getData()
                 } else if (typeof response.data === "string" && response.data !== null){
                     setSnackOpen(true)
                     setSnackbarInfo({
@@ -108,7 +113,6 @@ export default function ShiftPlanningDialog({getData}){
             })
         }
     }
-    
     return(
         
         <>
@@ -117,12 +121,24 @@ export default function ShiftPlanningDialog({getData}){
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <DialogTitle>Schedule time off</DialogTitle>
                     <DialogContent sx={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+                        
+                        <InputLabel id="employee-label">Employee:</InputLabel>
+                        <TextField 
+                            value={JSON.parse(localStorage.getItem("user")).username}
+                            onChange={e => handleFormChange(e)}
+                            labelId= "employee-label"
+                            id="employee"
+                            name="employee"
+                            inputProps={
+                                { readOnly: true, }
+                            }
+                        />
+
                         <InputLabel id="leave-type-label">Leave-type:</InputLabel>
                         <Select
                             value={formValue.type }
                             onChange={e => handleFormChange(e)}
                             labelId="leave-type-label"
-                            label="Leave-type"
                             name="type"
                             id="type"
                             >
@@ -153,11 +169,11 @@ export default function ShiftPlanningDialog({getData}){
                         />
 
                         <TextField 
-                            value={formValue.comment}
+                            value={formValue.comments}
                             onChange={e => handleFormChange(e)}
-                            id="comment"
-                            label="Comment"
-                            name="comment"
+                            id="comments"
+                            label="Comments"
+                            name="comments"
                         />
                     </DialogContent>
                     <DialogActions>

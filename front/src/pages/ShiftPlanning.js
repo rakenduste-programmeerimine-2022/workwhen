@@ -296,7 +296,7 @@ export default function ShiftPlanning() {
   return (
     <Container sx={{display: "flex"}}>
         <Box sx={{display:"flex", flexDirection:"column" ,marginRight:15, marginTop:20, width: 200, height:190, border:1, padding:1}}>
-            <ShiftPlanningDialog getData={getData}/>
+            <ShiftPlanningDialog />
             <Typography sx={{border:1, borderColor:"grey" , borderRadius: "5px", textAlign:"center", marginBottom:1}}>Shifts: </Typography>
             <Typography>
                 {state.externalEvents.map((event) => (
