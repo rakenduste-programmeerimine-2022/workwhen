@@ -10,9 +10,11 @@ const checkToken = (req, res, next) => {
 
         jwt.verify(token, `${process.env.KEY}`, (err, decoded) => {
             if(err){
-                console.log("verifier")
                 res.sendStatus(403)
             } else {
+                if(req.body.employee){
+                    req.body.employee = decoded.id
+                }
                 next()
             }
         })
