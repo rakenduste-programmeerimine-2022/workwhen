@@ -79,8 +79,9 @@ export default function ShiftPlanningDialog({ getData }){
                         text: "Successfully saved!",
                         severity: "success"
                     })
-                    setOpen(false)
                     getData()
+                    setOpen(false)
+                    
                 } else if (typeof response.data === "string" && response.data !== null){
                     setSnackOpen(true)
                     setSnackbarInfo({
@@ -112,6 +113,7 @@ export default function ShiftPlanningDialog({ getData }){
                 severity: "error"
             })
         }
+        getData()
     }
     return(
         
