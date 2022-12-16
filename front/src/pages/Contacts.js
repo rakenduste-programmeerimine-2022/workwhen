@@ -140,7 +140,7 @@ export default function Contacts(searchQuery) {
     const [contactId, setContactId] = useState("")
     const [snackOpen, setSnackOpen] = useState(false)
     const [snackbarInfo, setSnackbarInfo] = useState({
-        test: "",
+        text: "",
         severity: ""
     })
 

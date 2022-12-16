@@ -29,9 +29,10 @@ export default function Bookmarks() {
     }
 
     const handleDelete = e => {
-        console.log(e.currentTarget.id)
         const id = e.currentTarget.id
-        axios.post("http://localhost:8080/bookmark/remove", {id}) // where token?
+        axios.post("http://localhost:8080/bookmark/remove", 
+            { id },
+            { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
         .then(function(response){
             console.log(response)
             getData()

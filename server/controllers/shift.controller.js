@@ -39,11 +39,32 @@ exports.add = async (req, res) => {
 }
 
 exports.get = async (req, res) => {
+    console.log(req)
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() })
     }
     Shift.get(req.body, req.headers["authorization"].split(" ")[1])
+        .then((data) => res.send(data))
+        .catch((err) => res.send(err))
+}
+
+exports.publish = async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() })
+    }
+    Shift.publish(req.body, req.headers["authorization"].split(" ")[1])
+        .then((data) => res.send(data))
+        .catch((err) => res.send(err))
+}
+
+exports.seeSchedule = async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() })
+    }
+    Shift.getSchedule(req.body)
         .then((data) => res.send(data))
         .catch((err) => res.send(err))
 }

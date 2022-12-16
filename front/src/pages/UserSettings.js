@@ -77,7 +77,6 @@ export default function UserSettings() {
 
 
     const [helperText, setHelperText] = useState("")
-    const [success, setSuccess] = useState(false)
     const [snackOpen, setSnackOpen] = useState(false)
     const handleSnackClose = () => {
         setSnackOpen(false)

@@ -4,11 +4,12 @@ require("dotenv").config()
 
 const shiftSchema = new Schema(
     {
-        date: { type: Date },
+        date: { type: Date, required: true },
         dayShift: [{ type: Schema.Types.ObjectId, ref: "User" }],
         nightShift: [{ type: Schema.Types.ObjectId, ref: "User" }],
         booked: [{ type: Schema.Types.ObjectId, ref: "User" }],
         leave: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        published: { type: Boolean, default: false}
     },
     { timestamps: true }
 )
@@ -35,6 +36,8 @@ shiftSchema.statics.add = async ({ shifts }, token) => {
                     if user is in another type, then remove
                     if not present in type then push
                 */
+                // causes errors? -> in DB id null
+                // if(existingShift.published) return reject("Cannot add to an already published schedule!")
                 const inCorrectShift = existingShift[shift.type].includes(decoded.id)
                 if(!inCorrectShift){
                     const inDayShift = existingShift.dayShift.includes(decoded.id)
@@ -75,8 +78,8 @@ shiftSchema.statics.get = async ({ date }, token) => {
         const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
         if(decoded.role === "scheduler"){
             const shift = await Shift.find(
-                    { date: { $gte: firstDay, $lte: lastDay} },
-                    "-_id date dayShift nightShift booked leave"
+                    { date: { $gte: firstDay, $lte: lastDay } },
+                    "-_id date dayShift nightShift booked leave published"
                 )
                 .populate("dayShift nightShift booked leave", "fullname")
                 .sort({ date: 1 })
@@ -94,7 +97,7 @@ shiftSchema.statics.get = async ({ date }, token) => {
                         { leave: decoded.id }
                     ]
                 },
-                "_id date dayShift nightShift booked leave",)
+                "_id date dayShift nightShift booked leave published")
                 .populate("dayShift nightShift booked leave", "fullname")
                 .sort({ date: 1 })
                 .lean()
@@ -133,6 +136,50 @@ shiftSchema.statics.get = async ({ date }, token) => {
             if(shift.length >= 1 && employeeShifts.length >= 1) return resolve(employeeShifts)
             reject("No shifts planned for this date")
         }
+    })
+}
+
+shiftSchema.statics.publish = async ({ date }, token) => {
+    return new Promise(async (resolve, reject) => {
+        const decoded = jwt.verify(token, `${process.env.KEY}`)
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 2).setUTCHours(0)
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
+        
+        if(decoded.role !== "scheduler") return reject(`Cannot publish schedule with ${decoded.role} role!`)
+        const shifts = await Shift.find({ date: { $gte: firstDay, $lte: lastDay }, published: false})
+        if(shifts.length === 0) return reject("No shifts in this month or it's already published!")
+
+        shifts.forEach(shift => {
+            shift.published = true
+            shift.save((err) => {
+                if(err) return reject(err)
+            })
+        })
+        resolve(shifts)
+    })
+}
+
+shiftSchema.statics.getSchedule = async ({ date }) => {
+    return new Promise(async (resolve, reject) => {
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 2).setUTCHours(0)
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
+
+        const schedule = await Shift.find(
+            { date: { $gte: firstDay, $lte: lastDay }, published: true},
+            "-_id date dayShift nightShift booked leave")
+            .populate("dayShift nightShift booked leave", "-_id fullname")
+            .sort({ date: 1 })
+            .lean()
+
+        if(schedule.length === 0) return reject("Schedule hasn't been published!")
+
+        schedule.forEach((shift) => {
+            if(shift.dayShift.length === 0) delete shift.dayShift
+            if(shift.nightShift.length === 0) delete shift.nightShift
+            if(shift.booked.length === 0) delete shift.booked
+            if(shift.leave.length === 0) delete shift.leave
+        })
+        resolve(schedule)
     })
 }
 

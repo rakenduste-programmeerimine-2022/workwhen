@@ -12,10 +12,14 @@ const checkToken = (req, res, next) => {
             if(err){
                 res.sendStatus(403)
             } else {
+                if(req.body.employee){
+                    req.body.employee = decoded.id
+                }
                 next()
             }
         })
     } else {
+        console.log("undefined")
         res.sendStatus(403)
     }
 }

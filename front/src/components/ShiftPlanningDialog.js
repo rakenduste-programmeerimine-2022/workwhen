@@ -8,19 +8,22 @@ import {
     TextField, 
     Box,
     Snackbar, 
-    Alert } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+    Alert,
+    MenuItem } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
 import axios from "axios"; 
+import Select from '@mui/material/Select';
 
-export default function BookmarkDialog({getData}){
+export default function ShiftPlanningDialog({ getData }){
     const [open, setOpen] = useState(false)
     const [snackOpen, setSnackOpen] = useState(false)
 
     const form = {
-        title: "",
-        description: "",
-        date: "",
-        assigned: ""
+        employee: "",
+        type: "",
+        startDate: "",
+        endDate: "",
+        comments: "",
     }
 
     const snackbar = {
@@ -42,6 +45,11 @@ export default function BookmarkDialog({getData}){
 
     const handleClickOpen = () => {
         setOpen(true)
+        const newValue = {
+            ...formValue,
+            ['employee']: JSON.parse(localStorage.getItem("user")).username
+        }
+        setFormValue(newValue)
     }
 
     const handleClose = () => {
@@ -54,12 +62,13 @@ export default function BookmarkDialog({getData}){
 
     const handleSubmit = e => {
         e.preventDefault()
-        if(formValue.title && formValue.description && formValue.date && formValue.assigned){
-            axios.post("http://localhost:8080/todo/add", {
-                title: formValue.title,
-                description: formValue.description,
-                date: formValue.date,
-                assigned: formValue.assigned
+        if(formValue.employee && formValue.type && formValue.comments && formValue.startDate && formValue.endDate){
+            axios.post("http://localhost:8080/leave/add", {
+                employee: formValue.employee,
+                type: formValue.type,
+                startDate: formValue.startDate,
+                endDate: formValue.endDate,
+                comments: formValue.comments
             },
             { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
             .then(function(response){
@@ -70,8 +79,9 @@ export default function BookmarkDialog({getData}){
                         text: "Successfully saved!",
                         severity: "success"
                     })
-                    setOpen(false)
                     getData()
+                    setOpen(false)
+                    
                 } else if (typeof response.data === "string" && response.data !== null){
                     setSnackOpen(true)
                     setSnackbarInfo({
@@ -96,67 +106,76 @@ export default function BookmarkDialog({getData}){
                 setOpen(false)
             })
         }
-        if (formValue.title === "" || formValue.description === "" || formValue.assigned === "" || formValue.date === ""){
+        if (formValue.type === "" || formValue.startDate === "" || formValue.endDate === ""){
             setSnackOpen(true)
             setSnackbarInfo({
                 text: "Form fields are not filled",
                 severity: "error"
             })
         }
+        getData()
     }
-    
     return(
         
         <>
-            <Button variant="outlined" onClick={handleClickOpen} size="small" sx={{margin:1, color:'black', borderColor:'black', maxWidth: '36px', padding:'5px'}}><AddIcon></AddIcon></Button>
+            <Button variant="outlined" onClick={handleClickOpen} sx={{color: "#E4C5AF", borderColor: "#E4C5AF"}}>Add</Button>
             <Dialog open={open} onClose={handleClose}>
-                <Box component="form" onSubmit={handleSubmit} noValidate
-                    sx={{ 
-                        backgroundColor: "#E4C5AF",
-                        overflow: "hidden",                        
-                    }}
-                    elevation={7}
-                >
-                    <DialogTitle>Add a new to-do assignment</DialogTitle>
+                <Box component="form" onSubmit={handleSubmit} noValidate>
+                    <DialogTitle>Schedule time off</DialogTitle>
                     <DialogContent sx={{display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+                        
+                        <InputLabel id="employee-label">Employee:</InputLabel>
                         <TextField 
-                            value={formValue.title}
+                            value={JSON.parse(localStorage.getItem("user")).username}
                             onChange={e => handleFormChange(e)}
-                            required
-                            id="title"
-                            label="Title"
-                            name="title"
+                            labelId= "employee-label"
+                            id="employee"
+                            name="employee"
+                            inputProps={
+                                { readOnly: true, }
+                            }
                         />
-                        <TextField 
-                            value={formValue.description}
+
+                        <InputLabel id="leave-type-label">Leave-type:</InputLabel>
+                        <Select
+                            value={formValue.type }
                             onChange={e => handleFormChange(e)}
-                            required
-                            id="description"
-                            label="Assignment description"
-                            name="description"    
-                        />
-                       
+                            labelId="leave-type-label"
+                            name="type"
+                            id="type"
+                        >
+                            <MenuItem value={"Planned"}>Planned</MenuItem>
+                            <MenuItem value={"Unplanned"}>Unplanned</MenuItem>
+                        </Select>
+  
                         <TextField 
                             InputLabelProps={{ shrink: true }}
                             type="date"
-                            value={formValue.date}
+                            value={formValue.startDate}
                             onChange={e => handleFormChange(e)}
                             required
-                            id="date"
-                            label="Select due date"
-                            name="date"
-
+                            id="startDate"
+                            label="Select start date"
+                            name="startDate"
                         />
 
-
-                    
-                        <TextField
-                            value={formValue.assigned}
+                        <TextField 
+                            InputLabelProps={{ shrink: true }}
+                            type="date"
+                            value={formValue.endDate}
                             onChange={e => handleFormChange(e)}
                             required
-                            id="assigned"
-                            label="Assign a person"
-                            name="assigned"
+                            id="endDate"
+                            label="Select end date"
+                            name="endDate"
+                        />
+
+                        <TextField 
+                            value={formValue.comments}
+                            onChange={e => handleFormChange(e)}
+                            id="comments"
+                            label="Comments"
+                            name="comments"
                         />
                     </DialogContent>
                     <DialogActions>
@@ -177,13 +196,15 @@ export default function BookmarkDialog({getData}){
                             Save
                         </Button>
                     </DialogActions>
-                    <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
-                        <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
-                            {snackbarInfo.text}
-                        </Alert>
-                    </Snackbar>
+                    
                 </Box>
+                
             </Dialog>
+            <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+                <Alert onClose={handleSnackClose} severity={snackbarInfo.severity}>
+                    {snackbarInfo.text}
+                </Alert>
+            </Snackbar>
         </>
     )
     

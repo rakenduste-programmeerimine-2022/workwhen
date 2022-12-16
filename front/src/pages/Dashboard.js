@@ -125,11 +125,23 @@ export default function Dashboard() {
             <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450, backgroundColor: "#E4C5AF"}}>
                 <Box sx={{display:"flex"}}>
                     <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list
-                        <Typography
-                            sx={{display:'flex',border:'solid 1', borderRadius:'50%', background: 'red', marginLeft:'5px', padding:'2px'}}
+                        
+                    </Typography>
+                    <Typography
+                            sx={{
+                                display:'flex',
+                                width: '4%',
+                                height: "2vw",
+                                border:'solid 1',
+                                borderRadius:'50%',
+                                background: 'red',
+                                marginLeft:'5px',
+                                marginTop: "0.65vw",
+                                paddingLeft: 1,
+                                alignItems:'center'
+                            }}
                         >
                             5
-                        </Typography>
                     </Typography>
                     <Button
                         variant="outlined"
