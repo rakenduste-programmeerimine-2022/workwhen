@@ -94,8 +94,9 @@ userSchema.statics.login = async ({ username, password }) => {
 
 userSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
-        const users = await User.find({ deleted: false }, " -_id email fullname contact", {})
+        const users = await User.find({ deleted: false }, " -_id email fullname contact birthday", {})
         resolve(users)
+        console.log(users)
     })
 }
 

@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Button,Divider,Paper,Typography} from "@mui/material";
+import { Button,Divider,Paper,TableContainer,Typography, Table, TableHead, TableCell, TableBody, TableRow, ThemeProvider} from "@mui/material";
 import { Box, Container} from "@mui/system";
 import axios from 'axios';
 import TodoDialog from "../components/TodoDialog"
 import moment from 'moment'
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
+import BirthdayDialog from '../components/BirthdayDialog';
+import globalTheme from '../styles/globalTheme';
+
 
 
 export default function Dashboard() {
     const [todoArr, setTodoArr] = useState([])
+    const [usersArr, setUsersArr] = useState([])
+
+    const now = new Date()
+    const priorDate = new Date(new Date().setDate(now.getDate() +30))
+    const priorMonth = priorDate.getMonth()
+    console.log(priorMonth)
+
 
     const getData = () => {
         axios.get("http://localhost:8080/todo/all", 
@@ -21,6 +31,31 @@ export default function Dashboard() {
             setTodoArr([])
             response.data.forEach(element => {
                 setTodoArr(oldArr => [...oldArr, element])
+                }
+            )  
+        })
+        .catch(function(err) {
+            console.log(err)
+        })
+    }
+
+    const getUsers = () => {
+        axios.get("http://localhost:8080/user/all", 
+        {
+            params: { completed: false }, 
+            headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}
+        })
+        .then(function(response) {
+            setUsersArr([])
+            response.data.forEach(element => {
+                console.log(element.birthday)
+                const userBirthday = element.birthday
+                const cuttedBirthday = userBirthday.slice(5, 6);
+                console.log(cuttedBirthday)
+
+                if(cuttedBirthday == priorMonth ){
+                    setUsersArr(oldArr => [...oldArr, element])
+                }
                 }
             )  
         })
@@ -79,6 +114,12 @@ export default function Dashboard() {
     useEffect(() => {
         getData()
     }, [])
+
+    useEffect(() => {
+        getUsers()
+
+    }, [])
+
     return (
         <Container sx={{display:'flex', padding: 3, width: 500, margin: 0}}>
             <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450, backgroundColor: "#E4C5AF"}}>
@@ -135,6 +176,39 @@ export default function Dashboard() {
                     })}
                 </Box>
             </Paper>
+            <ThemeProvider theme={globalTheme}>
+            <Paper sx={{ ml: 5, minWidth: "600px", maxHeight: "200px" }}>
+            <TableContainer>
+                        <Table>
+                            <TableHead >
+                                <TableCell sx={{ textAlign: "center"}}>Upcoming birthdays</TableCell>
+
+                            </TableHead>
+                            <TableBody>
+                                {usersArr.map((user) => (
+ 
+                                <TableRow
+                                key={usersArr.fullname}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell component="th" scope="row">
+                                    {user.fullname}
+                                    </TableCell>
+                                    <TableCell align="right">{user.birthday.slice(0, 10)}</TableCell>
+
+
+                                </TableRow>
+                            ))}
+                            </TableBody>
+
+                        </Table>
+
+                    </TableContainer>
+            </Paper>
+            </ThemeProvider>
         </Container>
+
+        
+
     )
 }

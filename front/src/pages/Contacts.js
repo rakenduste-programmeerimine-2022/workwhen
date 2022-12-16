@@ -404,8 +404,8 @@ export default function Contacts(searchQuery) {
                         >                            
                         </FormControl>
                         <TextField
-                            autoFocus
-                            id="cnctNameChange"
+
+                            id="cnctChange"
                             name="name"
                             value={formValue.name}
                             onChange={e => handleFormChange(e)}
@@ -416,7 +416,7 @@ export default function Contacts(searchQuery) {
                         />
                         <TextField
                             autoFocus
-                            id="cnctPhoneChange"
+                            id="cnctChange"
                             name="phone"
                             value={formValue.phone}
                             onChange={e => handleFormChange(e)}
@@ -427,7 +427,7 @@ export default function Contacts(searchQuery) {
                         />
                         <TextField
                             autoFocus
-                            id="cnctEmailChange"
+                            id="cnctChange"
                             name="email"
                             value={formValue.email}
                             onChange={e => handleFormChange(e)}
