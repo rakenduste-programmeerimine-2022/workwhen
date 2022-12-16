@@ -51,7 +51,7 @@ userSchema.statics.changePassword = async (req) => {
         const existingUser = await User.findById(decoded.id)
         if(!existingUser) return reject("Something went wrong!")
         if(!await bcrypt.compare(currentPwd, existingUser.password)) return reject("Wrong current password!")
-        console.log(newPwd)
+        // console.log(newPwd)
 
         existingUser.password = await bcrypt.hash(newPwd, 10)
 
@@ -96,7 +96,7 @@ userSchema.statics.all = async () => {
     return new Promise(async (resolve, reject) => {
         const users = await User.find({ deleted: false }, " -_id email fullname contact birthday", {})
         resolve(users)
-        console.log(users)
+        // console.log(users)
     })
 }
 
