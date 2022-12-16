@@ -6,7 +6,6 @@ import TodoDialog from "../components/TodoDialog"
 import moment from 'moment'
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import BirthdayDialog from '../components/BirthdayDialog';
 import globalTheme from '../styles/globalTheme';
 
 
@@ -18,7 +17,6 @@ export default function Dashboard() {
     const now = new Date()
     const priorDate = new Date(new Date().setDate(now.getDate() +30))
     const priorMonth = priorDate.getMonth()
-    console.log(priorMonth)
 
 
     const getData = () => {
@@ -48,11 +46,8 @@ export default function Dashboard() {
         .then(function(response) {
             setUsersArr([])
             response.data.forEach(element => {
-                console.log(element.birthday)
                 const userBirthday = element.birthday
                 const cuttedBirthday = userBirthday.slice(5, 6);
-                console.log(cuttedBirthday)
-
                 if(cuttedBirthday == priorMonth ){
                     setUsersArr(oldArr => [...oldArr, element])
                 }
@@ -67,7 +62,7 @@ export default function Dashboard() {
     
 
     const handleDelete = e => {
-        console.log(e.currentTarget.id)
+
         const id = e.currentTarget.id
         axios.post("http://localhost:8080/todo/remove",
             {id},
@@ -89,7 +84,7 @@ export default function Dashboard() {
     }
 
     const handleCompleted = e => {
-        console.log(e.currentTarget.id)
+        // console.log(e.currentTarget.id)
         const id = e.currentTarget.id
         axios.post("http://localhost:8080/todo/update",
             {id},
@@ -193,7 +188,7 @@ export default function Dashboard() {
             <TableContainer>
                         <Table>
                             <TableHead >
-                                <TableCell sx={{ textAlign: "center"}}>Upcoming birthdays</TableCell>
+                                <TableCell sx={{ textAlign: "center", fontWeight: "bold" }}>Upcoming birthdays</TableCell>
 
                             </TableHead>
                             <TableBody>
