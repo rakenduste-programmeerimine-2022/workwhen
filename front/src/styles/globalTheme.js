@@ -14,11 +14,9 @@ const Colors = {
 const globalTheme = createTheme({
     palette: {
         primary: {
-            main: Colors.primary
-        },
-        secondary: {
             main: Colors.secondary
-        }
+        },
+
     },
     components: {
         MuiTableCell: {
@@ -27,6 +25,7 @@ const globalTheme = createTheme({
                 props: { variant: 'header'},
                 style: {
                     textTransform: 'capitalize',
+                    fontFamily: "Overpass",
                     fontWeight: 'bold',
                     fontSize: 16,
                 },
@@ -76,11 +75,40 @@ const globalTheme = createTheme({
             },
         },
 
-        MuiTableCell: {
+        MuiTextField: {
             styleOverrides: {
                 root: ({ }) => ({
-                    fontFamily: "Overpass",
+                    "&.MuiFormLabel-root.Mui-focused": {
+                        color: "black"
+                    }
+
+,
                 }),
+            },
+        },
+
+    
+
+
+        MuiInput: {
+            styleOverrides: {
+                root: {
+                    "&.MuiFormLabel-root.Mui-focused": {
+                        color: "black"
+
+                    },
+                },
+                input: {
+                    borderRadius: 4,
+                }
+            },
+        },
+
+        MuiFormHelperText: {
+            styleOverrides: {
+                root: {
+                    color: "black",
+                },
             },
         },
 

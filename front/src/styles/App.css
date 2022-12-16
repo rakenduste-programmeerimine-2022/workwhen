@@ -25,3 +25,7 @@ body {
   .headerCell {
     font-style: bold;
   }
+
+  .Mui-focused {
+    color:black;
+  }
