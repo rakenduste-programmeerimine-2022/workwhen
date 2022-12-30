@@ -129,14 +129,19 @@ function axiosPost({ name, email, phone }, id, link){
     })
 }
 
-export default function Contacts(searchQuery) {
+export default function Contacts() {
     const form = {
         name: "",
         email: "",
         phone: ""
     }
+
+    const [searchResult, setSearchResult] = useState([])
+
     const [contacts, setContacts] = useState([])
     const [formValue, setFormValue] = useState(form)
+    const [searchQuery, setSearchQuery] = useState("")
+    const [cancelSearch, setCancelSearch] = useState(false)
     const [contactId, setContactId] = useState("")
     const [snackOpen, setSnackOpen] = useState(false)
     const [snackbarInfo, setSnackbarInfo] = useState({
@@ -147,6 +152,20 @@ export default function Contacts(searchQuery) {
     const handleSnackClose = () => {
         setSnackOpen(false)
     }
+    // const handleSearchQuery = (e) => {
+    //     const { value, name } = e.target
+    //     const newValue = {
+    //         ...searchQuery,
+    //         [name]: value
+    //     }
+	// 	setSearchQuery(newValue);
+	// };
+
+
+
+    // console.log(contacts)
+
+    console.log(contacts.filter(contact=>contact.name.includes(searchQuery)))
 
     const getData = () => {
         axios.get("http://localhost:8080/contact/all", { headers: {Authorization: `Bearer ${localStorage.getItem("token")}`} })
@@ -278,6 +297,25 @@ export default function Contacts(searchQuery) {
         getData()
     }, [])
 
+    // const tableSearch = e => {
+    //     if(searchQuery != ""){
+    //         const { value, name } = e.target
+    //         const searchResult = {
+    //             ...contacts,
+    //             [name]: value
+    //         }
+    //         setContacts(searchResult)
+            
+    //     }
+    //     console.log(contacts)        
+
+    // };
+
+    // console.log(contacts.filter((contact) => contact.name.toLowerCase().includes(searchQuery)))
+
+ 
+
+
         return(
             <ThemeProvider theme={globalTheme}>
             <CssBaseline />
@@ -302,33 +340,30 @@ export default function Contacts(searchQuery) {
                                         </Button>
                                     </TableCell>
                                     <TableCell>
+                                        <TextField
+                                            label="search..."
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                        />
+                                        
                                     </TableCell>
+
                             </TableHead>
-                            <TableBody className="primaryBody">
-                                {contacts.filter((contacts) => {
-                                    if(searchQuery == ""){
-                                        return contacts;                            
-                                    } else if(contacts.name.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                        return contacts;
-                                    } else if(contacts.phone.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                        return contacts;
-                                    } else if(contacts.email.toString().toLowerCase().includes(searchQuery.toString().toLowerCase())){
-                                        return contacts;
-                                    }
-                                })}
-                                {(rowsPerPage > 0
-                                ? contacts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : contacts
+                            <TableBody className="primaryBody" >
+
+                               {(rowsPerPage > 0
+                                    ? contacts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    : contacts
                                 ).map((contact) => (
                                 
                                 <TableRow>
+
                                 <TableCell component="th" scope="row">
                                     {contact.name}
                                 </TableCell>
                                 <TableCell>
                                     {contact.phone}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell>                                    
                                     {contact.email}
                                 </TableCell>
                                 <TableCell className="contactButton">
@@ -355,6 +390,7 @@ export default function Contacts(searchQuery) {
                                 <TableCell colSpan={6} />
                                 </TableRow>
                                 )}
+                                
                         
                             </TableBody>
                     </Table>

@@ -141,7 +141,7 @@ export default function UserSettings() {
         <ThemeProvider theme={globalTheme}>
         <Container>
             <Paper>
-                <Avatar sx={{ m: 2, bgcolor: "black", color: "#e4c5af", width: 60, height: 60, backgroundColor: "#2F3E46"}}>JK</Avatar>
+                <Avatar sx={{ m: 2, mt: "2px", bgcolor: "black", color: "#e4c5af", width: 60, height: 60, backgroundColor: "#2F3E46"}}>BB</Avatar>
                     <Box>
                         <TableContainer noValidate sx={{ marginTop: "5px", marginBottom: "0px" }}>
 
