@@ -23,7 +23,7 @@ const pages = {
 function Navbar() {
 
   return (
-    <AppBar position='static' sx={{ backgroundColor: "#354F52"}}>
+    <AppBar position='static' >
       <Container maxWidth='xl'>
         <Toolbar disableGutters >          
           <Typography
@@ -34,11 +34,11 @@ function Navbar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: '#e4c5af',
+
               textDecoration: 'none',
             }}
           >
-            <Link style={{textDecoration:'none', color: '#e4c5af'}} to={'/dashboard'}>
+            <Link style={{textDecoration:'none'}} to={'/dashboard'}>
             <img src={Logo} />
             </Link>
             
@@ -50,7 +50,7 @@ function Navbar() {
                         to={`/${link}`}
                         key={page}
                         sx={{color: '#e4c5af', display: 'block', '&.active': {
-                        background:'#2f3e46',}}} 
+                        }}} 
                     >
                         {page}   
                     </Button>

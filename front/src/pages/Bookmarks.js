@@ -3,7 +3,7 @@ import { Box, Divider, IconButton, Link, Paper, ThemeProvider, Typography } from
 import DeleteIcon from '@mui/icons-material/Delete'
 import axios from "axios"
 import BookmarkDialog from "../components/BookmarkDialog"
-import globalTheme from "../styles/globalTheme"
+
 
 export default function Bookmarks() {
     const [monitoringArr, setMonitoringArr] = useState([])
@@ -54,7 +54,7 @@ export default function Bookmarks() {
     
     return (
         <>
-        <ThemeProvider theme={globalTheme}>
+
         <Box sx={{padding: "0 1rem 0 1rem"}}>
             <Box sx={{display: "flex", alignItems: "center", gap: "1rem"}}>
                 <h1>Bookmarks</h1>
@@ -106,7 +106,7 @@ export default function Bookmarks() {
             </Paper>
 
         </Box>
-        </ThemeProvider>
+
         </>
     )
 }

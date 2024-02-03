@@ -7,7 +7,6 @@ import interactionPlugin, { Draggable } from "@fullcalendar/interaction"
 import { Container, ThemeProvider } from '@mui/system'
 import HighlightOffSharpIcon from '@mui/icons-material/HighlightOffSharp'
 import ShiftPlanningDialog from "../components/ShiftPlanningDialog"
-import globalTheme from '../styles/globalTheme'
 import PublishSchedule from '../components/PublishSchedule'
 
 const ExternalEvent = memo(({ event }) => {
@@ -285,7 +284,7 @@ export default function ShiftPlanning() {
     }
 
   return (
-    <ThemeProvider theme={globalTheme}>
+
         <Container sx={{display: "flex", width: "100%"}}>
             <Box sx={{
                     display:"flex",
@@ -340,6 +339,6 @@ export default function ShiftPlanning() {
                 </Box>
             </Paper>
         </Container>
-    </ThemeProvider>
+
   );
 }

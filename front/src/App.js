@@ -11,7 +11,7 @@ import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import RouteGuard from "./components/RouteGuard"
 import "./styles/App.css";
-import globalTheme from "./styles/globalTheme"
+
 
 function App() {
     const [user, setUser] = useState(false)

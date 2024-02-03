@@ -23,7 +23,6 @@ import TableRow from "@mui/material/TableRow";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
-import globalTheme from "../styles/globalTheme";
 
 
 
@@ -138,7 +137,7 @@ export default function UserSettings() {
 
 
     return(
-        <ThemeProvider theme={globalTheme}>
+
         <Container>
             <Paper>
                 <Avatar sx={{ m: 2, mt: "2px", bgcolor: "black", color: "#e4c5af", width: 60, height: 60, backgroundColor: "#2F3E46"}}>BB</Avatar>
@@ -256,7 +255,7 @@ export default function UserSettings() {
                     </Snackbar>
             </Paper>
         </Container>
-    </ThemeProvider>
+
 
     );    
 }

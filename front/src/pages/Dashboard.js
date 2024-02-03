@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button,Divider,Paper,TableContainer,Typography, Table, TableHead, TableCell, TableBody, TableRow, ThemeProvider} from "@mui/material";
+import { Button,Divider,Paper,TableContainer,Typography, Table, TableHead, TableCell, TableBody, TableRow} from "@mui/material";
 import { Box, Container} from "@mui/system";
 import axios from 'axios';
 import TodoDialog from "../components/TodoDialog"
 import moment from 'moment'
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
-import globalTheme from '../styles/globalTheme';
+
 
 
 
@@ -117,7 +117,7 @@ export default function Dashboard() {
 
     return (
         <Container sx={{display:'flex', padding: 3, width: 500, margin: 0}}>
-            <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450, backgroundColor: "#E4C5AF"}}>
+            <Paper elevation={7} sx={{display: 'flex', flexDirection: 'column', minWidth: 450}}>
                 <Box sx={{display:"flex"}}>
                     <Typography sx={{padding:1, display:'flex', alignItems:'center'}}>To-do list
                         
@@ -183,7 +183,7 @@ export default function Dashboard() {
                     })}
                 </Box>
             </Paper>
-            <ThemeProvider theme={globalTheme}>
+            
             <Paper sx={{ ml: 5, minWidth: "600px", maxHeight: "200px" }}>
             <TableContainer>
                         <Table>
@@ -212,7 +212,7 @@ export default function Dashboard() {
 
                     </TableContainer>
             </Paper>
-            </ThemeProvider>
+
         </Container>
 
         

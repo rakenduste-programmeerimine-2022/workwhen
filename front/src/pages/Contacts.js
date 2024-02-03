@@ -27,7 +27,6 @@ import PropTypes from "prop-types";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
-import globalTheme from "../styles/globalTheme";
 import axios from "axios";
  
 function TablePaginationActions(props) {
@@ -299,7 +298,7 @@ export default function Contacts() {
     // console.log(contacts.filter((contact) => contact.name.toLowerCase().includes(searchQuery)))
  
     return (
-        <ThemeProvider theme={globalTheme}>
+        <>
             {/*<CssBaseline />*/}
             <Paper>
                 <TableContainer>
@@ -534,6 +533,7 @@ export default function Contacts() {
                     </DialogActions>
                 </Dialog>
             </Paper>
-        </ThemeProvider>
-    );
+            </>
+        
+    )
 }
