@@ -145,7 +145,7 @@ shiftSchema.statics.publish = async ({ date }, token) => {
         const firstDay = new Date(date.getFullYear(), date.getMonth(), 2).setUTCHours(0)
         const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1).setUTCHours(0)
         
-        if(decoded.role !== "scheduler") return reject(`Cannot publish schedule with ${decoded.role} role!`)
+        if(decoded.role !== "scheduler" && decoded.role !== "admin") return reject(`Cannot publish schedule with ${decoded.role} role!`)
         const shifts = await Shift.find({ date: { $gte: firstDay, $lte: lastDay }, published: false})
         if(shifts.length === 0) return reject("No shifts in this month or it's already published!")
 
