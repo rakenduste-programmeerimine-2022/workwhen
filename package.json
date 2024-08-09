@@ -3,6 +3,8 @@
     "react-test-renderer": "^18.2.0"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "prop-types": "^15.8.1"
   }

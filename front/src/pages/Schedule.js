@@ -1,6 +1,6 @@
 
+import FullCalendar from '@fullcalendar/react'; 
 import dayGridPlugin from '@fullcalendar/daygrid';
-import FullCalendar from '@fullcalendar/react'
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction"
 import { Box, Typography, ThemeProvider, Paper, Snackbar, Alert } from '@mui/material'
 import CalendarLegends from '../components/CalendarLegends'
@@ -136,7 +136,7 @@ export default function Schedule() {
                         draggable={true}
                         droppable={true}
                         weekends={state.weekendsVisible}
-                        events={state.calendarEvents}
+                        events={state.events}
                         eventContent={handleEventRender}
                         // eventReceive={handleEventReceive}
                         // eventDrop={handleEventDrop}
